@@ -1,4 +1,18 @@
 <script lang="ts">
+import { onMount } from 'svelte';
+
+import FusionCharts from "fusioncharts"; //Import the Fusioncharts library
+import Maps from "fusioncharts/fusioncharts.maps"; //Import the FusionMaps
+import World from "fusioncharts/maps/fusioncharts.world"; //Import World Map
+import FusionTheme from "fusioncharts/themes/fusioncharts.theme.fusion";
+//Import the Svelte component
+import SvelteFC, { fcRoot } from "svelte-fusioncharts";
+
+onMount(() => {
+    // Always set FusionCharts as the first parameter
+    fcRoot(FusionCharts, Charts, FusionTheme);
+});
+
 import Counter from "./Counter.svelte"
 
 let counters = {
