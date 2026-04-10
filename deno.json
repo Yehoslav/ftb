@@ -1,0 +1,22 @@
+{
+    "unstable": ["fmt-component"],
+    "fmt": {
+        "useTabs": false,
+        "lineWidth": 80,
+        "indentWidth": 4,
+        "semiColons": true,
+        "singleQuote": false,
+        "proseWrap": "preserve"
+    },
+    "tasks": {
+        "dev": "deno run -A --env-file npm:vite dev",
+        "build": "deno run -A npm:vite build",
+        "preview": "deno run -A npm:vite preview"
+    },
+    "imports": {
+        "$lib": "./src/lib",
+        "$lib/*": "./src/lib/*",
+        "@/": "./src/"
+    },
+    "nodeModulesDir": "auto"
+}
