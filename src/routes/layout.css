@@ -1,1 +1,14 @@
 @import 'tailwindcss';
+
+@theme {
+
+    /* Colors from the brand-book */
+    --color-cerry:   oklch(0.5048 0.1938 27.86); /*#BA1818*/
+    --color-red:     oklch(0.6048 0.215 28.87); /*#E63429*/
+    --color-oxford:  oklch(0.3848 0.141 273.69); /*#2F378D*/
+    --color-blue:    oklch(0.5349 0.1375 247.85); /*#1071B8*/
+    --color-sunglow: oklch(0.8764 0.1657 91.03); /*#FFD136*/
+    --color-orange:  oklch(0.7459 0.1616 62.51); /*#F39222*/
+
+
+}

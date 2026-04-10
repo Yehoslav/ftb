@@ -19,7 +19,7 @@
 
 <div class="m-auto border-x-1 border-olive-200 *:border-olive-200 lg:w-300">
     <!-- INFO: Card -->
-    <div class="flex flex-row items-center border-b-1 py-8">
+    <div class="flex flex-row items-center text-accent border-b-1 py-8 bg-linear-to-r from-primary to-secondary">
         <div class="w-1/2">
             <h1 class="text-2xl font-bold">Noi suntem FTB</h1>
 
