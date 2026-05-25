@@ -104,13 +104,13 @@
 			<div class="flex flex-wrap gap-3 mb-8">
 				<a
 					href="/despre-noi"
-					class="inline-flex items-center px-6 py-3 rounded-lg bg-blue text-white font-medium text-sm no-underline hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue transition-all duration-300"
-				>
-					Află mai multe
-				</a>
-				<a
-					href="/proiecte"
-					class="inline-flex items-center px-6 py-3 rounded-lg border border-oxford/30 text-oxford font-medium text-sm no-underline hover:bg-oxford hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford transition-all duration-300"
+					class="inline-flex items-center px-6 py-3 rounded-lg bg-blue text-white font-medium text-sm no-underline hover:brightness-110 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue transition-all duration-300"
+			>
+				Află mai multe
+			</a>
+			<a
+				href="/proiecte"
+				class="inline-flex items-center px-6 py-3 rounded-lg border border-blue text-blue font-medium text-sm no-underline hover:bg-blue hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue transition-all duration-300"
 				>
 					Vezi proiecte
 				</a>
@@ -264,7 +264,7 @@
 			</div>
 			<a
 				href="/membre"
-				class="inline-flex items-center px-7 py-3.5 rounded-lg border border-oxford text-oxford font-medium text-sm no-underline tracking-wider hover:bg-oxford hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford transition-colors duration-300"
+				class="inline-flex items-center px-7 py-3.5 rounded-lg border border-blue text-blue font-medium text-sm no-underline tracking-wider hover:bg-blue hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue transition-colors duration-300"
 			>
 				Vezi toate organizațiile membre
 			</a>
@@ -302,7 +302,7 @@
 			<div class="flex flex-wrap justify-center gap-4">
 				<a
 					href="/contact"
-					class="inline-flex items-center px-7 py-3.5 rounded-lg bg-blue text-white font-medium text-sm no-underline tracking-wider hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all duration-300"
+					class="inline-flex items-center px-7 py-3.5 rounded-lg bg-blue text-white font-medium text-sm no-underline tracking-wider hover:brightness-110 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white transition-all duration-300"
 				>
 					Contactează-ne
 				</a>
