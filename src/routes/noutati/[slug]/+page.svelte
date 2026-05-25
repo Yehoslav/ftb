@@ -10,12 +10,8 @@
 	};
 </script>
 
-<svelte:head>
-	<title>{data.post?.title ?? 'Articol'} — FTB România</title>
-</svelte:head>
-
-<div class="mx-auto flex flex-col lg:flex-row lg:w-300 divide-y lg:divide-y-0 lg:divide-x divide-bg-alt border-bg-alt border-x">
-	<article class="p-6 lg:p-8 lg:w-[70ch]">
+<div class="mx-auto flex w-full max-w-screen-xl flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-bg-alt border-bg-alt border-x">
+	<article class="p-6 lg:p-8 lg:max-w-[70ch]">
 		<h1 class="text-3xl font-bold text-text">{data.post.title}</h1>
 		<time class="text-sm text-text-muted">
 			{new Date(data.post.date).toLocaleString('ro', dateOptions)}

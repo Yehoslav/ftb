@@ -1,15 +1,10 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import Counter from '$lib/components/Counter.svelte';
-
 	let { data }: PageProps = $props();
 </script>
 
-<svelte:head>
-	<title>FTB România — Federația Tinerilor Basarabeni</title>
-</svelte:head>
-
-<div class="mx-auto lg:w-300">
+<div class="mx-auto w-full max-w-screen-xl">
 	<!-- Hero -->
 	<section class="flex flex-col lg:flex-row items-center gap-8 px-4 py-12 lg:py-16 text-white bg-linear-to-r from-oxford to-blue">
 		<div class="lg:w-1/2">

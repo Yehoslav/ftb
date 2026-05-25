@@ -2,11 +2,7 @@
 	import { categorii } from '$lib/data/proiecte';
 </script>
 
-<svelte:head>
-	<title>Proiecte — FTB România</title>
-</svelte:head>
-
-<div class="mx-auto px-4 py-12 lg:w-300">
+<div class="mx-auto w-full max-w-screen-xl px-4 py-12">
 	<h1 class="text-3xl font-bold text-oxford mb-8">Proiecte</h1>
 
 	{#each categorii as { nume, proiecte }}

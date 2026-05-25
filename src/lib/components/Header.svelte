@@ -36,7 +36,7 @@
 	style="transform: translateY({hidden ? '-100%' : '0'});"
 	class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-bg-alt transition-transform duration-300"
 >
-	<div class="mx-auto flex items-center justify-between px-4 py-3 lg:w-300">
+	<div class="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-3">
 		<a href="/" class="font-bold text-xl text-oxford no-underline hover:text-oxford-light">
 			FTB România
 		</a>

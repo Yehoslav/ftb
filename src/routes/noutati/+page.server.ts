@@ -32,6 +32,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 	return {
 		posts: data.posts.nodes,
-		pageInfo: data.posts.pageInfo
+		pageInfo: data.posts.pageInfo,
+		seo: { title: 'Noutăți', description: 'Ultimele articole și anunțuri de la Federația Tinerilor Basarabeni.' }
 	};
 };

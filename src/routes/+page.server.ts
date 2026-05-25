@@ -13,6 +13,7 @@ export const load: PageServerLoad = async () => {
 			total: membri.length,
 			orase: orase.length,
 			oraseList: orase.sort()
-		}
+		},
+		seo: { title: 'Acasă', description: 'Federația Tinerilor Basarabeni — reunește asociațiile de studenți și tineri basarabeni din România.' }
 	};
 };

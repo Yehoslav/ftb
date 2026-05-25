@@ -10,11 +10,7 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Organizații Membre — FTB România</title>
-</svelte:head>
-
-<div class="mx-auto px-4 py-12 lg:w-300">
+<div class="mx-auto w-full max-w-screen-xl px-4 py-12">
 	<h1 class="text-3xl font-bold text-oxford mb-2">Organizații Membre</h1>
 	<p class="text-text-muted mb-8">Federația Tinerilor Basarabeni reunește {membri.length} de asociații studențești din toată România.</p>
 

@@ -39,7 +39,7 @@
 </script>
 
 <footer class="border-t border-bg-alt bg-white mt-16">
-	<div class="mx-auto px-4 py-10 lg:w-300">
+	<div class="mx-auto w-full max-w-screen-xl px-4 py-10">
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 			<div class="flex flex-col gap-3">
 				<a href="/" class="font-bold text-xl text-oxford no-underline">FTB România</a>

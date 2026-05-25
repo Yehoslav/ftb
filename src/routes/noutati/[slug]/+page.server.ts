@@ -30,8 +30,17 @@ export const load: PageServerLoad = async ({ params }) => {
 		).catch(() => ({ post: null }))
 	]);
 
+	const description = postData.post.excerpt
+		? postData.post.excerpt.replace(/<[^>]+>/g, '').slice(0, 160)
+		: undefined;
+
 	return {
 		post: postData.post,
-		featuredPost: featuredData.post
+		featuredPost: featuredData.post,
+		seo: {
+			title: postData.post.title,
+			description,
+			image: postData.post.featuredImage?.node?.sourceUrl
+		}
 	};
 };
