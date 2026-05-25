@@ -14,6 +14,7 @@ let headerHeight = $state(0);
 	<script defer src="/fa/js/fontawesome.js"></script>
 	<script defer src="/fa/js/brands.js"></script>
 	<script defer src="/fa/js/solid.js"></script>
+	<script defer src="/fa/js/regular.js"></script>
 </svelte:head>
 
 <Header bind:headerHeight />
