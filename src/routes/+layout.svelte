@@ -1,7 +1,7 @@
 <script lang="ts">
 import './layout.css';
 import type { LayoutProps } from './$types';
-import { page } from '$app/state';
+import { page, navigating } from '$app/state';
 import favicon from '$lib/assets/favicon.svg';
 import Header from '$lib/components/Header.svelte';
 import Footer from '$lib/components/Footer.svelte';
@@ -25,6 +25,10 @@ let headerHeight = $state(0);
 	<script defer src="/fa/js/regular.js"></script>
 </svelte:head>
 
+
+{#if navigating.to}
+	<div class="fixed top-0 left-0 right-0 z-[100] h-1 bg-blue animate-pulse"></div>
+{/if}
 
 {#if dev}
     <div
