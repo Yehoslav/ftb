@@ -26,7 +26,7 @@ Production: https://ftbromania.ro
 
 - `deno task dev` — start dev server
 - `deno task build` — production build
-- `deno task check` — run `svelte-check` for type-checking
+- `deno task check` — run `svelte-check` for type-checking (uses `tsconfig.json` — do not change)
 - `deno task preview` — preview production build
 
 ## Project structure

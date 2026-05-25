@@ -13,8 +13,8 @@
         "build": "deno run -A npm:vite build",
         "preview": "deno run -A --env-file npm:vite preview",
         "prepare": "deno run -A npm:@sveltejs/kit sync || echo ''",
-        "check": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./jsconfig.json",
-        "check:watch": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./jsconfig.json --watch"
+"check": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json --watch"
     },
     "imports": {
         "$lib": "./src/lib",

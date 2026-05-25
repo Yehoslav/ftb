@@ -13,8 +13,8 @@
     --color-cerry-light:   oklch(0.65 0.18 27.86);
     --color-cerry-dark:    oklch(0.40 0.18 27.86);
     --color-oxford-light:  oklch(0.50 0.10 273.69);
-    --color-bg:            oklch(0.97 0.01 90);
-    --color-bg-alt:        oklch(0.94 0.01 90);
+    --color-bg:            oklch(0.9798 0.0045 78.3);
+    --color-bg-alt:        oklch(0.945 0.005 78.3);
     --color-text:          oklch(0.15 0.02 273.69);
     --color-text-muted:    oklch(0.45 0.02 273.69);
 
