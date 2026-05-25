@@ -1,14 +1,24 @@
+export interface WPMediaDetails {
+	width: number;
+	height: number;
+}
+
+export interface WPFeaturedImage {
+	node: {
+		sourceUrl: string;
+		srcSet?: string | null;
+		sizes?: string | null;
+		mediaDetails?: WPMediaDetails | null;
+	};
+}
+
 export interface WPPost {
 	title: string;
 	slug: string;
 	excerpt: string;
 	content: string;
 	date: string;
-	featuredImage?: {
-		node: {
-			sourceUrl: string;
-		};
-	};
+	featuredImage?: WPFeaturedImage | null;
 }
 
 export interface WPPage {
@@ -17,11 +27,7 @@ export interface WPPage {
 	uri: string;
 	content: string;
 	date: string;
-	featuredImage?: {
-		node: {
-			sourceUrl: string;
-		};
-	};
+	featuredImage?: WPFeaturedImage | null;
 }
 
 export interface PostsQueryResult {

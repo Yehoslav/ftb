@@ -7,6 +7,11 @@
 		month: 'long', day: 'numeric', year: 'numeric'
 	};
 
+	function toWebp(srcSet: string | null | undefined): string | undefined {
+		return srcSet?.replace(/\.(jpe?g|png)(\s|,)/gi, '.webp$2');
+	}
+
+
 	const quickLinks = [
 		{ href: '/noutati', label: 'Noutăți', icon: 'fa-regular fa-newspaper', desc: 'Ultimele articole și anunțuri' },
 		{ href: '/echipa', label: 'Echipă', icon: 'fa-solid fa-users', desc: 'Cunoaște echipa FTB' },
@@ -132,6 +137,8 @@
 				src="https://www.ftbromania.ro/wp-content/uploads/2022/08/Homepage-image-1.png"
 				class="w-2/3 lg:w-4/5 hero-img-shadow"
 				alt="Tineri basarabeni reuniți la un eveniment FTB"
+				loading="eager"
+				decoding="async"
 			/>
 		</div>
 	</section>
@@ -213,12 +220,24 @@
 						<article class="card-hover bg-white rounded-xl border border-bg-alt overflow-hidden">
 							{#if post.featuredImage?.node?.sourceUrl}
 								<a href={url} class="block aspect-[16/9] overflow-hidden" tabindex="-1">
-									<img
-										class="w-full h-full object-cover transition duration-500 hover:scale-105"
-										src={post.featuredImage.node.sourceUrl}
-										alt=""
-										loading="lazy"
-									/>
+									<picture>
+										<source
+											type="image/webp"
+											srcset={toWebp(post.featuredImage.node.srcSet)}
+											sizes="(max-width: 768px) 100vw, 400px"
+										/>
+										<img
+											class="w-full h-full object-cover transition duration-500 hover:scale-105"
+											src={post.featuredImage.node.sourceUrl}
+											srcset={post.featuredImage.node.srcSet ?? undefined}
+											sizes="(max-width: 768px) 100vw, 400px"
+											width={post.featuredImage.node.mediaDetails?.width ?? undefined}
+											height={post.featuredImage.node.mediaDetails?.height ?? undefined}
+											alt=""
+											loading="lazy"
+											decoding="async"
+										/>
+									</picture>
 								</a>
 							{/if}
 							<div class="p-5">

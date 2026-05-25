@@ -12,6 +12,11 @@
 	let pageInfo = $state(data.pageInfo);
 	let loading = $state(false);
 
+	function toWebp(srcSet: string | null | undefined): string | undefined {
+		return srcSet?.replace(/\.(jpe?g|png)(\s|,)/gi, '.webp$2');
+	}
+
+
 	async function loadMore() {
 		if (!pageInfo?.hasNextPage || loading) return;
 		loading = true;
@@ -58,11 +63,24 @@
 			<article class="post-card flex flex-col sm:flex-row gap-0 bg-white rounded-xl border border-bg-alt overflow-hidden">
 				{#if post.featuredImage?.node?.sourceUrl}
 					<a href={url} class="block sm:w-72 shrink-0 h-56 sm:h-auto overflow-hidden">
-						<img
-							class="w-full h-full object-cover transition duration-500 hover:scale-105"
-							src={post.featuredImage.node.sourceUrl}
-							alt=""
-						/>
+						<picture>
+							<source
+								type="image/webp"
+								srcset={toWebp(post.featuredImage.node.srcSet)}
+								sizes="(max-width: 768px) 100vw, 288px"
+							/>
+							<img
+								class="w-full h-full object-cover transition duration-500 hover:scale-105"
+								src={post.featuredImage.node.sourceUrl}
+								srcset={post.featuredImage.node.srcSet ?? undefined}
+								sizes="(max-width: 768px) 100vw, 288px"
+								width={post.featuredImage.node.mediaDetails?.width ?? undefined}
+								height={post.featuredImage.node.mediaDetails?.height ?? undefined}
+								alt=""
+								loading="lazy"
+								decoding="async"
+							/>
+						</picture>
 					</a>
 				{/if}
 				<div class="p-5 lg:p-6 flex flex-col justify-center flex-1">

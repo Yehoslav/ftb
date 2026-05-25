@@ -18,6 +18,12 @@ export async function GET({ url }) {
 					featuredImage {
 						node {
 							sourceUrl
+							srcSet
+							sizes
+							mediaDetails {
+								width
+								height
+							}
 						}
 					}
 				}

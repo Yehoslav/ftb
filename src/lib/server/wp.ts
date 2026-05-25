@@ -47,7 +47,7 @@ export async function queryWP<T>(query: string, variables?: Record<string, unkno
 export function warmNoutatiCache(): Promise<void> {
 	const q = `query Posts {
 		posts(first: 10, where: { categoryName: "actualitati" }) {
-			nodes { title slug excerpt date featuredImage { node { sourceUrl } } }
+			nodes { title slug excerpt date featuredImage { node { sourceUrl srcSet sizes mediaDetails { width height } } } }
 			pageInfo { hasNextPage endCursor }
 		}
 	}`;

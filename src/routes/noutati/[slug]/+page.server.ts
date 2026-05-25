@@ -13,6 +13,12 @@ export const load: PageServerLoad = async ({ params }) => {
 					featuredImage {
 						node {
 							sourceUrl
+							srcSet
+							sizes
+							mediaDetails {
+								width
+								height
+							}
 						}
 					}
 				}

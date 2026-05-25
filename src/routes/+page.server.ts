@@ -9,7 +9,7 @@ export const load: PageServerLoad = async () => {
 
 	const orase = [...new Set(membri.map((m) => m.oras))];
 
-	const postsData = await queryWP<PostsQueryResult>(
+	const postsData = await 	queryWP<PostsQueryResult>(
 		`query RecentPosts($first: Int!) {
 			posts(first: $first, where: { categoryName: "actualitati" }) {
 				nodes {
@@ -20,6 +20,12 @@ export const load: PageServerLoad = async () => {
 					featuredImage {
 						node {
 							sourceUrl
+							srcSet
+							sizes
+							mediaDetails {
+								width
+								height
+							}
 						}
 					}
 				}
