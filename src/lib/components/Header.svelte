@@ -90,6 +90,7 @@
 			{#each directLinks.filter((l) => l.href === '/') as { href, label }}
 				<a
 					{href}
+					aria-current={isActive(href) ? 'page' : undefined}
 					class="px-3 py-2 rounded text-sm font-medium transition-colors
 						{isActive(href)
 							? 'bg-oxford text-white'
@@ -140,6 +141,7 @@
 									<a
 										{href}
 										role="menuitem"
+										aria-current={isActive(href) ? 'page' : undefined}
 										class="block px-4 py-2 text-sm transition-colors
 											{isActive(href)
 												? 'bg-oxford/10 text-oxford font-medium'
@@ -157,6 +159,7 @@
 			{#each directLinks.filter((l) => l.href !== '/') as { href, label }}
 				<a
 					{href}
+					aria-current={isActive(href) ? 'page' : undefined}
 					class="px-3 py-2 rounded text-sm font-medium transition-colors
 						{isActive(href)
 							? 'bg-oxford text-white'

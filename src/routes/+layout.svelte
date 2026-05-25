@@ -25,21 +25,20 @@ let headerHeight = $state(0);
 	<script defer src="/fa/js/regular.js"></script>
 </svelte:head>
 
-
 {#if navigating.to}
-	<div class="fixed top-0 left-0 right-0 z-[100] h-1 bg-blue animate-pulse"></div>
+	<div class="fixed top-0 left-0 right-0 z-100 h-0.5 bg-cerry animate-pulse"></div>
 {/if}
 
 {#if dev}
-    <div
-        class="fixed bottom-6 left-6 rounded bg-primary-subtle border border-primary-border z-200 px-4 py-2 font-mono"
-    >
-        <span class="inline sm:hidden">xs</span>
-        <span class="hidden sm:inline md:hidden">sm</span>
-        <span class="hidden md:inline lg:hidden">md</span>
-        <span class="hidden lg:inline xl:hidden">lg</span>
-        <span class="hidden xl:inline">xl</span>
-    </div>
+	<div
+		class="fixed bottom-5 left-5 rounded bg-white/90 border border-bg-alt shadow-sm z-200 px-3 py-1.5 font-mono text-xs text-text-muted backdrop-blur-sm"
+	>
+		<span class="inline sm:hidden">xs</span>
+		<span class="hidden sm:inline md:hidden">sm</span>
+		<span class="hidden md:inline lg:hidden">md</span>
+		<span class="hidden lg:inline xl:hidden">lg</span>
+		<span class="hidden xl:inline">xl</span>
+	</div>
 {/if}
 
 <Header bind:headerHeight />

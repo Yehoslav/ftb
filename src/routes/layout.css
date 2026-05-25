@@ -1,29 +1,58 @@
 @import 'tailwindcss';
 
 @theme {
-    /* Brand colors (from brand-book — do not change) */
-    --color-cerry:   oklch(0.5048 0.1938 27.86); /* #BA1818 */
-    --color-red:     oklch(0.6048 0.215 28.87);  /* #E63429 */
-    --color-oxford:  oklch(0.3848 0.141 273.69); /* #2F378D */
-    --color-blue:    oklch(0.5349 0.1375 247.85);/* #1071B8 */
-    --color-sunglow: oklch(0.8764 0.1657 91.03); /* #FFD136 */
-    --color-orange:  oklch(0.7459 0.1616 62.51); /* #F39222 */
+	/* Brand colors (from brand-book — do not change) */
+	--color-cerry:   oklch(0.5048 0.1938 27.86); /* #BA1818 */
+	--color-red:     oklch(0.6048 0.215 28.87);  /* #E63429 */
+	--color-oxford:  oklch(0.3848 0.141 273.69); /* #2F378D */
+	--color-blue:    oklch(0.5349 0.1375 247.85);/* #1071B8 */
+	--color-sunglow: oklch(0.8764 0.1657 91.03); /* #FFD136 */
+	--color-orange:  oklch(0.7459 0.1616 62.51); /* #F39222 */
 
-    /* Derived colors */
-    --color-cerry-light:   oklch(0.65 0.18 27.86);
-    --color-cerry-dark:    oklch(0.40 0.18 27.86);
-    --color-oxford-light:  oklch(0.50 0.10 273.69);
-    --color-bg:            oklch(0.9798 0.0045 78.3);
-    --color-bg-alt:        oklch(0.945 0.005 78.3);
-    --color-text:          oklch(0.15 0.02 273.69);
-    --color-text-muted:    oklch(0.45 0.02 273.69);
+	/* Derived / extended shades */
+	--color-cerry-light:   oklch(0.65 0.18 27.86);
+	--color-cerry-dark:    oklch(0.40 0.18 27.86);
+	--color-oxford-light:  oklch(0.50 0.10 273.69);
+	--color-oxford-dark:   oklch(0.28 0.10 273.69);
+	--color-blue-light:    oklch(0.70 0.08 247.85);
+	--color-blue-muted:    oklch(0.45 0.08 247.85);
+	--color-bg:            oklch(0.9798 0.0045 78.3);
+	--color-bg-alt:        oklch(0.945 0.005 78.3);
+	--color-text:          oklch(0.15 0.02 273.69);
+	--color-text-muted:    oklch(0.45 0.02 273.69);
 
-    /* Font */
-    --font-sans: 'Rubik', sans-serif;
+	/* Font */
+	--font-sans: 'Rubik', sans-serif;
 }
 
 body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: var(--font-sans);
+	background-color: var(--color-bg);
+	color: var(--color-text);
+	font-family: var(--font-sans);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+	background-color: color-mix(in oklch, var(--color-oxford) 15%, transparent);
+}
+
+:focus-visible {
+	outline: 2px solid var(--color-oxford);
+	outline-offset: 2px;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
