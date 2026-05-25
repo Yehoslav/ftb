@@ -1,13 +1,15 @@
-import type { PageServerLoad } from './$types';
+import { json } from '@sveltejs/kit';
 import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
 
 const POSTS_PER_PAGE = 10;
 
-export const load: PageServerLoad = async () => {
+export async function GET({ url }) {
+	const after = url.searchParams.get('after');
+
 	const data = await queryWP<PostsQueryResult>(
-		`query Posts($first: Int!) {
-			posts(first: $first, where: { categoryName: "actualitati" }) {
+		`query Posts($first: Int!, $after: String) {
+			posts(first: $first, after: $after, where: { categoryName: "actualitati" }) {
 				nodes {
 					title
 					slug
@@ -25,12 +27,11 @@ export const load: PageServerLoad = async () => {
 				}
 			}
 		}`,
-		{ first: POSTS_PER_PAGE }
+		{ first: POSTS_PER_PAGE, after }
 	);
 
-	return {
+	return json({
 		posts: data.posts.nodes,
-		pageInfo: data.posts.pageInfo,
-		seo: { title: 'Noutăți', description: 'Ultimele articole și anunțuri de la Federația Tinerilor Basarabeni.' }
-	};
-};
+		pageInfo: data.posts.pageInfo
+	});
+}

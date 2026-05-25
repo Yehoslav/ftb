@@ -1,11 +1,29 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import type { WPPost } from '$lib/types/wp';
 
 	let { data }: PageProps = $props();
 
 	const dateOptions: Intl.DateTimeFormatOptions = {
 		month: 'long', day: 'numeric', year: 'numeric'
 	};
+
+	let allPosts = $state<WPPost[]>(data.posts);
+	let pageInfo = $state(data.pageInfo);
+	let loading = $state(false);
+
+	async function loadMore() {
+		if (!pageInfo?.hasNextPage || loading) return;
+		loading = true;
+		try {
+			const res = await fetch(`/api/posts?after=${pageInfo.endCursor}`);
+			const json = await res.json();
+			allPosts = [...allPosts, ...json.posts];
+			pageInfo = json.pageInfo;
+		} finally {
+			loading = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -33,8 +51,8 @@
 		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
 	</div>
 
-	<div class="anim-posts flex flex-col gap-6 max-w-4xl mx-auto">
-		{#each data.posts as post}
+	<div id="noutati-list" class="anim-posts flex flex-col gap-6 max-w-4xl mx-auto">
+		{#each allPosts as post}
 			{@const url = `/noutati/${post.slug}`}
 
 			<article class="post-card flex flex-col sm:flex-row gap-0 bg-white rounded-xl border border-bg-alt overflow-hidden">
@@ -62,14 +80,15 @@
 		{/each}
 	</div>
 
-	{#if data.pageInfo?.hasNextPage}
+	{#if pageInfo?.hasNextPage}
 		<nav class="mt-10 flex justify-center">
-			<a
-				href="?after={data.pageInfo?.endCursor ?? ''}"
-				class="inline-flex items-center px-6 py-3 rounded-lg border border-blue text-blue font-medium text-sm no-underline tracking-wider hover:bg-blue hover:text-white transition-colors duration-300"
+			<button
+				onclick={loadMore}
+				disabled={loading}
+				class="inline-flex items-center px-6 py-3 rounded-lg border border-blue text-blue font-medium text-sm no-underline tracking-wider hover:bg-blue hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
 			>
-				Articole mai vechi
-			</a>
+				{loading ? 'Se încarcă...' : 'Articole mai vechi'}
+			</button>
 		</nav>
 	{/if}
 </div>
