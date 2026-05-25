@@ -61,22 +61,20 @@
 </div>
 
 <style>
-article {
-    :global(:is(p, ul)) {
-        margin-top: 1rem;
-    }
-    :global(li) {
-        list-style-type: circle;
-        margin-left: 2rem;
-    }
-    :global(a) {
-        color: blue;
-    }
+:global(article p, article ul) {
+    margin-top: 1rem;
+}
+:global(article li) {
+    list-style-type: circle;
+    margin-left: 2rem;
+}
+:global(article a) {
+    color: blue;
 }
 
 .loader {
-    border: 3px solid #f3f3f3; /* Light grey */
-    border-top: 3px solid #3498db; /* Blue */
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
     border-radius: 50%;
     width: 20px;
     height: 20px;

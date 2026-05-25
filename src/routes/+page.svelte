@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Counter from './Counter.svelte';
+    import Counter from '$lib/components/Counter.svelte';
 
     let counters = {
         organizatii: 18,
@@ -56,10 +56,8 @@
                     proiecte: info.Nr_Evenimente,
                 }}
                 duration="3000"
-                random="false"
                 minspeed="50"
-                let:counterResult
-            ></Counter>
+            />
         {:catch error}
             <p style="color: red">{error.message}</p>
         {/await}

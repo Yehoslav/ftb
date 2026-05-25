@@ -16,5 +16,5 @@ export async function GET({ url }) {
     )
         .then((data) => data.json());
 
-    return json(resp.records.map(r => r.fields))
+    return json(resp.records.map((/** @type {{ fields: any }} */ r) => r.fields))
 }
