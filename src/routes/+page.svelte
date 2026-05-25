@@ -17,9 +17,9 @@
     }
 </script>
 
-<div class="m-auto border-x-1 border-olive-200 *:border-olive-200 lg:w-300">
+<div class="m-auto border-x border-bg-alt *:border-bg-alt lg:w-300">
     <!-- INFO: Card -->
-    <div class="flex flex-row items-center text-accent border-b-1 py-8 bg-linear-to-r from-primary to-secondary">
+    <div class="flex flex-row items-center text-white border-b py-8 bg-linear-to-r from-oxford to-blue">
         <div class="w-1/2">
             <h1 class="text-2xl font-bold">Noi suntem FTB</h1>
 

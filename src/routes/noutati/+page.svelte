@@ -29,7 +29,7 @@
     } 
 </script>
 
-<div class="lg:w-300 border-x-1 border-olive-200 py-8 flex flex-col mt-8 gap-4 mx-auto content-center">
+<div class="lg:w-300 border-x border-bg-alt py-8 flex flex-col mt-8 gap-4 mx-auto content-center">
     <h1 class="text-3xl">Noutăți FTB</h1>
 
         
@@ -50,7 +50,7 @@
                         <div>{@html post.excerpt}</div>
                     </div>
                 </div>
-                <hr class="border-olive-200">
+                <hr class="border-bg-alt">
         {/each}
     </div>
 

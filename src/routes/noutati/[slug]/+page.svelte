@@ -49,7 +49,7 @@
     } 
 </script>
 
-<div class="mx-auto flex flex-row lg:w-300 divide-x-1 divide-olive-200 border-olive-200 border-x-1">
+<div class="mx-auto flex flex-row lg:w-300 divide-x divide-bg-alt border-bg-alt border-x">
 
 
     <!-- TODO: Nu vor fi într-atîtea articole ca să le încarc mereu așa, vezi cum le preprocesezi -->
@@ -60,7 +60,7 @@
             <article>
                 <h1 class="text-3xl font-bold">{post.title}</h1>
                 <time>{new Date(post.date).toLocaleString("ro", dateOptions)}</time>
-                <hr class="pb-4 border-olive-200">
+                <hr class="pb-4 border-bg-alt">
                 {@html post.content}
             </article>
             {:catch error}
@@ -68,7 +68,7 @@
         {/await}
     </div>
 
-    <div class="flex flex-col grow py-8 divide-y-1 divide-olive-200">
+    <div class="flex flex-col grow py-8 divide-y divide-bg-alt">
         <div class="pl-2 ">
             <h1>Articol Recomandat</h1>
             {#await featuredPost()}
