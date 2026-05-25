@@ -1,6 +1,18 @@
 import type { PageServerLoad } from './$types';
-import { GRIST_AUTH_TOKEN } from '$env/static/private';
+import { getInfo } from '$lib/server/grist';
+import { membri } from '$lib/data/membre';
 
-export const load: PageServerLoad = async ({}) => {
-    return {};
+export const load: PageServerLoad = async () => {
+	const info = await getInfo().catch(() => null);
+
+	const orase = [...new Set(membri.map((m) => m.oras))];
+
+	return {
+		info,
+		membreStats: {
+			total: membri.length,
+			orase: orase.length,
+			oraseList: orase.sort()
+		}
+	};
 };

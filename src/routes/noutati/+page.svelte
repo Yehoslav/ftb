@@ -1,88 +1,73 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
+	import type { PageProps } from './$types';
 
-    let { data }: PageProps = $props();
+	let { data }: PageProps = $props();
 
-    async function getPosts() {
-        const resp = await fetch("https://ftbromania.ro/incubator/graphql", {
-                method: 'post', 
-                headers: {'Content-Type':'application/json'},
-                body: JSON.stringify({
-                    query: `{
-                        posts {
-                            nodes {
-                                title
-                                slug
-                                excerpt
-                                featuredImage {
-                                    node {
-                                        sourceUrl
-                                    }
-                               }
-                            }
-                        }
-                    }`
-                })
-            }
-        ).then(data => data.json())
-        return resp.data.posts.nodes
-    } 
+	const dateOptions: Intl.DateTimeFormatOptions = {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric'
+	};
 </script>
 
-<div class="lg:w-300 border-x border-bg-alt py-8 flex flex-col mt-8 gap-4 mx-auto content-center">
-    <h1 class="text-3xl">Noutăți FTB</h1>
+<svelte:head>
+	<title>Noutăți — FTB România</title>
+</svelte:head>
 
-        
-    {#await getPosts()}
-        <div class="flex flex-row">Încărcăm postarea<div class="loader"></div></div>
+<div class="mx-auto px-4 py-12 lg:w-300">
+	<h1 class="text-3xl font-bold text-oxford mb-8">Noutăți FTB</h1>
 
-    {:then posts}
-        Nr. postări: {posts.length}
+	<div class="flex flex-col gap-y-6">
+		{#each data.posts as post}
+			{@const url = `/noutati/${post.slug}`}
 
-    <div class="flex flex-col gap-y-4">
-        {#each posts as post}
-            {@const url = `/noutati/${post.slug}`}
+			<article class="flex flex-col sm:flex-row gap-4 bg-white rounded-lg border border-bg-alt overflow-hidden">
+				{#if post.featuredImage?.node?.sourceUrl}
+					<a href={url} class="block sm:w-72 shrink-0 h-56 sm:h-auto overflow-hidden">
+						<img
+							class="w-full h-full object-cover transition hover:scale-105"
+							src={post.featuredImage.node.sourceUrl}
+							alt=""
+						/>
+					</a>
+				{/if}
+				<div class="p-4 flex flex-col justify-center">
+					<time class="text-xs text-text-muted">
+						{new Date(post.date).toLocaleString('ro', dateOptions)}
+					</time>
+					<h2 class="font-bold text-lg mt-1">
+						<a href={url} class="text-text hover:text-oxford no-underline transition-colors">
+							{post.title}
+						</a>
+					</h2>
+					<div class="text-sm text-text-muted mt-2 line-clamp-3">{@html post.excerpt}</div>
+				</div>
+			</article>
+			<hr class="border-bg-alt" />
+		{/each}
+	</div>
 
-                <div class="flex flex-row gap-x-4 items-center " >
-                    <a class="block max-w-120 min-w-120 h-80 overflow-hidden" href={url}><img class="w-full h-full transition hover:scale-110 object-cover" src={post.featuredImage.node.sourceUrl} alt=""></a>
-                    <div>
-                        <h2 class="font-bold text-xl hover:text-blue-600"><a href={url}>{post.title}</a></h2>
-                        <div>{@html post.excerpt}</div>
-                    </div>
-                </div>
-                <hr class="border-bg-alt">
-        {/each}
-    </div>
-
-    {:catch error}
-        <p style="color: red">{error.message}</p>
-    {/await}
-
+	{#if data.pageInfo?.hasNextPage}
+		<nav class="mt-8 flex justify-center">
+			<a
+				href="?after={data.pageInfo?.endCursor ?? ''}"
+				class="px-6 py-2 rounded bg-oxford text-white text-sm font-medium hover:bg-oxford-light transition-colors no-underline"
+			>
+				Articole mai vechi
+			</a>
+		</nav>
+	{/if}
 </div>
 
 <style>
-:global(article p, article ul) {
-    margin-top: 1rem;
-}
-:global(article li) {
-    list-style-type: circle;
-    margin-left: 2rem;
-}
-:global(article a) {
-    color: blue;
-}
-
-.loader {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-0% { transform: rotate(0deg); }
-100% { transform: rotate(360deg); }
-}
+	:global(article p, article ul) {
+		margin-top: 1rem;
+	}
+	:global(article li) {
+		list-style-type: circle;
+		margin-left: 2rem;
+	}
+	:global(article a) {
+		color: var(--color-blue);
+	}
 </style>

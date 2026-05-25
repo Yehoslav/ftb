@@ -1,125 +1,60 @@
 <script lang="ts">
-    import type { PageProps } from './$types';
+	import type { PageProps } from './$types';
 
-    let { params }: PageProps = $props();
+	let { data }: PageProps = $props();
 
-    const events = [
-        {date: "22 aprilie", descr: "lorem ipsum"},
-        {date: "22 aprilie", descr: "lorem ipsum"},
-        {date: "22 aprilie", descr: "lorem ipsum"},
-    ]
-
-    const dateOptions: Intl.DateTimeFormatOptions = {
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-    }
-
-    async function featuredPost() {
-        const resp = await fetch("https://ftbromania.ro/incubator/graphql", {
-            method: 'post', 
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({
-                query: `{
-                    post(id: "federatia-tinerilor-basarabeni-din-romania-aniverseaza-trei-ani-de", idType: SLUG) {
-                        excerpt
-                        date
-                        title
-                    }
-                }`
-            })
-        }).then(data => data.json())
-        return resp.data.post
-    } 
-    async function getPost() {
-        const resp = await fetch("https://ftbromania.ro/incubator/graphql", {
-            method: 'post', 
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({
-                query: `{
-                    post(id: "${params.slug}", idType: SLUG) {
-                        content
-                        date
-                        title
-                    }
-                }`
-            })
-        }).then(data => data.json())
-        return resp.data.post
-    } 
+	const dateOptions: Intl.DateTimeFormatOptions = {
+		month: 'long',
+		day: 'numeric',
+		year: 'numeric'
+	};
 </script>
 
-<div class="mx-auto flex flex-row lg:w-300 divide-x divide-bg-alt border-bg-alt border-x">
+<svelte:head>
+	<title>{data.post?.title ?? 'Articol'} — FTB România</title>
+</svelte:head>
 
+<div class="mx-auto flex flex-col lg:flex-row lg:w-300 divide-y lg:divide-y-0 lg:divide-x divide-bg-alt border-bg-alt border-x">
+	<article class="p-6 lg:p-8 lg:w-[70ch]">
+		<h1 class="text-3xl font-bold text-text">{data.post.title}</h1>
+		<time class="text-sm text-text-muted">
+			{new Date(data.post.date).toLocaleString('ro', dateOptions)}
+		</time>
+		<hr class="my-4 border-bg-alt" />
+		<div class="prose prose-sm max-w-none">{@html data.post.content}</div>
+	</article>
 
-    <!-- TODO: Nu vor fi într-atîtea articole ca să le încarc mereu așa, vezi cum le preprocesezi -->
-    <div class="w-[60ch] min-w-[60ch] lg:w-[70ch] lg:min-w-[70ch] py-8">
-        {#await getPost()}
-            <div class="flex flex-row">Încărcăm postarea<div class="loader"></div></div>
-            {:then post}
-            <article>
-                <h1 class="text-3xl font-bold">{post.title}</h1>
-                <time>{new Date(post.date).toLocaleString("ro", dateOptions)}</time>
-                <hr class="pb-4 border-bg-alt">
-                {@html post.content}
-            </article>
-            {:catch error}
-            <p style="color: red">{error.message}</p>
-        {/await}
-    </div>
+	<aside class="p-6 lg:p-8 lg:grow flex flex-col gap-6">
+		{#if data.featuredPost}
+			<div>
+				<h2 class="text-lg font-bold text-oxford mb-3">Articol Recomandat</h2>
+				<article class="bg-bg-alt rounded-lg p-4">
+					<h3 class="font-bold text-text">{data.featuredPost.title}</h3>
+					<time class="text-xs text-text-muted">
+						{new Date(data.featuredPost.date).toLocaleString('ro', dateOptions)}
+					</time>
+					<div class="text-sm text-text-muted mt-2">{@html data.featuredPost.excerpt}</div>
+				</article>
+			</div>
+		{/if}
 
-    <div class="flex flex-col grow py-8 divide-y divide-bg-alt">
-        <div class="pl-2 ">
-            <h1>Articol Recomandat</h1>
-            {#await featuredPost()}
-                <div class="flex flex-row">Încărcăm postarea<div class="loader"></div></div>
-                {:then post}
-                <article>
-                    <h1 class="text-lg font-bold">{post.title}</h1>
-                    <time>{new Date(post.date).toLocaleString("ro", dateOptions)}</time>
-                    {@html post.excerpt}
-                </article>
-                {:catch error}
-                <p style="color: red">{error.message}</p>
-            {/await}
-        </div>
-        <div class="pl-2 pt-4">
-            <h1>Calendarul evenimentelor</h1>
-            <ul>
-                {#each events as event}
-                    <li class="ml-4"><time>{event.date}</time> &mdash; {event.descr}</li>
-                {/each}
-            </ul>
-        </div>
-    </div>
-
+		<div>
+			<h2 class="text-lg font-bold text-oxford mb-3">Calendarul evenimentelor</h2>
+			<!-- TODO: de integrat cu WP Events când e disponibil -->
+			<p class="text-sm text-text-muted">Nu există evenimente programate momentan.</p>
+		</div>
+	</aside>
 </div>
 
 <style>
-article {
-    :global(:is(p, ul)) {
-        margin-top: 1rem;
-    }
-    :global(li) {
-        list-style-type: circle;
-        margin-left: 2rem;
-    }
-    :global(a) {
-        color: blue;
-    }
-}
-
-.loader {
-  border: 3px solid #f3f3f3; /* Light grey */
-  border-top: 3px solid #3498db; /* Blue */
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+	:global(.prose p, .prose ul) {
+		margin-top: 1rem;
+	}
+	:global(.prose li) {
+		list-style-type: circle;
+		margin-left: 2rem;
+	}
+	:global(.prose a) {
+		color: var(--color-blue);
+	}
 </style>

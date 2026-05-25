@@ -1,95 +1,104 @@
 <script lang="ts">
-    import Counter from '$lib/components/Counter.svelte';
+	import type { PageProps } from './$types';
+	import Counter from '$lib/components/Counter.svelte';
 
-    let counters = {
-        organizatii: 18,
-        voluntari: 750,
-        parteneri: 16,
-        proiecte: 15,
-    };
-
-    const { data } = $props();
-
-    async function get(path: string) {
-        return await fetch(`/api/${path}`, { method: 'get' }).then((d) =>
-            d.json(),
-        );
-    }
+	let { data }: PageProps = $props();
 </script>
 
-<div class="m-auto border-x border-bg-alt *:border-bg-alt lg:w-300">
-    <!-- INFO: Card -->
-    <div class="flex flex-row items-center text-white border-b py-8 bg-linear-to-r from-oxford to-blue">
-        <div class="w-1/2">
-            <h1 class="text-2xl font-bold">Noi suntem FTB</h1>
+<svelte:head>
+	<title>FTB România — Federația Tinerilor Basarabeni</title>
+</svelte:head>
 
-            Federația Tinerilor Basarabeni s-a înființat din dorința de a aduna
-            la un loc toate asociațiile de studenți și tineri basarabeni din
-            România. Chiar dacă ca grup de inițiativă am existat de mai mult
-            timp, statutul juridic l-am obținut pe 24 septembrie 2021. În
-            prezent federația are 17 asociații membre din cele mai mari centre
-            universitare din România: Alba-Iulia, Bacău, Brașov, București,
-            Cluj-Napoca, Craiova, Galați, Iași, Petroșani, Ploiești, Sibiu,
-            Suceava, Târgoviște, Târgu Mureș și Timișoara.
-        </div>
+<div class="mx-auto lg:w-300">
+	<!-- Hero -->
+	<section class="flex flex-col lg:flex-row items-center gap-8 px-4 py-12 lg:py-16 text-white bg-linear-to-r from-oxford to-blue">
+		<div class="lg:w-1/2">
+			<h1 class="text-3xl lg:text-4xl font-bold mb-4">Noi suntem FTB</h1>
+			<p class="leading-relaxed">
+				Federația Tinerilor Basarabeni s-a înființat din dorința de a aduna
+				la un loc toate asociațiile de studenți și tineri basarabeni din
+				România. Chiar dacă ca grup de inițiativă am existat de mai mult
+				timp, statutul juridic l-am obținut pe 24 septembrie 2021.
+			</p>
+			<a
+				href="/despre-noi"
+				class="inline-block mt-6 px-6 py-2 rounded bg-white text-oxford font-medium text-sm no-underline hover:bg-bg transition-colors"
+			>
+				Află mai multe
+			</a>
+		</div>
+		<div class="lg:w-1/2 flex justify-center">
+			<img
+				src="https://www.ftbromania.ro/wp-content/uploads/2022/08/Homepage-image-1.png"
+				class="w-2/3"
+				alt=""
+			/>
+		</div>
+	</section>
 
-        <div class="flex w-1/2 justify-center">
-            <img
-                src="https://www.ftbromania.ro/wp-content/uploads/2022/08/Homepage-image-1.png"
-                class="w-2/3"
-                alt=""
-            />
-        </div>
-    </div>
+	<!-- Counter -->
+	<section class="px-4 py-16">
+		{#if data.info}
+			<Counter
+				values={{
+					organizatii: parseInt(data.info.Nr_Org_Membre),
+					voluntari: parseInt(data.info.Nr_Voluntari),
+					parteneri: parseInt(data.info.Nr_Parteneri),
+					proiecte: parseInt(data.info.Nr_Evenimente)
+				}}
+				duration="3000"
+				minspeed="50"
+			/>
+		{/if}
+	</section>
 
-    <div class="flex flex-row items-center py-16">
-        {#await get('info')}
-            <div class="flex flex-row">
-                Încărcăm informații despre asociație
-            </div>
-        {:then info}
-            <Counter
-                values={{
-                    organizatii: parseInt(info.Nr_Org_Membre),
-                    voluntari: info.Nr_Voluntari,
-                    parteneri: info.Nr_Parteneri,
-                    proiecte: info.Nr_Evenimente,
-                }}
-                duration="3000"
-                minspeed="50"
-            />
-        {:catch error}
-            <p style="color: red">{error.message}</p>
-        {/await}
-    </div>
+	<!-- Membre -->
+	<section class="px-4 py-12 bg-bg-alt border-y border-bg-alt">
+		<div class="text-center">
+			<h2 class="text-2xl font-bold text-oxford mb-2">Organizații Membre</h2>
+			<p class="text-text-muted mb-4">
+				{data.membreStats.total} de asociații în {data.membreStats.orase} de centre universitare
+			</p>
+			<div class="flex flex-wrap justify-center gap-2 mb-6 max-w-xl mx-auto">
+				{#each data.membreStats.oraseList as oras}
+					<span class="px-3 py-1 rounded-full bg-white border border-bg-alt text-sm text-text">
+						{oras}
+					</span>
+				{/each}
+			</div>
+			<a
+				href="/membre"
+				class="inline-block px-6 py-2 rounded bg-oxford text-white text-sm font-medium no-underline hover:bg-oxford-light transition-colors"
+			>
+				Vezi toate organizațiile membre
+			</a>
+		</div>
+	</section>
 
-    <div class="flex flex-row items-center py-16">
-        {#await get('asociatii')}
-            <div class="flex flex-row">Încărcăm asociațiile membre</div>
-        {:then asociatii}
-            <table class="min-w-full leading-normal">
-                <thead>
-                    <tr>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Nume</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Abreviere</th>
-                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Judet</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-1">
-                    {#each asociatii as asoc}
-                        {@const nume = asoc.Nume}
-                        {@const abbr = asoc.Abreviere}
-                        {@const jude = asoc.Judet}
-                        <tr>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{nume}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{abbr}</td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">{jude}</td>
-                        </tr>
-                    {/each}
-                </tbody>
-            </table>
-        {:catch error}
-            <p style="color: red">{error.message}</p>
-        {/await}
-    </div>
+	<!-- Quick links -->
+	<section class="px-4 py-16">
+		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+			<a
+				href="/echipa"
+				class="block p-6 rounded-lg bg-white border border-bg-alt no-underline hover:border-oxford transition-colors"
+			>
+				<h3 class="font-bold text-oxford mb-2">Echipă</h3>
+				<p class="text-sm text-text-muted">Cunoaște echipa FTB</p>
+			</a>
+			<a
+				href="/proiecte"
+				class="block p-6 rounded-lg bg-white border border-bg-alt no-underline hover:border-oxford transition-colors"
+			>
+				<h3 class="font-bold text-oxford mb-2">Proiecte</h3>
+				<p class="text-sm text-text-muted">Descoperă proiectele noastre</p>
+			</a>
+			<a
+				href="/noutati"
+				class="block p-6 rounded-lg bg-white border border-bg-alt no-underline hover:border-oxford transition-colors"
+			>
+				<h3 class="font-bold text-oxford mb-2">Noutăți</h3>
+				<p class="text-sm text-text-muted">Ultimele articole și anunțuri</p>
+			</a>
+		</div>
+	</section>
 </div>
