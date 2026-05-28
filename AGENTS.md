@@ -134,6 +134,23 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
 - [ ] **Pagination** — only "older articles" exists; add "newer articles" to noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
+- [ ] **Contact form** — replace OpnForm iframe with in-house form connected to Gmail API
+
+### 🔴 Security
+- [ ] **Auth on `/api/revalidate`** — no authentication; anyone can flush WP GraphQL cache
+- [ ] **`rel="noopener noreferrer"`** — missing on all social/external links in Footer, articles
+
+### 🟠 Performance
+- [ ] **Font Awesome JS → webfont CSS** — 4 JS bundles (~1.5MB) cause FOUI; replace with static CSS
+
+### 🟡 Accessibility
+- [ ] **Skip-to-content link** — first focusable element missing for keyboard users
+- [ ] **Header dropdown keyboard navigation** — Arrow keys, Enter, Escape not handled; focus not trapped
+
+### 🟢 UX / Housekeeping
+- [ ] **Custom `+error.svelte`** — SvelteKit's default is bare-minimum; create branded error page
+- [ ] **Dead resource tags on homepage** — stale category links in `src/routes/+page.svelte`
+- [ ] **Unused `wpEvents` fetch** — orphaned GraphQL query in server load files
 
 ## QA notes
 
