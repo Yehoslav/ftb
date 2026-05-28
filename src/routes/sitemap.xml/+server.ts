@@ -1,6 +1,7 @@
 import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
 import { resurseCategorii } from '$lib/data/resurse';
+import { evenimente } from '$lib/data/evenimente';
 
 export async function GET() {
 	const staticPages = [
@@ -22,6 +23,11 @@ export async function GET() {
 		}))
 	);
 
+	const evenimentePages = evenimente.map((ev) => ({
+		loc: `/evenimente/${ev.slug}`,
+		priority: '0.6'
+	}));
+
 	const query = `query SitemapPosts {
 		posts(where: { categoryName: "actualitati" }, first: 100) {
 			nodes { slug modified }
@@ -40,7 +46,7 @@ export async function GET() {
 		// WP offline — sitemap still works for static pages
 	}
 
-	const urls = [...staticPages, ...ghiduriPages, ...newsPages]
+	const urls = [...staticPages, ...ghiduriPages, ...evenimentePages, ...newsPages]
 		.map(
 			(p) => `  <url>
     <loc>https://ftbromania.ro${p.loc}</loc>

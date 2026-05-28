@@ -60,3 +60,7 @@ export interface EventsQueryResult {
 		nodes: WPEvent[];
 	};
 }
+
+export interface EventQueryResult {
+	event: WPEvent | null;
+}

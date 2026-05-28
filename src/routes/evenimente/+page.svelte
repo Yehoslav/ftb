@@ -69,7 +69,9 @@
 						<span class="text-xs font-medium uppercase">{new Date(event.date).toLocaleString(locale, { month: 'short' })}</span>
 					</div>
 					<div class="min-w-0 flex-1">
-						<h2 class="font-semibold text-text">{event.title}</h2>
+						<h2 class="font-semibold text-text">
+							<a href="/evenimente/{event.slug}" class="no-underline hover:text-blue transition-colors">{event.title}</a>
+						</h2>
 						<p class="text-sm text-text-muted mt-1 flex items-center gap-1.5">
 							<i class="fa-solid fa-location-dot text-blue text-xs" aria-hidden="true"></i>
 							{event.location}
@@ -77,7 +79,7 @@
 					</div>
 				</div>
 
-				<p class="text-sm text-text-muted mt-4 leading-relaxed">{event.description}</p>
+				<p class="text-sm text-text-muted mt-4 leading-relaxed">{event.description.length > 120 ? event.description.slice(0, 120) + '…' : event.description}</p>
 
 				{#if event.dateEnd}
 					<p class="text-xs text-text-muted mt-3">

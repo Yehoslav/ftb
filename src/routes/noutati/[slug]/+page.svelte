@@ -49,18 +49,21 @@
 					<h2 class="text-lg font-bold text-text tracking-tight mb-4">Calendarul evenimentelor</h2>
 					<div class="flex flex-col gap-3">
 						{#each data.evenimente as event}
-							<article class="bg-bg-alt rounded-xl p-4 border border-bg-alt">
+							<a
+								href="/evenimente/{event.slug}"
+								class="bg-bg-alt rounded-xl p-4 border border-bg-alt no-underline block hover:border-blue/20 transition-colors"
+							>
 								<div class="flex items-start gap-3">
 									<div class="shrink-0 w-10 h-10 rounded-lg bg-blue-light text-blue flex flex-col items-center justify-center leading-tight text-xs">
 										<span class="text-sm font-bold">{new Date(event.date).toLocaleString('ro', { day: 'numeric' })}</span>
 										<span class="uppercase font-medium">{new Date(event.date).toLocaleString('ro', { month: 'short' })}</span>
 									</div>
 									<div class="min-w-0">
-										<h3 class="text-sm font-semibold text-text leading-snug">{event.title}</h3>
+										<span class="text-sm font-semibold text-text leading-snug">{event.title}</span>
 										<p class="text-xs text-text-muted mt-0.5">{event.location}</p>
 									</div>
 								</div>
-							</article>
+							</a>
 						{/each}
 					</div>
 				</div>

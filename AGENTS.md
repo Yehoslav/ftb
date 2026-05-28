@@ -56,8 +56,9 @@ src/
 │   ├── contact/
 │   ├── despre-noi/
 │   ├── echipa/
-│   ├── membre/
+│   ├── membre/             → now at /organizatii-membre
 │   ├── noutati/            # News listing + [slug] article view
+│   ├── evenimente/         # Events listing + [slug] detail
 │   ├── proiecte/
 │   ├── api/                # API routes (grist proxy, cache revalidate)
 │   └── sitemap.xml/
@@ -130,7 +131,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Projects data** — hardcoded in `src/lib/data/proiecte.ts`; migrate to ACF CPT
 - [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
 - [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
-- [ ] **Event calendar** — placeholder on article pages; integrate with WP Events
+- [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
 - [ ] **Pagination** — only "older articles" exists; add "newer articles" to noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
 
