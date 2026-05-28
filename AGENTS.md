@@ -14,7 +14,7 @@ Production: https://ftbromania.ro
 | Language | TypeScript (strict) |
 | CSS | Tailwind CSS v4 (`@theme` directives, `@tailwindcss/vite` plugin) |
 | Icons | Font Awesome 6 (brands, solid, regular) — static files in `/static/fa/` |
-| Font | Rubik (Google Fonts, loaded in `app.html`) |
+| Font | Rubik (self-hosted woff2 in `/static/fonts/`, `@font-face` in `layout.css`) |
 | Runtime | Deno (Node compat via `deno.json`) |
 | Build | Vite 7 |
 | Adapter | `@deno/svelte-adapter` |
