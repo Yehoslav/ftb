@@ -111,7 +111,7 @@
 		</div></aside>
 
 		<!-- Main content -->
-		<div class="min-w-0 flex-1 anim-content pt-10 pl-6 lg:border-l border-bg-alt">
+		<div class="min-w-0 flex-1 anim-content pt-10 lg:pl-6 lg:border-l border-bg-alt">
 			<!-- Mobile: sidebar toggle + page title -->
 			<div class="flex items-center gap-3 mb-6 lg:hidden">
 				<button
