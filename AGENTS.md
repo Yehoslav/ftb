@@ -148,7 +148,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Header dropdown keyboard navigation** — Arrow keys, Enter, Escape not handled; focus not trapped
 
 ### 🟢 UX / Housekeeping
-- [ ] **Custom `+error.svelte`** — SvelteKit's default is bare-minimum; create branded error page
+- [x] **Custom `+error.svelte`** — branded error page with 404 detection, nav links back to homepage / noutati
 - [ ] **Dead resource tags on homepage** — stale category links in `src/routes/+page.svelte`
 - [ ] **Unused `wpEvents` fetch** — orphaned GraphQL query in server load files
 
