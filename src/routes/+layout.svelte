@@ -2,6 +2,7 @@
 import './layout.css';
 import type { LayoutProps } from './$types';
 import { page, navigating } from '$app/state';
+import { setContext } from 'svelte';
 import favicon from '$lib/assets/favicon.svg';
 import Header from '$lib/components/Header.svelte';
 import Footer from '$lib/components/Footer.svelte';
@@ -10,6 +11,12 @@ import { dev } from '$app/environment';
 
 let { children }: LayoutProps = $props();
 let headerHeight = $state(0);
+let headerVisible = $state(true);
+
+setContext('header', {
+	get height() { return headerHeight; },
+	get visible() { return headerVisible; }
+});
 </script>
 
 <svelte:head>
@@ -41,7 +48,7 @@ let headerHeight = $state(0);
 	</div>
 {/if}
 
-<Header bind:headerHeight />
+<Header bind:headerHeight bind:headerVisible />
 
 <main class="min-h-screen" style="padding-top: {headerHeight}px">
 	{@render children()}

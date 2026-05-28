@@ -26,6 +26,14 @@
 				{ href: '/membre', label: 'Membre' },
 				{ href: '/noutati', label: 'Noutăți' }
 			]
+		},
+		{
+			label: 'Resurse',
+			items: [
+				{ href: '/ghiduri#ghiduri', label: 'Ghiduri' },
+				{ href: '/ghiduri#pentru-studenti', label: 'Pentru studenți' },
+				{ href: '/ghiduri#resurse-generale', label: 'Resurse generale' }
+			]
 		}
 	];
 
@@ -34,7 +42,7 @@
 		{ href: '/contact', label: 'Contact' }
 	];
 
-	let { headerHeight = $bindable(0) } = $props();
+	let { headerHeight = $bindable(0), headerVisible = $bindable(true) } = $props();
 
 	let header: HTMLElement | undefined = $state();
 	let lastScroll = $state(0);
@@ -44,8 +52,9 @@
 	let openMobileGroup: string | null = $state(null);
 
 	function isActive(href: string): boolean {
-		if (href === '/') return page.url.pathname === href;
-		return page.url.pathname.startsWith(href);
+		const path = href.split('#')[0];
+		if (path === '/') return page.url.pathname === path;
+		return page.url.pathname.startsWith(path);
 	}
 
 	function isGroupActive(group: DropdownGroup): boolean {
@@ -58,6 +67,10 @@
 
 	$effect(() => {
 		if (header) headerHeight = header.offsetHeight;
+	});
+
+	$effect(() => {
+		headerVisible = !hidden;
 	});
 </script>
 

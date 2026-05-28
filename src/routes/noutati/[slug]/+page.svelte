@@ -27,7 +27,7 @@
 				{new Date(data.post.date).toLocaleString('ro', dateOptions)}
 			</time>
 			<div class="w-10 h-0.5 bg-blue mt-6 mb-8 rounded-sm" aria-hidden="true"></div>
-			<div class="prose max-w-none">{@html data.post.content}</div>
+			<div class="prose">{@html data.post.content}</div>
 		</article>
 
 		<aside class="anim-side lg:pl-10 lg:min-w-72 flex flex-col gap-8">

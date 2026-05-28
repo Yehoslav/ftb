@@ -43,3 +43,7 @@ export interface PostsQueryResult {
 export interface PostQueryResult {
 	post: WPPost;
 }
+
+export interface PageQueryResult {
+	page: WPPage;
+}
