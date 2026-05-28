@@ -25,7 +25,8 @@
 			label: 'Activități',
 			items: [
 				{ href: '/proiecte', label: 'Proiecte' },
-				{ href: '/noutati', label: 'Noutăți' }
+				{ href: '/noutati', label: 'Noutăți' },
+				{ href: '/evenimente', label: 'Evenimente' }
 			]
 		},
 		{

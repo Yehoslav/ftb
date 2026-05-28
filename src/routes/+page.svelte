@@ -282,7 +282,7 @@
 				{/each}
 			</div>
 			<a
-				href="/membre"
+				href="/organizatii-membre"
 				class="inline-flex items-center px-7 py-3.5 rounded-lg border border-blue text-blue font-medium text-sm no-underline tracking-wider hover:bg-blue hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue transition-colors duration-300"
 			>
 				Vezi toate organizațiile membre

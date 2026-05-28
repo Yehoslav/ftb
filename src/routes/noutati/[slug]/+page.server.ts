@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { queryWP } from '$lib/server/wp';
 import type { WPPost, PostQueryResult } from '$lib/types/wp';
+import { evenimente } from '$lib/data/evenimente';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const [postData, featuredData] = await Promise.all([
@@ -40,9 +41,16 @@ export const load: PageServerLoad = async ({ params }) => {
 		? postData.post.excerpt.replace(/<[^>]+>/g, '').slice(0, 160)
 		: undefined;
 
+	const azi = new Date();
+	const evenimenteVitoare = evenimente
+		.filter((e) => new Date(e.date) >= azi)
+		.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+		.slice(0, 3);
+
 	return {
 		post: postData.post,
 		featuredPost: featuredData.post,
+		evenimente: evenimenteVitoare,
 		seo: {
 			title: postData.post.title,
 			description,

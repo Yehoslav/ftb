@@ -8,8 +8,9 @@ export async function GET() {
 		{ loc: '/despre-noi', priority: '0.8' },
 		{ loc: '/echipa', priority: '0.7' },
 		{ loc: '/proiecte', priority: '0.8' },
-		{ loc: '/membre', priority: '0.8' },
+		{ loc: '/organizatii-membre', priority: '0.8' },
 		{ loc: '/noutati', priority: '0.9' },
+		{ loc: '/evenimente', priority: '0.7' },
 		{ loc: '/contact', priority: '0.6' },
 		{ loc: '/ghiduri', priority: '0.7' }
 	];

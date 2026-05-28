@@ -3,7 +3,7 @@
 		{ href: '/despre-noi', label: 'Despre Noi' },
 		{ href: '/echipa', label: 'Echipă' },
 		{ href: '/proiecte', label: 'Proiecte' },
-		{ href: '/membre', label: 'Membre' },
+		{ href: '/organizatii-membre', label: 'Membre' },
 		{ href: '/noutati', label: 'Noutăți' },
 		{ href: '/contact', label: 'Contact' }
 	];

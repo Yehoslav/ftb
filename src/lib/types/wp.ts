@@ -47,3 +47,16 @@ export interface PostQueryResult {
 export interface PageQueryResult {
 	page: WPPage;
 }
+
+export interface WPEvent {
+	title: string;
+	slug: string;
+	content?: string;
+	date?: string;
+}
+
+export interface EventsQueryResult {
+	events: {
+		nodes: WPEvent[];
+	};
+}
