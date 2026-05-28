@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { resurseCategorii } from '$lib/data/resurse';
 
 	interface DropdownItem {
 		href: string;
@@ -16,24 +17,23 @@
 			label: 'Organizație',
 			items: [
 				{ href: '/despre-noi', label: 'Despre Noi' },
-				{ href: '/echipa', label: 'Echipă' }
+				{ href: '/echipa', label: 'Echipă' },
+				{ href: '/organizatii-membre', label: 'Organizații Membre' },
 			]
 		},
 		{
 			label: 'Activități',
 			items: [
 				{ href: '/proiecte', label: 'Proiecte' },
-				{ href: '/membre', label: 'Membre' },
 				{ href: '/noutati', label: 'Noutăți' }
 			]
 		},
 		{
 			label: 'Resurse',
-			items: [
-				{ href: '/ghiduri#ghiduri', label: 'Ghiduri' },
-				{ href: '/ghiduri#pentru-studenti', label: 'Pentru studenți' },
-				{ href: '/ghiduri#resurse-generale', label: 'Resurse generale' }
-			]
+			items: resurseCategorii.map((c) => ({
+				href: `/ghiduri#${c.id}`,
+				label: c.label
+			}))
 		}
 	];
 
@@ -52,12 +52,18 @@
 	let openMobileGroup: string | null = $state(null);
 
 	function isActive(href: string): boolean {
-		const path = href.split('#')[0];
+		const [path, hash] = href.split('#');
 		if (path === '/') return page.url.pathname === path;
+		if (hash) {
+			return page.url.pathname === path && page.url.hash === `#${hash}`;
+		}
 		return page.url.pathname.startsWith(path);
 	}
 
 	function isGroupActive(group: DropdownGroup): boolean {
+		if (group.items.some((item) => item.href.startsWith('/ghiduri'))) {
+			return page.url.pathname.startsWith('/ghiduri');
+		}
 		return group.items.some((item) => isActive(item.href));
 	}
 
@@ -84,6 +90,9 @@
 		const target = e.target as HTMLElement;
 		if (!target.closest('[data-dropdown]')) {
 			openDropdown = null;
+		}
+		if (mobileOpen && !target.closest('[data-mobile-menu]') && !target.closest('[data-hamburger]')) {
+			mobileOpen = false;
 		}
 	}}
 />
@@ -187,6 +196,7 @@
 		<button
 			aria-label={mobileOpen ? 'Închide meniul' : 'Deschide meniul'}
 			aria-expanded={mobileOpen}
+			data-hamburger="true"
 			class="md:hidden flex flex-col gap-1.5 p-2"
 			onclick={() => (mobileOpen = !mobileOpen)}
 		>
@@ -198,7 +208,7 @@
 
 	<!-- Mobile menu -->
 	{#if mobileOpen}
-		<nav class="md:hidden border-t border-bg-alt bg-white max-h-[80vh] overflow-y-auto" aria-label="Principal mobil">
+		<nav data-mobile-menu="true" class="md:hidden border-t border-bg-alt bg-white max-h-[80vh] overflow-y-auto" aria-label="Principal mobil">
 			{#each directLinks.filter((l) => l.href === '/') as { href, label }}
 				<a
 					{href}

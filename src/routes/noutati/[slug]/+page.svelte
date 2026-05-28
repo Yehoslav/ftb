@@ -20,8 +20,8 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="flex flex-col lg:flex-row gap-10 lg:divide-x lg:divide-bg-alt">
-		<article class="anim-article lg:max-w-[70ch] lg:pr-10">
+	<div class="flex flex-col lg:flex-row">
+		<article class="anim-article lg:min-w-3xl lg:max-w-3xl lg:pr-10">
 			<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-3">{data.post.title}</h1>
 			<time class="text-sm text-text-muted">
 				{new Date(data.post.date).toLocaleString('ro', dateOptions)}

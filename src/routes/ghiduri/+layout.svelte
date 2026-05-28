@@ -28,12 +28,31 @@
 		from { opacity: 0; transform: translateY(24px); }
 		to { opacity: 1; transform: translateY(0); }
 	}
+	@keyframes slideInItem {
+		from { opacity: 0; transform: translateX(-8px); }
+		to { opacity: 1; transform: translateX(0); }
+	}
 	.anim-content { animation: fadeInUp 0.6s ease-out both; animation-delay: 0.1s; }
+	.nav-item { animation: slideInItem 0.35s ease-out both; }
+
+	.sidebar-panel {
+		transform: translateX(-100%);
+		transition: transform 300ms, top 300ms;
+	}
+	.sidebar-panel.open {
+		transform: translateX(0);
+	}
+	@media (min-width: 1024px) {
+		.sidebar-panel {
+			transform: none;
+			transition: top 300ms;
+		}
+	}
 </style>
 </svelte:head>
 
-<div class="mx-auto w-full max-w-screen-xl px-4 lg:px-6 pb-16">
-	<div class="flex gap-0 lg:gap-6">
+<div class="mx-auto w-full max-w-screen-xl px-4 lg:px-6">
+	<div class="flex gap-0">
 		<!-- Mobile sidebar backdrop -->
 		{#if sidebarOpen}
 			<div
@@ -44,15 +63,14 @@
 		{/if}
 
 		<!-- Sidebar -->
-		<aside
-			class="fixed inset-y-0 left-0 z-40 w-56 shrink-0 bg-white border-r border-bg-alt overflow-y-auto
-				transform transition-[top,transform] duration-300 ease-in-out pt-6 pb-8
-				lg:sticky lg:z-auto lg:block lg:max-h-screen lg:transform-none lg:border-r-0
-				{sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}"
+		<aside class="pt-4"><div
+			class="fixed inset-y-0 left-0 z-40 w-56 shrink-0 bg-white lg:bg-transparent overflow-y-auto pb-8 sidebar-panel
+				lg:sticky lg:z-auto lg:block lg:h-fit lg:max-h-screen
+				{sidebarOpen ? 'open' : ''}"
 			style="top: {sidebarTop}px"
 			aria-label="Navigare resurse"
 		>
-			<div class="px-3 lg:px-0">
+			<div class="px-3 pt-6 lg:px-0">
 				<a
 					href="/ghiduri"
 					class="block text-sm font-semibold text-text no-underline mb-4 hover:text-oxford transition-colors
@@ -68,16 +86,17 @@
 								{category.label}
 							</p>
 							<ul class="space-y-px">
-								{#each category.items as item}
+								{#each category.items as item, i}
 									{@const href = `/ghiduri/${item.slug}`}
 									{@const active = !isLanding && currentSlug === item.slug}
 									<li>
 										<a
 											{href}
-											class="block px-1.5 py-1 text-sm rounded transition-colors
+											class="nav-item block px-1.5 py-1 text-sm border-l-2 transition-colors no-underline
 												{active
-													? 'bg-oxford/10 text-oxford font-medium'
-													: 'text-text-muted hover:text-text hover:bg-bg-alt'}"
+													? 'border-oxford text-oxford font-medium'
+													: 'border-transparent text-text-muted hover:border-bg-alt hover:text-text'}"
+											style="animation-delay: {i * 0.04}s"
 											aria-current={active ? 'page' : undefined}
 										>
 											{item.title}
@@ -89,10 +108,10 @@
 					{/each}
 				</nav>
 			</div>
-		</aside>
+		</div></aside>
 
 		<!-- Main content -->
-		<div class="min-w-0 flex-1 anim-content pt-6">
+		<div class="min-w-0 flex-1 anim-content pt-10 pl-6 lg:border-l border-bg-alt">
 			<!-- Mobile: sidebar toggle + page title -->
 			<div class="flex items-center gap-3 mb-6 lg:hidden">
 				<button

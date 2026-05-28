@@ -16,35 +16,40 @@ export const resurseCategorii: ResurseCategory[] = [
 		label: 'Ghiduri',
 		items: [
 			{
-				title: 'Ghid de implicare civică pentru tineri',
+				title: 'Implicare Civică Tineri',
 				slug: 'ghid-de-implicare-civica-pentru-tineri',
 				description: 'Cum să te implici activ în comunitatea ta și să îți faci vocea auzită.'
 			},
 			{
-				title: 'Ghid de scriere a proiectelor',
+				title: 'Scriere a Proiectelor',
 				slug: 'ghid-de-scriere-a-proiectelor',
 				description: 'Învață cum să scrii și să depui proiecte cu finanțare, de la idee la buget.'
 			},
 			{
-				title: 'Ghid secretariat organizațional',
+				title: 'Secretariat Organizațional',
 				slug: 'ghid-secretariat-organizational',
 				description: 'Gestionarea documentelor, ședințelor și comunicării interne într-o organizație de tineret.'
 			},
 			{
-				title: 'Platforme digitale',
-				slug: 'platforme-digitale',
-				description: 'Instrumente și platforme utile pentru activitatea organizațiilor de tineret.'
+				title: 'Oportunități de finanțare',
+				slug: 'oportunitati-de-finantare',
+				description: 'Finanțări disponibile pentru tineri, organizații studențești și proiecte educaționale.'
 			}
 		]
 	},
-	{
-		id: 'pentru-studenti',
-		label: 'Pentru studenți',
+    {
+		id: 'admitere',
+		label: 'Admitere',
 		items: [
 			{
-				title: 'Admitere în România',
-				slug: 'admitere-in-romania',
-				description: 'Informații complete despre procesul de admitere la universități, licee și școli profesionale.'
+				title: 'Înscriere la colegiu, liceu sau școală profesională',
+				slug: 'inscrie-te-la-colegiu-liceu-scoala-profesionala',
+				description: 'Procedura de înscriere în învățământul preuniversitar din România.'
+			},
+			{
+				title: 'Înscriere la universitate',
+				slug: 'inscrie-te-la-universitate',
+				description: 'Etapele înscrierii la facultate în România pentru cetățenii moldoveni.'
 			},
 			{
 				title: 'Acte de ședere temporară',
@@ -56,15 +61,16 @@ export const resurseCategorii: ResurseCategory[] = [
 				slug: 'aplica-pentru-viza-de-studii',
 				description: 'Cum să aplici pentru viza de studii în România — documente, termene, procedură.'
 			},
+        ]
+    },
+	{
+		id: 'resurse-generale',
+		label: 'Resurse generale',
+		items: [
 			{
-				title: 'Înscriere la colegiu, liceu sau școală profesională',
-				slug: 'inscrie-te-la-colegiu-liceu-scoala-profesionala',
-				description: 'Procedura de înscriere în învățământul preuniversitar din România.'
-			},
-			{
-				title: 'Înscriere la universitate',
-				slug: 'inscrie-te-la-universitate',
-				description: 'Etapele înscrierii la facultate în România pentru cetățenii moldoveni.'
+				title: 'Platforme digitale',
+				slug: 'platforme-digitale',
+				description: 'Instrumente și platforme utile pentru activitatea organizațiilor de tineret.'
 			},
 			{
 				title: 'Cursuri de limba română',
@@ -81,32 +87,6 @@ export const resurseCategorii: ResurseCategory[] = [
 				slug: 'viziteaza-romania',
 				description: 'Ghid turistic și practic pentru vizitarea României — obiective, cazare, transport.'
 			},
-			{
-				title: 'Oportunități educaționale',
-				slug: 'oportunitati-educationale',
-				description: 'Burse, stagii, programe de schimb și alte oportunități pentru studenți.'
-			},
-			{
-				title: 'Oportunități de finanțare',
-				slug: 'oportunitati-de-finantare',
-				description: 'Finanțări disponibile pentru tineri, organizații studențești și proiecte educaționale.'
-			}
-		]
-	},
-	{
-		id: 'resurse-generale',
-		label: 'Resurse generale',
-		items: [
-			{
-				title: 'Resurse',
-				slug: 'resurse',
-				description: 'Colecție de resurse utile pentru tinerii basarabeni din România.'
-			},
-			{
-				title: 'Resurse pentru organizațiile de tineret din Republica Moldova',
-				slug: 'resurse-pentru-organizatii-de-tineret-din-republica-moldova',
-				description: 'Materiale și ghiduri pentru dezvoltarea organizațiilor de tineret.'
-			}
 		]
 	}
 ];

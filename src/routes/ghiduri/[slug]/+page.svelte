@@ -129,8 +129,6 @@
 			<time>Actualizat: {new Date(data.page.date).toLocaleString('ro', dateOptions)}</time>
 		</div>
 
-		<div class="w-10 h-0.5 bg-blue mb-8 rounded-sm" aria-hidden="true"></div>
-
 		<!-- Mobile TOC -->
 		{#if toc.length > 0}
 			<details class="lg:hidden mb-8 rounded-xl border border-bg-alt bg-bg-alt/50">
@@ -163,12 +161,12 @@
 		<!-- Related guides -->
 		{#if relatedItems.length > 0}
 			<hr class="my-12 border-bg-alt" aria-hidden="true" />
-			<section>
+			<section class="mb-12">
 				<h2 class="text-lg font-bold tracking-tight text-text mb-4">
 					{currentCategory?.label === 'Pentru studenți' ? 'Alte resurse utile' : 'Alte ghiduri din această categorie'}
 				</h2>
 				<div class="space-y-3">
-					{#each relatedItems as item}
+					{#each relatedItems.slice(0, 3) as item}
 						<a
 							href="/ghiduri/{item.slug}"
 							class="block bg-white rounded-xl p-4 border border-bg-alt no-underline hover:border-blue/20 hover:shadow-sm transition-all"
@@ -185,9 +183,7 @@
 	<!-- Desktop TOC -->
 	{#if toc.length > 0}
 		<aside class="anim-toc hidden lg:block lg:w-56 shrink-0" aria-label="Cuprins">
-			<div class="sticky
-transform transition-[top,transform] duration-300 ease-in-out pt-6
-                " style="top: {tocTop}px;">
+			<div class="sticky transform transition-[top,transform] duration-300 pt-6" style="top: {tocTop}px;">
 				<h2 class="text-xs font-bold uppercase tracking-widest text-text-muted mb-4">
 					Pe această pagină
 				</h2>
