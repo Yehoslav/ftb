@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { resurseCategorii } from '$lib/data/resurse';
+	import { getContext } from 'svelte';
 
 	let { data }: PageProps = $props();
 
@@ -31,15 +32,20 @@
 	});
 
 	$effect(() => {
-		if (!proseEl) return;
+		const prose = proseEl;
+		const _content = data.page.content;
+		if (!prose) return;
 
-		const headings = proseEl.querySelectorAll<HTMLHeadingElement>('h2, h3');
+		const headings = prose.querySelectorAll<HTMLHeadingElement>('h2, h3');
 		const items: Array<{ id: string; level: number; text: string }> = [];
 
 		headings.forEach((h, i) => {
 			const id = `toc-${i}`;
 			h.id = id;
 			h.style.position = 'relative';
+
+			const existing = h.querySelector('.heading-anchor');
+			if (existing) existing.remove();
 
 			const anchor = document.createElement('a');
 			anchor.href = `#${id}`;
@@ -52,6 +58,7 @@
 		});
 
 		toc = items;
+		activeId = null;
 
 		const observer = new IntersectionObserver(
 			(entries) => {
@@ -78,6 +85,9 @@
 			activeId = id;
 		}
 	}
+
+	const headerCtx = getContext<{ readonly height: number; readonly visible: boolean }>('header');
+	let tocTop = $derived(headerCtx.visible ? headerCtx.height : 0);
 </script>
 
 <svelte:head>
@@ -95,7 +105,7 @@
 </svelte:head>
 
 <!-- Breadcrumb -->
-<nav class="text-sm text-text-muted mb-6 anim-article" aria-label="Breadcrumb">
+<nav class="text-sm text-text-muted anim-article" aria-label="Breadcrumb">
 	<a href="/ghiduri" class="hover:text-oxford transition-colors no-underline">Resurse</a>
 	{#if currentCategory}
 		<span class="mx-1.5" aria-hidden="true">/</span>
@@ -104,7 +114,7 @@
 </nav>
 
 <div class="flex flex-col lg:flex-row gap-10">
-	<article class="anim-article min-w-0 flex-1 max-w-3xl">
+	<article class="anim-article min-w-0 flex-1 max-w-3xl pt-6">
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-4">{data.page.title}</h1>
 
 		<!-- Metadata bar -->
@@ -175,7 +185,9 @@
 	<!-- Desktop TOC -->
 	{#if toc.length > 0}
 		<aside class="anim-toc hidden lg:block lg:w-56 shrink-0" aria-label="Cuprins">
-			<div class="sticky top-24">
+			<div class="sticky
+transform transition-[top,transform] duration-300 ease-in-out pt-6
+                " style="top: {tocTop}px;">
 				<h2 class="text-xs font-bold uppercase tracking-widest text-text-muted mb-4">
 					Pe această pagină
 				</h2>
