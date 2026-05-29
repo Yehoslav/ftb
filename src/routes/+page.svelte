@@ -88,6 +88,16 @@
 		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
 		border-radius: 8px;
 	}
+
+	.hero-main {
+		filter: blur(32px);
+		transform: scale(1.1);
+		transition: filter 0.4s ease-out, transform 0.4s ease-out;
+	}
+	.hero-main.loaded {
+		filter: blur(0);
+		transform: scale(1);
+	}
 </style>
 	<link
 		rel="preload"
@@ -139,7 +149,12 @@
 		</div>
 
 		<div class="lg:w-1/2 flex justify-center z-10">
-			<div data-hero class="relative overflow-hidden w-2/3 lg:w-4/5 hero-img-shadow" style="background: var(--color-bg); aspect-ratio: 1/1;">
+			<div data-hero class="relative overflow-hidden w-full lg:w-4/5 hero-img-shadow" style="aspect-ratio: 1/1;">
+				<div
+					class="absolute inset-0 bg-cover bg-center blur-xl scale-110 transition-opacity duration-700"
+					style="background-image: url('data:image/webp;base64,UklGRrwAAABXRUJQVlA4ILAAAACwAgCdASoQABAAAgA0JYwCdAYqJ9gOEf3z5SMW9gAA/gv0x2MxWfJr7tnvZYhWfjKOf/6Qkx1TJEVvoLD8wfvcM6T5n9A3ImuVewk8TwzVp++qnzUW7ysxo7P2x4NZ8fTgLRqMvXyT/y26sM8iA1DfL8TWlSCdVLJjuXGjffAalbT+skGM3XYHKPpi/TmF5O7l/92QCj8RSnvQ+f5q9h2WT/Jbg+Ot6CAaAI7wrAAAAA==')"
+					data-placeholder
+				></div>
 				<picture>
 					<source
 						type="image/webp"
@@ -159,13 +174,19 @@
 							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image.webp 1024w
 						"
 						sizes="(max-width: 1024px) 66vw, 40vw"
-						class="relative w-full h-full object-cover hero-img-shadow text-transparent"
+						class="relative w-full h-full object-cover hero-img-shadow text-transparent hero-main"
 						alt="Tineri basarabeni reuniți la un eveniment FTB"
 						width="1024"
 						height="1024"
 						fetchpriority="high"
 						loading="eager"
 						decoding="async"
+						onload={(e) => {
+							const img = e.target as HTMLElement;
+							const hero = img.closest('[data-hero]');
+							img.classList.add('loaded');
+							hero?.querySelector('[data-placeholder]')?.classList.add('opacity-0');
+						}}
 					/>
 				</picture>
 			</div>
