@@ -42,10 +42,10 @@
 	] as const;
 
 	const resourceTags = [
-		{ label: 'Admitere România', href: '#', color: 'bg-oxford/10 text-oxford border-oxford/20' },
-		{ label: 'Viză studii', href: '#', color: 'bg-blue-light text-blue border-blue/20' },
-		{ label: 'Ghiduri utile', href: '#', color: 'bg-blue/10 text-blue border-blue/20' },
-		{ label: 'Cursuri română', href: '#', color: 'bg-orange/10 text-orange border-orange/20' }
+		{ label: 'Admitere România', href: '/ghiduri#admitere', color: 'bg-oxford/10 text-oxford border-oxford/20' },
+		{ label: 'Viză studii', href: '/ghiduri#admitere', color: 'bg-blue/10 text-blue border-blue/20' },
+		{ label: 'Ghiduri utile', href: '/ghiduri#ghiduri', color: 'bg-blue/10 text-blue border-blue/20' },
+		{ label: 'Cursuri română', href: '/ghiduri#resurse-generale', color: 'bg-orange/10 text-orange border-orange/20' }
 	] as const;
 </script>
 
@@ -89,6 +89,12 @@
 		border-radius: 8px;
 	}
 </style>
+	<link
+		rel="preload"
+		as="image"
+		href="https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image.webp"
+		fetchpriority="high"
+	/>
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl">
@@ -133,13 +139,36 @@
 		</div>
 
 		<div class="lg:w-1/2 flex justify-center z-10">
-			<img
-				src="https://www.ftbromania.ro/wp-content/uploads/2022/08/Homepage-image-1.png"
-				class="w-2/3 lg:w-4/5 hero-img-shadow"
-				alt="Tineri basarabeni reuniți la un eveniment FTB"
-				loading="eager"
-				decoding="async"
-			/>
+			<div data-hero class="relative overflow-hidden w-2/3 lg:w-4/5 hero-img-shadow" style="background: var(--color-bg); aspect-ratio: 1/1;">
+				<picture>
+					<source
+						type="image/webp"
+						srcset="
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image-150x150.webp 150w,
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image-300x300.webp 300w,
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image-768x768.webp 768w,
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image.webp 1024w
+						"
+						sizes="(max-width: 1024px) 66vw, 40vw"
+					/>
+					<img
+						src="https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image.webp"
+						srcset="
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image-150x150.webp 150w,
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image-300x300.webp 300w,
+							https://ftbromania.ro/incubator/wp-content/uploads/2022/08/homepage_image.webp 1024w
+						"
+						sizes="(max-width: 1024px) 66vw, 40vw"
+						class="relative w-full h-full object-cover hero-img-shadow text-transparent"
+						alt="Tineri basarabeni reuniți la un eveniment FTB"
+						width="1024"
+						height="1024"
+						fetchpriority="high"
+						loading="eager"
+						decoding="async"
+					/>
+				</picture>
+			</div>
 		</div>
 	</section>
 

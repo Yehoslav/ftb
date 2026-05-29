@@ -5,6 +5,7 @@
 **FTB România** (Federația Tinerilor Basarabeni) is a non-profit NGO website — a headless WordPress frontend built with SvelteKit. WordPress serves as the CMS backend via GraphQL; this app renders the public site.
 
 Production: https://ftbromania.ro
+Staging (headless WP backend): https://ftbromania.ro/incubator
 
 ## Tech stack
 
@@ -132,25 +133,25 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
 - [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
-- [ ] **Pagination** — only "older articles" exists; add "newer articles" to noutati
+- [x] **Pagination** — "older articles" + "newer articles" buttons on noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
 - [ ] **Contact form** — replace OpnForm iframe with in-house form connected to Gmail API
 
 ### 🔴 Security
-- [ ] **Auth on `/api/revalidate`** — no authentication; anyone can flush WP GraphQL cache
-- [ ] **`rel="noopener noreferrer"`** — missing on all social/external links in Footer, articles
+- [x] **Auth on `/api/revalidate`** — Bearer token via `REVALIDATE_TOKEN` env var
+- [x] **`rel="noopener noreferrer"`** — added to Footer + member org external links
 
 ### 🟠 Performance
-- [ ] **Font Awesome JS → webfont CSS** — 4 JS bundles (~1.5MB) cause FOUI; replace with static CSS
+- [x] **Font Awesome JS → webfont CSS** — JS bundles replaced with CSS + woff2 webfonts (~84KB vs ~1.7MB)
 
 ### 🟡 Accessibility
-- [ ] **Skip-to-content link** — first focusable element missing for keyboard users
-- [ ] **Header dropdown keyboard navigation** — Arrow keys, Enter, Escape not handled; focus not trapped
+- [x] **Skip-to-content link** — first focusable element, slides in on Tab
+- [x] **Header dropdown keyboard navigation** — Arrow keys, Home/End, Escape, focusout close
 
 ### 🟢 UX / Housekeeping
 - [x] **Custom `+error.svelte`** — branded error page with 404 detection, nav links back to homepage / noutati
-- [ ] **Dead resource tags on homepage** — stale category links in `src/routes/+page.svelte`
-- [ ] **Unused `wpEvents` fetch** — orphaned GraphQL query in server load files
+- [x] **Dead resource tags on homepage** — stale `href="#"` replaced with real `/ghiduri#` links
+- [x] **Unused `wpEvents` fetch** — removed orphaned GraphQL query + `EventsQueryResult` type
 
 ## QA notes
 

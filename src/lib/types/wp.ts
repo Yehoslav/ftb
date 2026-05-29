@@ -55,12 +55,6 @@ export interface WPEvent {
 	date?: string;
 }
 
-export interface EventsQueryResult {
-	events: {
-		nodes: WPEvent[];
-	};
-}
-
 export interface EventQueryResult {
 	event: WPEvent | null;
 }

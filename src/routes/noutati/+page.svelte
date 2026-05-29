@@ -11,6 +11,7 @@
 	let allPosts = $state<WPPost[]>(data.posts);
 	let pageInfo = $state(data.pageInfo);
 	let loading = $state(false);
+	let hasOlder = $state(false);
 
 	function toWebp(srcSet: string | null | undefined): string | undefined {
 		return srcSet?.replace(/\.(jpe?g|png)(\s|,)/gi, '.webp$2');
@@ -23,7 +24,22 @@
 		try {
 			const res = await fetch(`/api/posts?after=${pageInfo.endCursor}`);
 			const json = await res.json();
+			hasOlder = true;
 			allPosts = [...allPosts, ...json.posts];
+			pageInfo = json.pageInfo;
+		} finally {
+			loading = false;
+		}
+	}
+
+	async function loadNewer() {
+		if (!hasOlder || loading) return;
+		loading = true;
+		try {
+			const res = await fetch('/api/posts');
+			const json = await res.json();
+			hasOlder = false;
+			allPosts = json.posts;
 			pageInfo = json.pageInfo;
 		} finally {
 			loading = false;
@@ -98,8 +114,17 @@
 		{/each}
 	</div>
 
-	{#if pageInfo?.hasNextPage}
-		<nav class="mt-10 flex justify-center">
+	<nav class="mt-10 flex justify-center gap-3">
+		{#if hasOlder}
+			<button
+				onclick={loadNewer}
+				disabled={loading}
+				class="inline-flex items-center px-6 py-3 rounded-lg border border-blue text-blue font-medium text-sm no-underline tracking-wider hover:bg-blue hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+			>
+				{loading ? 'Se încarcă...' : 'Articole mai noi'}
+			</button>
+		{/if}
+		{#if pageInfo?.hasNextPage}
 			<button
 				onclick={loadMore}
 				disabled={loading}
@@ -107,8 +132,8 @@
 			>
 				{loading ? 'Se încarcă...' : 'Articole mai vechi'}
 			</button>
-		</nav>
-	{/if}
+		{/if}
+	</nav>
 </div>
 
 <style>
