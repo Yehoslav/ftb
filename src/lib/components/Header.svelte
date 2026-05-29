@@ -140,6 +140,17 @@
 	$effect(() => {
 		headerVisible = !hidden;
 	});
+
+	function onPageShow(e: PageTransitionEvent) {
+		if (e.persisted) {
+			mobileOpen = false;
+			openDropdown = null;
+			openMobileGroup = null;
+			hidden = false;
+			lastScroll = window.pageYOffset || document.documentElement.scrollTop;
+		}
+	}
+
 </script>
 
 <svelte:window
@@ -157,6 +168,7 @@
 			mobileOpen = false;
 		}
 	}}
+	onpageshow={onPageShow}
 />
 
 <header

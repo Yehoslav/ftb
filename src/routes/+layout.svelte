@@ -3,7 +3,6 @@ import './layout.css';
 import type { LayoutProps } from './$types';
 import { page, navigating } from '$app/state';
 import { setContext } from 'svelte';
-import favicon from '$lib/assets/favicon.svg';
 import Header from '$lib/components/Header.svelte';
 import Footer from '$lib/components/Footer.svelte';
 import Seo from '$lib/components/Seo.svelte';
@@ -25,7 +24,6 @@ setContext('header', {
 		description={page.data.seo?.description}
 		image={page.data.seo?.image}
 	/>
-	<link rel="icon" href={favicon} />
 	<link rel="stylesheet" href="/fa/css/fa-bare.min.css">
 </svelte:head>
 
