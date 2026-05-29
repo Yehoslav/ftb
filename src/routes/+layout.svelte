@@ -26,10 +26,7 @@ setContext('header', {
 		image={page.data.seo?.image}
 	/>
 	<link rel="icon" href={favicon} />
-	<link rel="stylesheet" href="/fa/css/fontawesome.min.css">
-	<link rel="stylesheet" href="/fa/css/brands.min.css">
-	<link rel="stylesheet" href="/fa/css/solid.min.css">
-	<link rel="stylesheet" href="/fa/css/regular.min.css">
+	<link rel="stylesheet" href="/fa/css/fa-bare.min.css">
 </svelte:head>
 
 {#if navigating.to}

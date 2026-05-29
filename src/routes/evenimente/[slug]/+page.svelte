@@ -170,7 +170,7 @@
 
 				{#if ev.dateEnd}
 					<p class="text-sm text-text-muted mb-6">
-						<i class="fa-regular fa-calendar-circle-plus text-blue mr-1.5" aria-hidden="true"></i>
+						<i class="fa-regular fa-calendar-plus text-blue mr-1.5" aria-hidden="true"></i>
 						{formatFull(ev.date)} – {formatFull(ev.dateEnd)}
 					</p>
 				{/if}

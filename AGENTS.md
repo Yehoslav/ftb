@@ -14,7 +14,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | Framework | Svelte 5 (runes mode) + SvelteKit 2 |
 | Language | TypeScript (strict) |
 | CSS | Tailwind CSS v4 (`@theme` directives, `@tailwindcss/vite` plugin) |
-| Icons | Font Awesome 6 (brands, solid, regular) — static files in `/static/fa/` |
+| Icons | Font Awesome 7.2 (brands, solid, regular) — minimal CSS in `/static/fa/css/fa-bare.min.css` with only the 15 icons used on the site; full webfonts in `/static/fa/webfonts/` |
 | Font | Rubik (self-hosted woff2 in `/static/fonts/`, `@font-face` in `layout.css`) |
 | Runtime | Deno (Node compat via `deno.json`) |
 | Build | Vite 7 |
@@ -143,6 +143,8 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 
 ### 🟠 Performance
 - [x] **Font Awesome JS → webfont CSS** — JS bundles replaced with CSS + woff2 webfonts (~84KB vs ~1.7MB)
+- [x] **FA CSS minimal subset** — `fa-bare.min.css` includes only the 15 used icons (2.4KB vs 75KB for full CSS)
+- [ ] **FA woff2 subsetting** — `pyftsubset` or `glyphhanger` can trim the 3 webfonts (currently 244KB) to only the codepoints in `fa-bare.min.css`; worth doing when icon set is stable
 
 ### 🟡 Accessibility
 - [x] **Skip-to-content link** — first focusable element, slides in on Tab
