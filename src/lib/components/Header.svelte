@@ -72,6 +72,67 @@
 		openMobileGroup = openMobileGroup === label ? null : label;
 	}
 
+	function getMenuItems(groupLabel: string): HTMLAnchorElement[] {
+		const dropdown = document.querySelector<HTMLElement>(`[data-dropdown-label="${groupLabel}"]`);
+		if (!dropdown) return [];
+		const menu = dropdown.querySelector<HTMLElement>('[role="menu"]');
+		if (!menu) return [];
+		return Array.from(menu.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]'));
+	}
+
+	function focusItem(items: HTMLAnchorElement[], idx: number) {
+		if (items[idx]) items[idx].focus();
+	}
+
+	function onTriggerKeydown(e: KeyboardEvent, groupLabel: string) {
+		if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+			e.preventDefault();
+			openDropdown = groupLabel;
+			requestAnimationFrame(() => {
+				const items = getMenuItems(groupLabel);
+				if (e.key === 'ArrowDown') focusItem(items, 0);
+				else focusItem(items, items.length - 1);
+			});
+		}
+	}
+
+	function onMenuKeydown(e: KeyboardEvent, groupLabel: string) {
+		const menu = e.currentTarget as HTMLElement;
+		const items = Array.from(menu.querySelectorAll<HTMLAnchorElement>('[role="menuitem"]'));
+		const current = e.target as HTMLElement;
+		const idx = items.indexOf(current as HTMLAnchorElement);
+
+		switch (e.key) {
+			case 'ArrowDown':
+				e.preventDefault();
+				focusItem(items, (idx + 1) % items.length);
+				break;
+			case 'ArrowUp':
+				e.preventDefault();
+				focusItem(items, (idx - 1 + items.length) % items.length);
+				break;
+			case 'Home':
+				e.preventDefault();
+				focusItem(items, 0);
+				break;
+			case 'End':
+				e.preventDefault();
+				focusItem(items, items.length - 1);
+				break;
+			case 'Escape':
+				e.preventDefault();
+				openDropdown = null;
+				menu.closest('[data-dropdown]')?.querySelector<HTMLButtonElement>('button')?.focus();
+				break;
+		}
+	}
+
+	function onDropdownFocusout(e: FocusEvent, groupLabel: string) {
+		if (!(e.currentTarget as HTMLElement).contains(e.relatedTarget as Node)) {
+			openDropdown = null;
+		}
+	}
+
 	$effect(() => {
 		if (header) headerHeight = header.offsetHeight;
 	});
@@ -127,9 +188,11 @@
 				<div
 					role="none"
 					data-dropdown="true"
+					data-dropdown-label={group.label}
 					class="relative"
 					onmouseenter={() => (openDropdown = group.label)}
 					onmouseleave={() => (openDropdown = null)}
+					onfocusout={(e) => onDropdownFocusout(e, group.label)}
 				>
 					<button
 						aria-haspopup="true"
@@ -138,6 +201,7 @@
 							e.stopPropagation();
 							openDropdown = openDropdown === group.label ? null : group.label;
 						}}
+						onkeydown={(e) => onTriggerKeydown(e, group.label)}
 						class="flex items-center gap-1.5 px-3 py-2 rounded text-sm font-medium transition-colors
 							{isGroupActive(group)
 								? 'bg-oxford text-white'
@@ -158,12 +222,15 @@
 						<div class="absolute top-full left-0 pt-1 w-48 z-50">
 							<div
 								role="menu"
+								tabindex="-1"
+								onkeydown={(e) => onMenuKeydown(e, group.label)}
 								class="bg-white rounded-lg border border-bg-alt shadow-lg py-1"
 							>
 								{#each group.items as { href, label }}
 									<a
 										{href}
 										role="menuitem"
+										tabindex="-1"
 										aria-current={isActive(href) ? 'page' : undefined}
 										class="block px-4 py-2 text-sm transition-colors
 											{isActive(href)
@@ -200,6 +267,11 @@
 			data-hamburger="true"
 			class="md:hidden flex flex-col gap-1.5 p-2"
 			onclick={() => (mobileOpen = !mobileOpen)}
+			onkeydown={(e) => {
+				if (e.key === 'Escape' && mobileOpen) {
+					mobileOpen = false;
+				}
+			}}
 		>
 			<span class="block w-6 h-0.5 bg-text rounded transition-all {mobileOpen ? 'rotate-45 translate-y-2' : ''}"></span>
 			<span class="block w-6 h-0.5 bg-text rounded transition-all {mobileOpen ? 'opacity-0' : ''}"></span>
@@ -209,7 +281,14 @@
 
 	<!-- Mobile menu -->
 	{#if mobileOpen}
-		<nav data-mobile-menu="true" class="md:hidden border-t border-bg-alt bg-white max-h-[80vh] overflow-y-auto" aria-label="Principal mobil">
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div data-mobile-menu="true" onkeydown={(e) => {
+				if (e.key === 'Escape') {
+					mobileOpen = false;
+					document.querySelector<HTMLButtonElement>('[data-hamburger]')?.focus();
+				}
+			}}>
+		<nav class="md:hidden border-t border-bg-alt bg-white max-h-[80vh] overflow-y-auto" aria-label="Principal mobil">
 			{#each directLinks.filter((l) => l.href === '/') as { href, label }}
 				<a
 					{href}
@@ -275,5 +354,6 @@
 				</a>
 			{/each}
 		</nav>
+		</div>
 	{/if}
 </header>

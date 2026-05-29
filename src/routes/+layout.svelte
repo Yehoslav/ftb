@@ -48,9 +48,16 @@ setContext('header', {
 	</div>
 {/if}
 
+<a
+	href="#main-content"
+	class="fixed -top-full left-4 z-60 px-4 py-2 bg-white text-oxford rounded-lg shadow-lg border border-bg-alt text-sm font-medium no-underline focus:top-4 focus:outline-2 focus:outline-oxford transition-all duration-150"
+>
+	Sari la conținut
+</a>
+
 <Header bind:headerHeight bind:headerVisible />
 
-<main class="min-h-screen" style="padding-top: {headerHeight}px">
+<main id="main-content" class="min-h-screen" style="padding-top: {headerHeight}px">
 	{@render children()}
 </main>
 
