@@ -82,6 +82,7 @@
 											<a
 												href={url}
 												target="_blank"
+												rel="noopener noreferrer"
 												class="text-sm text-text-muted hover:text-blue no-underline transition-colors"
 											>
 												{platform}

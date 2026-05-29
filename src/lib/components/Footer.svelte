@@ -74,6 +74,7 @@
 							{href}
 							aria-label={label}
 							target="_blank"
+							rel="noopener noreferrer"
 							class="flex items-center justify-center w-10 h-10 rounded text-lg text-text-muted hover:text-oxford hover:bg-bg-alt transition-colors"
 						>
 							<i class={icon}></i>
