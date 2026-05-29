@@ -26,10 +26,10 @@ setContext('header', {
 		image={page.data.seo?.image}
 	/>
 	<link rel="icon" href={favicon} />
-	<script defer src="/fa/js/fontawesome.js"></script>
-	<script defer src="/fa/js/brands.js"></script>
-	<script defer src="/fa/js/solid.js"></script>
-	<script defer src="/fa/js/regular.js"></script>
+	<link rel="stylesheet" href="/fa/css/fontawesome.min.css">
+	<link rel="stylesheet" href="/fa/css/brands.min.css">
+	<link rel="stylesheet" href="/fa/css/solid.min.css">
+	<link rel="stylesheet" href="/fa/css/regular.min.css">
 </svelte:head>
 
 {#if navigating.to}
