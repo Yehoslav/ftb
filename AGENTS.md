@@ -163,3 +163,71 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
   3. **Hardcoded TypeScript** only as temporary fallback
 - The WP GraphQL client has an in-memory cache with 1-hour TTL. Clear via `POST /api/revalidate`.
 - Never commit API keys or secrets.
+
+## Project System Plan (two-tier: hub + editions)
+
+### Data model
+
+**`ProiectHub`** — umbrella/parent (e.g., "Admiteri")
+| Field | Type | Notes |
+|---|---|---|
+| `slug` | `string` | URL: `/proiecte/admiteri` |
+| `titlu` | `string` | |
+| `categorie` | `"anuale" \| "singulare"` | |
+| `descriere` | `string` | Evergreen text |
+| `imagine` | `string` | Hero image URL |
+| `culoare` | `string` | Brand color (e.g. `#BA1818`) |
+| `domenii` | `string[]` | Thematic tags (educație, cultură, civic) |
+| `website` | `string` (optional) | External link |
+
+**`ProiectEditie`** — one per year (e.g., "Admitere 2026")
+| Field | Type | Notes |
+|---|---|---|
+| `slug` | `string` | URL: `/proiecte/admiteri/admitere-2026` |
+| `titlu` | `string` | "Admitere 2026" |
+| `an` | `number` | 2026 |
+| `proiectSlug` | `string` | Reference to parent hub |
+| `perioada` | `string` | "Mai — Octombrie 2026" |
+| `descriere` | `string` | Year-specific vision |
+| `finantator` | `string` (optional) | |
+| `activitati` | `string[]` | |
+| `beneficiari` | `string` (optional) | |
+| `voluntari` | `string` (optional) | |
+| `parteneri` | `string` (optional) | |
+| `imagine` | `string` | Cover image for this edition |
+| `galerie` | `string[]` | Photo gallery |
+| `statistici` | `Array<{ label, value }>` | Structured stats |
+| `materiale` | `Array<{ label, url }>` | PDFs, brochures, PR kit |
+| `stare` | `"planificat" \| "in-desfasurare" \| "finalizat"` | |
+| `registrationUrl` | `string` (optional) | CTA link |
+
+### URL structure
+
+```
+/proiecte                              → Listing (categorii: anuale, singulare)
+/proiecte/[slug]                       → Hub page (/proiecte/admiteri)
+/proiecte/[slug]/[editieSlug]          → Edition page (/proiecte/admiteri/admitere-2026)
+/proiecte/[slug]/arhiva                → Archive of past editions
+```
+
+### Content relationships (news + events)
+
+- **Long-term (WP):** custom taxonomy `project` on `post` and `event` CPTs. GraphQL: `posts(where: {taxonomy: "project", term: "admiteri"})`.
+- **Hardcoded phase:** manual mapping `Record<proiectSlug, { postSlugs: string[], eventSlugs: string[] }>` in `proiecte.ts` or a `proiect` field on each post/event.
+
+### WordPress schema (when ACF is ready)
+
+- CPT `project_hub` — ACF fields: descriere, imagine, culoare, domenii, website
+- CPT `project_edition` — ACF fields: an, perioada, descriere, finantator, activitati, beneficiari, voluntari, parteneri, imagine, galerie, statistici, materiale, stare, registrationUrl
+- Taxonomy `project` — assigned to `post` and `event`
+
+### Implementation phases
+
+| Phase | What | Depends on |
+|---|---|---|
+| **1** | Expand TypeScript types (`ProiectHub`, `ProiectEditie`), restructure `proiecte.ts` | — |
+| **2** | Route `[slug]/` — hub page: hero, description, current edition, related posts & events | Phase 1 |
+| **3** | Route `[slug]/[editieSlug]` — edition page: gallery, stats, materials, team, CTA | Phase 2 |
+| **4** | Route `[slug]/arhiva` — archive of past editions by year | Phase 3 |
+| **5** | Filtering on listing page (`/proiecte`) — by category, year, status, domenii | Phase 4 |
+| **6** | WP migration — ACF CPT, GraphQL queries, replace hardcoded data | ACF ready on WP |
