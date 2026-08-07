@@ -2,6 +2,7 @@ import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
 import { resurseCategorii } from '$lib/data/resurse';
 import { evenimente } from '$lib/data/evenimente';
+import { huburi, editii } from '$lib/data/proiecte';
 
 export async function GET() {
 	const staticPages = [
@@ -28,6 +29,28 @@ export async function GET() {
 		priority: '0.6'
 	}));
 
+	const editiiPeProiect = new Map<string, number>();
+	for (const editie of editii) {
+		editiiPeProiect.set(editie.proiectSlug, (editiiPeProiect.get(editie.proiectSlug) ?? 0) + 1);
+	}
+
+	const proiectePages = [
+		...huburi.map((hub) => ({
+			loc: `/proiecte/${hub.slug}`,
+			priority: '0.6'
+		})),
+		...editii.map((editie) => ({
+			loc: `/proiecte/${editie.proiectSlug}/${editie.slug}`,
+			priority: '0.5'
+		})),
+		...huburi
+			.filter((hub) => (editiiPeProiect.get(hub.slug) ?? 0) > 1)
+			.map((hub) => ({
+				loc: `/proiecte/${hub.slug}/arhiva`,
+				priority: '0.4'
+			}))
+	];
+
 	const query = `query SitemapPosts {
 		posts(where: { categoryName: "actualitati" }, first: 100) {
 			nodes { slug modified }
@@ -46,7 +69,7 @@ export async function GET() {
 		// WP offline — sitemap still works for static pages
 	}
 
-	const urls = [...staticPages, ...ghiduriPages, ...evenimentePages, ...newsPages]
+	const urls = [...staticPages, ...ghiduriPages, ...evenimentePages, ...proiectePages, ...newsPages]
 		.map(
 			(p) => `  <url>
     <loc>https://ftbromania.ro${p.loc}</loc>

@@ -6,6 +6,8 @@ export interface Eveniment {
 	location: string;
 	description: string;
 	image?: string;
+	proiectSlug?: string;
+	proiectEditieSlug?: string;
 	duration?: string;
 	financedBy?: { label: string; url: string };
 	activities: string[];
@@ -22,6 +24,8 @@ export const evenimente: Eveniment[] = [
 		slug: 'ziua-nationala-a-romaniei',
 		date: '2026-12-01',
 		location: 'Alba Iulia',
+		proiectSlug: 'ziua-nationala',
+		proiectEditieSlug: 'ziua-nationala-2026',
 		description: 'Evenimentul are loc în fiecare an la Alba Iulia, de 1 decembrie, unde cele 16 asociații de basarabeni din România, membre ale Federației Tinerilor Basarabeni, se adună la evenimentul de sărbătorire a Zilei Naționale a României.',
 		duration: 'anual pe 1 decembrie',
 		image: 'https://www.ftbromania.ro/wp-content/uploads/2022/08/1-2-1170x658.jpg',
@@ -51,6 +55,7 @@ export const evenimente: Eveniment[] = [
 		date: '2026-05-01',
 		dateEnd: '2026-09-30',
 		location: 'Republica Moldova',
+		proiectSlug: 'resurse',
 		description: 'Proiectul „Resurse pentru organizații de tineret din Republica Moldova” urmărește dezvoltarea capacității organizațiilor de tineret și formarea comunităților de tineri din Republica Moldova prin intermediul organizațiilor de tineret de basarabeni din România.',
 		duration: 'mai – septembrie 2026',
 		financedBy: {
@@ -86,6 +91,8 @@ export const evenimente: Eveniment[] = [
 		slug: 'targul-universitatilor-din-romania',
 		date: '2026-07-07',
 		location: 'Chișinău, Bălți, Cahul',
+		proiectSlug: 'targul-universitatilor',
+		proiectEditieSlug: 'targul-universitatilor-2026',
 		description: 'Târgul Universităților din România este un eveniment din cadrul campaniei AdmiteRO, prin intermediul căruia tinerii și cadrele didactice din România prezintă oferta educațională a celor mai mari centre universitare din România.',
 		duration: 'anual în luna iulie',
 		image: 'https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg',
@@ -116,6 +123,7 @@ export const evenimente: Eveniment[] = [
 		date: '2026-03-01',
 		dateEnd: '2026-10-31',
 		location: 'România',
+		proiectSlug: 'save-ukraine',
 		description: 'Începând cu luna februarie 2022 Federația Tinerilor Basarabeni s-a implicat activ în sprijinul refugiaților din Ucraina odată cu începerea războiului. Cele mai mari fluxuri de refugiați au fost înregistrate în București, Iași, Cluj-Napoca, Timișoara, Suceava, Constanța, Sibiu, Brașov și Galați.',
 		duration: 'martie – octombrie 2026',
 		financedBy: {
@@ -164,4 +172,8 @@ export function getEvenimenteRecente(): Eveniment[] {
 	return evenimente
 		.filter((e) => new Date(e.date) < azi)
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export function getEvenimenteAle(proiectSlug: string): Eveniment[] {
+	return evenimente.filter((e) => e.proiectSlug === proiectSlug);
 }

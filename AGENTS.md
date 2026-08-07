@@ -129,7 +129,8 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 
 - [ ] **Team photos** — avatar placeholders use initials; replace with real images when ACF CPT is ready on WP
 - [ ] **Despre Noi** — hardcoded text; migrate to WP GraphQL when WP page stops using Elementor
-- [ ] **Projects data** — hardcoded in `src/lib/data/proiecte.ts`; migrate to ACF CPT
+- [ ] **Projects data** — two-tier model (hub + editions) implemented as hardcoded `src/lib/data/proiecte.ts`; migrate to ACF CPT (Phase 6)
+- [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte` (Phases 1–5)
 - [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
 - [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
@@ -223,11 +224,11 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 
 ### Implementation phases
 
-| Phase | What | Depends on |
-|---|---|---|
-| **1** | Expand TypeScript types (`ProiectHub`, `ProiectEditie`), restructure `proiecte.ts` | — |
-| **2** | Route `[slug]/` — hub page: hero, description, current edition, related posts & events | Phase 1 |
-| **3** | Route `[slug]/[editieSlug]` — edition page: gallery, stats, materials, team, CTA | Phase 2 |
-| **4** | Route `[slug]/arhiva` — archive of past editions by year | Phase 3 |
-| **5** | Filtering on listing page (`/proiecte`) — by category, year, status, domenii | Phase 4 |
-| **6** | WP migration — ACF CPT, GraphQL queries, replace hardcoded data | ACF ready on WP |
+| Phase | What | Depends on | Status |
+|---|---|---|---|
+| **1** | Expand TypeScript types (`ProiectHub`, `ProiectEditie`), restructure `proiecte.ts` | — | ✅ done |
+| **2** | Route `[slug]/` — hub page: hero, description, current edition, related posts & events | Phase 1 | ✅ done |
+| **3** | Route `[slug]/[editieSlug]` — edition page: gallery, stats, materials, team, CTA | Phase 2 | ✅ done |
+| **4** | Route `[slug]/arhiva` — archive of past editions by year | Phase 3 | ✅ done |
+| **5** | Filtering on listing page (`/proiecte`) — by category, year, status, domenii | Phase 4 | ✅ done |
+| **6** | WP migration — ACF CPT, GraphQL queries, replace hardcoded data | ACF ready on WP | ⏳ pending |
