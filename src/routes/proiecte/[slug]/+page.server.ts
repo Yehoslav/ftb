@@ -1,6 +1,13 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { getHubBySlug, getEditiiAle, getEditieCurenta, getPosturiAle } from '$lib/data/proiecte';
+import {
+	getHubBySlug,
+	getEditiiAle,
+	getEditieCurenta,
+	getPosturiAle,
+	getSubproiecteAle,
+	getProiectParinte
+} from '$lib/data/proiecte';
 import { getEvenimenteAle } from '$lib/data/evenimente';
 import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
@@ -12,6 +19,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	const editii = getEditiiAle(hub.slug);
 	const editieCurenta = getEditieCurenta(hub.slug);
 	const evenimente = getEvenimenteAle(hub.slug);
+	const subproiecte = getSubproiecteAle(hub.slug);
+	const proiectParinte = getProiectParinte(hub);
 
 	let posturi: PostsQueryResult['posts']['nodes'] = [];
 	const postSlugs = getPosturiAle(hub.slug);
@@ -51,6 +60,8 @@ export const load: PageServerLoad = async ({ params }) => {
 		hub,
 		editii,
 		editieCurenta,
+		subproiecte,
+		proiectParinte,
 		posturi,
 		evenimente,
 		seo: {

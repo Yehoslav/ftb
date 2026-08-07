@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { huburi } from '$lib/data/proiecte';
+	import { huburi, getProiectParinte } from '$lib/data/proiecte';
 
 	let categorie = $state<'toate' | 'anuale' | 'singulare'>('toate');
 	let domeniu = $state('toate');
@@ -111,16 +111,25 @@
 					<a href="/proiecte/{hub.slug}" class="proj-card bg-white rounded-xl border border-bg-alt p-6 lg:p-7 no-underline block flex flex-col">
 						<div class="w-12 h-1 rounded-full mb-5" style="background-color: {hub.culoare}" aria-hidden="true"></div>
 
-						<div class="flex items-center justify-between gap-2 mb-3">
-							<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
-								{hub.categorie === 'anuale' ? 'Anual' : 'Singular'}
-							</span>
-							{#if hub.website}
-								<i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-sm" aria-hidden="true"></i>
-							{/if}
-						</div>
+					<div class="flex items-center justify-between gap-2 mb-3">
+						<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
+							{hub.categorie === 'anuale' ? 'Anual' : 'Singular'}
+						</span>
+						{#if hub.website}
+							<i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-sm" aria-hidden="true"></i>
+						{/if}
+					</div>
 
-						<h2 class="text-lg font-bold text-text leading-snug mb-3">{hub.titlu}</h2>
+					<h2 class="text-lg font-bold text-text leading-snug mb-3">{hub.titlu}</h2>
+
+					{#if getProiectParinte(hub)}
+						<p class="text-xs text-text-muted mb-2">
+							Parte din{' '}
+							<a href="/proiecte/{getProiectParinte(hub)!.slug}" class="text-blue hover:text-oxford transition-colors no-underline">
+								{getProiectParinte(hub)!.titlu}
+							</a>
+						</p>
+					{/if}
 
 						<p class="text-sm text-text-muted leading-relaxed line-clamp-3 mb-5 flex-1">{hub.descriere}</p>
 

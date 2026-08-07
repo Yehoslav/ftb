@@ -130,7 +130,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Team photos** — avatar placeholders use initials; replace with real images when ACF CPT is ready on WP
 - [ ] **Despre Noi** — hardcoded text; migrate to WP GraphQL when WP page stops using Elementor
 - [ ] **Projects data** — two-tier model (hub + editions) implemented as hardcoded `src/lib/data/proiecte.ts`; migrate to ACF CPT (Phase 6)
-- [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte` (Phases 1–5)
+- [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte`, subprojects via `proiectParinteSlug` (e.g. Târgul Universităților → AdmiteRO; parent hub aggregates subproject events/posts) (Phases 1–5)
 - [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
 - [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
@@ -180,6 +180,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 | `culoare` | `string` | Brand color (e.g. `#BA1818`) |
 | `domenii` | `string[]` | Thematic tags (educație, cultură, civic) |
 | `website` | `string` (optional) | External link |
+| `proiectParinteSlug` | `string` (optional) | Parent hub slug for subprojects (e.g. Târgul Universităților → `admiteri`). Events/posts of a parent aggregate its subprojects' content. |
 
 **`ProiectEditie`** — one per year (e.g., "Admitere 2026")
 | Field | Type | Notes |
@@ -218,7 +219,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 
 ### WordPress schema (when ACF is ready)
 
-- CPT `project_hub` — ACF fields: descriere, imagine, culoare, domenii, website
+- CPT `project_hub` — ACF fields: descriere, imagine, culoare, domenii, website, proiectParinte (relationship → `project_hub`)
 - CPT `project_edition` — ACF fields: an, perioada, descriere, finantator, activitati, beneficiari, voluntari, parteneri, imagine, galerie, statistici, materiale, stare, registrationUrl
 - Taxonomy `project` — assigned to `post` and `event`
 

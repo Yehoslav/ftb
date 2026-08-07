@@ -3,7 +3,7 @@
 	import { etichetaStare } from '$lib/data/proiecte';
 
 	let { data }: PageProps = $props();
-	const { hub, editii, editieCurenta, posturi, evenimente } = data;
+	const { hub, editii, editieCurenta, subproiecte, proiectParinte, posturi, evenimente } = data;
 
 	function formatData(dataIso: string): string {
 		return new Date(dataIso).toLocaleDateString('ro', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -48,6 +48,15 @@
 			<span class="inline-flex items-center gap-1.5 text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
 				{hub.categorie === 'anuale' ? 'Proiect anual' : 'Proiect singular'}
 			</span>
+			{#if proiectParinte}
+				<a
+					href="/proiecte/{proiectParinte.slug}"
+					class="inline-flex items-center gap-1.5 text-xs font-medium text-text bg-bg-alt border border-bg-alt px-3 py-1 rounded-full no-underline hover:bg-bg transition-colors"
+				>
+					<i class="fa-solid fa-layer-group text-xs" aria-hidden="true"></i>
+					Parte din {proiectParinte.titlu}
+				</a>
+			{/if}
 			{#each hub.domenii as domeniu}
 				<span class="inline-flex items-center text-xs text-text-muted bg-bg-alt border border-bg-alt px-3 py-1 rounded-full">
 					{domeniu}
@@ -126,6 +135,27 @@
 						</a>
 					{/if}
 				</div>
+			</div>
+		</section>
+	{/if}
+
+	{#if subproiecte.length > 0}
+		<section class="anim-list mt-12">
+			<h2 class="text-xl font-bold text-text tracking-tight mb-4">Subproiecte</h2>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				{#each subproiecte as subproiect}
+					<a
+						href="/proiecte/{subproiect.slug}"
+						class="related-card bg-white rounded-xl border border-bg-alt p-5 no-underline block"
+					>
+						<div class="w-10 h-1 rounded-full mb-4" style="background-color: {subproiect.culoare}" aria-hidden="true"></div>
+						<h3 class="font-bold text-text leading-snug mb-2">{subproiect.titlu}</h3>
+						<p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">{subproiect.descriere}</p>
+						<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
+							Vezi proiectul →
+						</span>
+					</a>
+				{/each}
 			</div>
 		</section>
 	{/if}

@@ -7,6 +7,7 @@ export interface ProiectHub {
 	culoare: string;
 	domenii: string[];
 	website?: string;
+	proiectParinteSlug?: string;
 }
 
 export interface ProiectStatistic {
@@ -57,7 +58,8 @@ export const huburi: ProiectHub[] = [
 			'Târgul Universităților din România este un eveniment din cadrul campaniei AdmiteRO, prin intermediul căruia tinerii și cadrele didactice din România prezintă oferta educațională a celor mai mari centre universitare din România.',
 		imagine: 'https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg',
 		culoare: '#1071B8',
-		domenii: ['educație']
+		domenii: ['educație'],
+		proiectParinteSlug: 'admiteri'
 	},
 	{
 		slug: 'summitul-tinerilor',
@@ -157,9 +159,9 @@ export const editii: ProiectEditie[] = [
 		titlu: 'Târgul Universităților 2026',
 		an: 2026,
 		proiectSlug: 'targul-universitatilor',
-		perioada: 'Iulie 2026',
+		perioada: '2 — 5 Iulie 2026',
 		descriere:
-			'Ediția din 2026 a Târgului Universităților din România aduce în fața absolvenților de liceu ofertele celor mai mari centre universitare din România, cu sesiuni de consiliere dedicate și prezentări ale programelor de burse.',
+			'Cea de-a XV-a ediție a Târgului Universităților din România se desfășoară în perioada 2–5 iulie la Chișinău, Bălți, Ungheni și Comrat, aducând în fața absolvenților de liceu ofertele universităților din România, cu sesiuni de consiliere dedicate și prezentări ale programelor de burse.',
 		activitati: [
 			'Oferirea de informații despre etapele admiterii în România, actele necesare și modalitatea de confirmare a locului.',
 			'Consiliere cu privire la alegerea unei facultăți / specializări.',
@@ -390,6 +392,24 @@ export function getHuburi(): ProiectHub[] {
 
 export function getHubBySlug(slug: string): ProiectHub | undefined {
 	return huburi.find((h) => h.slug === slug);
+}
+
+export function getSubproiecteSlugs(proiectSlug: string): string[] {
+	const rezultat = [proiectSlug];
+	for (const hub of huburi) {
+		if (hub.proiectParinteSlug === proiectSlug) {
+			rezultat.push(...getSubproiecteSlugs(hub.slug));
+		}
+	}
+	return rezultat;
+}
+
+export function getSubproiecteAle(proiectSlug: string): ProiectHub[] {
+	return huburi.filter((h) => h.proiectParinteSlug === proiectSlug);
+}
+
+export function getProiectParinte(hub: ProiectHub): ProiectHub | undefined {
+	return hub.proiectParinteSlug ? getHubBySlug(hub.proiectParinteSlug) : undefined;
 }
 
 export function getEditiiAle(proiectSlug: string): ProiectEditie[] {
