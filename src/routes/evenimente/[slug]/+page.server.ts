@@ -3,6 +3,7 @@ import { queryWP } from '$lib/server/wp';
 import type { EventQueryResult } from '$lib/types/wp';
 import { evenimente } from '$lib/data/evenimente';
 import type { Eveniment } from '$lib/data/evenimente';
+import { getHubBySlug } from '$lib/data/proiecte';
 import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -47,8 +48,17 @@ export const load: PageServerLoad = async ({ params }) => {
 		ev = found;
 	}
 
+	const proiect = ev!.proiectSlug ? getHubBySlug(ev!.proiectSlug) : undefined;
+	const siblingEvents = proiect
+		? evenimente
+				.filter((e) => e.proiectSlug === proiect.slug && e.slug !== slug)
+				.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+		: [];
+
 	return {
 		event: ev!,
+		proiect,
+		siblingEvents,
 		seo: { title: ev!.title, description: ev!.description }
 	};
 };

@@ -1,9 +1,23 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { etichetaStare } from '$lib/data/proiecte';
+	import { esteTrecut, sorteazaEvenimente } from '$lib/data/evenimente';
 
 	let { data }: PageProps = $props();
 	const { hub, editii, editieCurenta, subproiecte, proiectParinte, posturi, evenimente } = data;
+
+	const LIMIT = 3;
+
+	const evenimenteSortate = sorteazaEvenimente(evenimente);
+	const upcoming = evenimenteSortate.filter((e) => !esteTrecut(e));
+	const shownUpcoming = Math.min(LIMIT, upcoming.length);
+	const hasHidden = shownUpcoming > 0 && shownUpcoming < evenimenteSortate.length;
+
+	let showAll = $state(false);
+
+	const evenimenteVizibile = $derived(
+		hasHidden && !showAll ? upcoming.slice(0, shownUpcoming) : evenimenteSortate
+	);
 
 	function formatData(dataIso: string): string {
 		return new Date(dataIso).toLocaleDateString('ro', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -188,28 +202,50 @@
 		</section>
 	{/if}
 
-	{#if evenimente.length > 0}
+	{#if evenimenteSortate.length > 0}
 		<section class="anim-list mt-12">
 			<h2 class="text-xl font-bold text-text tracking-tight mb-4">Evenimente</h2>
 			<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-				{#each evenimente as ev}
+				{#each evenimenteVizibile as ev}
+					{@const past = esteTrecut(ev)}
 					<a
 						href="/evenimente/{ev.slug}"
 						class="related-card bg-white rounded-xl border border-bg-alt p-5 no-underline block"
 					>
-						<p class="text-xs text-text-muted uppercase tracking-wide mb-1">
-							{formatData(ev.date)}
+						<p class="text-xs text-text-muted uppercase tracking-wide mb-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+							<span>{formatData(ev.date)}</span>
+							{#if ev.dateEnd}
+								<span class="inline-flex items-center gap-1 normal-case tracking-normal font-medium">
+									<i class="fa-solid fa-arrow-right text-text-muted text-[10px]" aria-hidden="true"></i>
+									{formatData(ev.dateEnd)}
+								</span>
+							{/if}
+							{#if past}
+								<span class="text-xs font-medium bg-bg-alt text-text-muted px-2 py-0.5 rounded-full normal-case tracking-normal">Trecut</span>
+							{/if}
 						</p>
-						<h3 class="font-bold text-text leading-snug mb-2">{ev.title}</h3>
+						<h3 class="font-bold leading-snug mb-2 {past ? 'text-text-muted' : 'text-text'}">{ev.title}</h3>
 						{#if ev.location}
 							<p class="text-sm text-text-muted flex items-center gap-1.5">
-								<i class="fa-solid fa-location-dot text-blue text-xs" aria-hidden="true"></i>
+								<i class="fa-solid fa-location-dot text-xs {past ? 'text-text-muted' : 'text-blue'}" aria-hidden="true"></i>
 								{ev.location}
 							</p>
 						{/if}
 					</a>
 				{/each}
 			</div>
+			{#if hasHidden}
+				<div class="flex justify-center mt-8">
+					<button
+						onclick={() => (showAll = !showAll)}
+						aria-expanded={showAll}
+						class="inline-flex items-center gap-2 text-sm font-medium text-blue hover:text-oxford transition-colors bg-white border border-bg-alt rounded-xl px-5 py-3 hover:bg-bg"
+					>
+						<i class="fa-solid {showAll ? 'fa-chevron-up' : 'fa-chevron-down'} text-xs" aria-hidden="true"></i>
+						{showAll ? 'Arată mai puțin' : `Vezi toate evenimentele (${evenimenteSortate.length})`}
+					</button>
+				</div>
+			{/if}
 		</section>
 	{/if}
 

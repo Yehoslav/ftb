@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { queryWP } from '$lib/server/wp';
 import type { WPPost, PostQueryResult } from '$lib/types/wp';
-import { evenimente } from '$lib/data/evenimente';
+import { evenimente, sorteazaEvenimente, esteTrecut } from '$lib/data/evenimente';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const [postData, featuredData] = await Promise.all([
@@ -42,10 +42,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		: undefined;
 
 	const azi = new Date();
-	const evenimenteVitoare = evenimente
-		.filter((e) => new Date(e.date) >= azi)
-		.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-		.slice(0, 3);
+	const evenimenteVitoare = sorteazaEvenimente(evenimente.filter((e) => !esteTrecut(e, azi))).slice(0, 3);
 
 	return {
 		post: postData.post,

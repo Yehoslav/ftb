@@ -8,6 +8,7 @@ export default defineConfig({
         watch: {
             ignored: [
                 "**/node_modules/**",
+                /vite\.config\.ts\.timestamp-.+\.mjs$/,
                 /(^|[\/\\])\../,
             ]
         }

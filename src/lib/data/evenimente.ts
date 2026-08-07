@@ -54,12 +54,12 @@ export const evenimente: Eveniment[] = [
 	{
 		title: 'Resurse pentru Organizații de Tineret din Republica Moldova',
 		slug: 'resurse-pentru-organizatii-de-tineret-din-republica-moldova',
-		date: '2026-05-01',
-		dateEnd: '2026-09-30',
+		date: '2022-05-01',
+		dateEnd: '2022-09-30',
 		location: 'Republica Moldova',
 		proiectSlug: 'resurse',
 		description: 'Proiectul „Resurse pentru organizații de tineret din Republica Moldova” urmărește dezvoltarea capacității organizațiilor de tineret și formarea comunităților de tineri din Republica Moldova prin intermediul organizațiilor de tineret de basarabeni din România.',
-		duration: 'mai – septembrie 2026',
+		duration: 'mai – septembrie 2022',
 		financedBy: {
 			label: 'Departamentul pentru Relația cu Republica Moldova',
 			url: 'http://drrm.gov.ro/'
@@ -236,12 +236,12 @@ export const evenimente: Eveniment[] = [
 	{
 		title: 'Save Ukraine — response plan for the Ukrainian crisis in Romania',
 		slug: 'save-ukraine-response-plan',
-		date: '2026-03-01',
-		dateEnd: '2026-10-31',
+		date: '2022-03-01',
+		dateEnd: '2022-10-31',
 		location: 'România',
 		proiectSlug: 'save-ukraine',
 		description: 'Începând cu luna februarie 2022 Federația Tinerilor Basarabeni s-a implicat activ în sprijinul refugiaților din Ucraina odată cu începerea războiului. Cele mai mari fluxuri de refugiați au fost înregistrate în București, Iași, Cluj-Napoca, Timișoara, Suceava, Constanța, Sibiu, Brașov și Galați.',
-		duration: 'martie – octombrie 2026',
+		duration: 'martie – octombrie 2022',
 		financedBy: {
 			label: 'Asociația pentru Relații Comunitare (ARC) și ActionAid',
 			url: 'https://arcromania.ro/arc/'
@@ -276,17 +276,21 @@ export const evenimente: Eveniment[] = [
 	}
 ];
 
+export function esteTrecut(e: Eveniment, azi: Date = new Date()): boolean {
+	return new Date(e.dateEnd ?? e.date).getTime() < azi.getTime();
+}
+
+export function sorteazaEvenimente(lista: Eveniment[]): Eveniment[] {
+	return [...lista].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
 export function getEvenimenteVitoare(): Eveniment[] {
-	const azi = new Date();
-	return evenimente
-		.filter((e) => new Date(e.date) >= azi)
-		.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+	return sorteazaEvenimente(evenimente.filter((e) => !esteTrecut(e)));
 }
 
 export function getEvenimenteRecente(): Eveniment[] {
-	const azi = new Date();
 	return evenimente
-		.filter((e) => new Date(e.date) < azi)
+		.filter((e) => esteTrecut(e))
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 

@@ -14,7 +14,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | Framework | Svelte 5 (runes mode) + SvelteKit 2 |
 | Language | TypeScript (strict) |
 | CSS | Tailwind CSS v4 (`@theme` directives, `@tailwindcss/vite` plugin) |
-| Icons | Font Awesome 7.2 (brands, solid, regular) — minimal CSS in `/static/fa/css/fa-bare.min.css` with only the 15 icons used on the site; full webfonts in `/static/fa/webfonts/` |
+| Icons | Font Awesome 7.2 (brands, solid, regular) — minimal CSS in `/static/fa/css/fa-bare.min.css` with only the icons used on the site (19: brands + UI incl. chevron-down/up); full webfonts in `/static/fa/webfonts/` |
 | Font | Rubik (self-hosted woff2 in `/static/fonts/`, `@font-face` in `layout.css`) |
 | Runtime | Deno (Node compat via `deno.json`) |
 | Build | Vite 7 |
@@ -133,7 +133,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte`, subprojects via `proiectParinteSlug` (e.g. Târgul Universităților → AdmiteRO; parent hub aggregates subproject events/posts) (Phases 1–5)
 - [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
 - [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
-- [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (listing + `[slug]` detail), sidebar în articole
+- [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (timeline listing + `[slug]` detail), sidebar în articole
 - [x] **Pagination** — "older articles" + "newer articles" buttons on noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
 - [ ] **Contact form** — replace OpnForm iframe with in-house form connected to Gmail API

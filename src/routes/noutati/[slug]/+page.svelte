@@ -55,8 +55,20 @@
 							>
 								<div class="flex items-start gap-3">
 									<div class="shrink-0 w-10 h-10 rounded-lg bg-blue-light text-blue flex flex-col items-center justify-center leading-tight text-xs">
-										<span class="text-sm font-bold">{new Date(event.date).toLocaleString('ro', { day: 'numeric' })}</span>
-										<span class="uppercase font-medium">{new Date(event.date).toLocaleString('ro', { month: 'short' })}</span>
+										{#if event.dateEnd}
+											{@const start = new Date(event.date)}
+											{@const end = new Date(event.dateEnd)}
+											{#if start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()}
+												<span class="text-sm font-bold">{start.toLocaleString('ro', { day: 'numeric' })}</span>
+												<span class="uppercase font-medium text-[10px] leading-none">– {end.toLocaleString('ro', { day: 'numeric' })}</span>
+											{:else}
+												<span class="text-sm font-bold uppercase">{start.toLocaleString('ro', { month: 'short' })}</span>
+												<span class="uppercase font-medium text-[10px] leading-none">→ {end.toLocaleString('ro', { month: 'short' })}</span>
+											{/if}
+										{:else}
+											<span class="text-sm font-bold">{new Date(event.date).toLocaleString('ro', { day: 'numeric' })}</span>
+											<span class="uppercase font-medium">{new Date(event.date).toLocaleString('ro', { month: 'short' })}</span>
+										{/if}
 									</div>
 									<div class="min-w-0">
 										<span class="text-sm font-semibold text-text leading-snug">{event.title}</span>

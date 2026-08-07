@@ -4,6 +4,7 @@
 
 	let { data }: PageProps = $props();
 	const ev = data.event!;
+	const { proiect, siblingEvents } = data;
 	const locale = 'ro';
 	const monthOpts: Intl.DateTimeFormatOptions = { month: 'long' };
 	const dayOpts: Intl.DateTimeFormatOptions = { day: 'numeric' };
@@ -115,10 +116,19 @@
 		transform: translateY(-1px);
 	}
 
+	.related-card {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+	.related-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.anim-hero, .anim-body, .anim-side, .anim-gallery { animation: none; }
 		.gallery-img:hover { transform: none; }
 		.stat-card:hover { transform: none; }
+		.related-card:hover { transform: none; }
 	}
 </style>
 </svelte:head>
@@ -169,9 +179,11 @@
 				</div>
 
 				{#if ev.dateEnd}
-					<p class="text-sm text-text-muted mb-6">
-						<i class="fa-regular fa-calendar-plus text-blue mr-1.5" aria-hidden="true"></i>
-						{formatFull(ev.date)} – {formatFull(ev.dateEnd)}
+					<p class="text-sm text-text-muted mb-6 inline-flex flex-wrap items-center gap-x-2">
+						<i class="fa-regular fa-calendar-plus text-blue" aria-hidden="true"></i>
+						<span>{formatFull(ev.date)}</span>
+						<i class="fa-solid fa-arrow-right text-text-muted text-[10px]" aria-hidden="true"></i>
+						<span class="font-medium text-text">{formatFull(ev.dateEnd)}</span>
 					</p>
 				{/if}
 
@@ -262,9 +274,13 @@
 
 				<div class="space-y-4">
 					<div>
-						<p class="text-xs text-text-muted uppercase tracking-wide">Dată</p>
+						<p class="text-xs text-text-muted uppercase tracking-wide">{ev.dateEnd ? 'Perioadă' : 'Dată'}</p>
 						<p class="text-sm font-medium text-text mt-0.5">
-							{new Date(ev.date).toLocaleString(locale, dayOpts)} {new Date(ev.date).toLocaleString(locale, monthOpts)}
+							{formatFull(ev.date)}
+							{#if ev.dateEnd}
+								<span class="text-text-muted font-normal"> – </span>
+								<span>{formatFull(ev.dateEnd)}</span>
+							{/if}
 						</p>
 					</div>
 
@@ -354,4 +370,45 @@
 			</div>
 		</aside>
 	</div>
+
+	{#if proiect && siblingEvents.length > 0}
+		<div class="anim-gallery mt-16 pt-8 border-t border-bg-alt">
+			<div class="flex flex-wrap items-baseline justify-between gap-2 mb-6">
+				<h2 class="text-xl font-bold text-text tracking-tight">Toate evenimentele — {proiect.titlu}</h2>
+				<a href="/proiecte/{proiect.slug}" class="text-sm text-blue hover:text-oxford transition-colors no-underline">
+					Vezi proiectul →
+				</a>
+			</div>
+
+			<ol class="relative max-w-3xl">
+				<div class="absolute left-[5px] top-1 bottom-1 w-0.5 bg-bg-alt" aria-hidden="true"></div>
+
+				{#each siblingEvents as sibling}
+					<li class="relative pl-12 pb-5 last:pb-0">
+						<span class="absolute left-[5px] top-6 w-3 h-3 rounded-full bg-blue -translate-x-1/2 ring-4 ring-bg" aria-hidden="true"></span>
+
+						<article class="related-card bg-white rounded-xl border border-bg-alt p-5">
+							<div class="flex items-center gap-4">
+								<div class="shrink-0 w-14 h-14 rounded-lg bg-blue-light text-blue flex flex-col items-center justify-center leading-tight">
+									<span class="text-lg font-bold">{new Date(sibling.date).toLocaleString(locale, dayOpts)}</span>
+									<span class="text-xs font-medium uppercase">{new Date(sibling.date).toLocaleString(locale, { month: 'short' })}</span>
+								</div>
+								<div class="min-w-0 flex-1">
+									<h3 class="font-semibold text-text leading-snug">
+										<a href="/evenimente/{sibling.slug}" class="no-underline hover:text-blue transition-colors">{sibling.title}</a>
+									</h3>
+									{#if sibling.location}
+										<p class="text-sm text-text-muted mt-1 flex items-center gap-1.5">
+											<i class="fa-solid fa-location-dot text-blue text-xs" aria-hidden="true"></i>
+											{sibling.location}
+										</p>
+									{/if}
+								</div>
+							</div>
+						</article>
+					</li>
+				{/each}
+			</ol>
+		</div>
+	{/if}
 </div>
