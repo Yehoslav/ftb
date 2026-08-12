@@ -305,6 +305,31 @@
 		border-radius: 0.75rem;
 		margin-block: 1.5rem;
 	}
+	:global(.prose .wp-block-gallery) {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		gap: 0.75rem;
+		margin-block: 1.5rem;
+		margin-inline: 0;
+		padding: 0;
+	}
+	:global(.prose .wp-block-gallery .wp-block-image) {
+		margin: 0;
+		overflow: hidden;
+		border-radius: 0.75rem;
+		background: var(--color-bg-alt);
+	}
+	:global(.prose .wp-block-gallery.is-cropped .wp-block-image) {
+		aspect-ratio: 4 / 3;
+	}
+	:global(.prose .wp-block-gallery .wp-block-image img) {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		margin: 0;
+		border-radius: 0;
+	}
 	:global(.prose code) {
 		font-size: 0.875em;
 		background: var(--color-bg-alt);
