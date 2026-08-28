@@ -97,27 +97,43 @@ export function getMembri(): Promise<Membru[]> {
 }
 
 async function fetchEchipa(): Promise<MembruEchipa[]> {
-	const values = await fetchValues('Echipa!A1:D');
+	const values = await fetchValues('Echipa!A1:AJ');
 	const [header, ...rows] = values;
 	if (!header) {
 		throw new Error('Google Sheets: empty header row in Echipa tab');
 	}
-	return rows
-		.map((row): MembruEchipa | null => {
-			const cell = (col: string) => row[header.indexOf(col)]?.trim() ?? '';
-			const nume = cell('nume');
-			const rol = cell('rol');
-			const categorie = cell('categorie');
-			if (!nume) return null;
-			if (categorie !== 'birou' && categorie !== 'extinsa') return null;
-			return {
-				nume,
-				rol,
-				categorie,
-				foto: cell('foto') || undefined
-			};
-		})
-		.filter((m): m is MembruEchipa => m !== null);
+		return rows
+			.map((row): MembruEchipa | null => {
+				const cell = (col: string) => row[header.indexOf(col)]?.trim() ?? '';
+				const nume = cell('nume');
+				const rol = cell('rol');
+				const categorie = cell('categorie');
+				if (!nume) return null;
+				if (categorie !== 'birou' && categorie !== 'extinsa') return null;
+				const socials = cell('socials')
+					? cell('socials')
+							.split(';')
+							.filter(Boolean)
+							.map((item) => {
+								const [label, url] = item.split('|');
+								return label && url
+									? { label: label.trim(), url: url.trim() }
+									: null;
+							})
+							.filter((s): s is { label: string; url: string } => s !== null)
+					: undefined;
+				return {
+					nume,
+					rol,
+					categorie,
+					foto: cell('foto') || undefined,
+					descriere: cell('descriere') || undefined,
+					oras: cell('oras') || undefined,
+					email: cell('email') || undefined,
+					socials: socials && socials.length ? socials : undefined
+				};
+			})
+			.filter((m): m is MembruEchipa => m !== null);
 }
 
 export function getEchipa(): Promise<MembruEchipa[]> {

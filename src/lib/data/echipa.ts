@@ -3,6 +3,11 @@ export interface MembruEchipa {
 	rol: string;
 	categorie: 'birou' | 'extinsa';
 	foto?: string;
+	/** Informații suplimentare, opționale — completate gradual în foaia "Echipa". */
+	descriere?: string;
+	oras?: string;
+	email?: string;
+	socials?: { label: string; url: string }[];
 }
 
 /*

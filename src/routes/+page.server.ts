@@ -1,11 +1,12 @@
 import type { PageServerLoad } from './$types';
-import { getInfo, getMembri } from '$lib/server/googleSheets';
+import { getInfo, getMembri, getEchipa } from '$lib/server/googleSheets';
 import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
 
 export const load: PageServerLoad = async () => {
 	const info = await getInfo().catch(() => null);
 	const membri = await getMembri();
+	const echipa = await getEchipa();
 
 	const orase = [...new Set(membri.map((m) => m.oras))];
 
@@ -38,6 +39,7 @@ export const load: PageServerLoad = async () => {
 		info,
 		posts: postsData?.posts.nodes ?? [],
 		membri,
+		echipa,
 		membreStats: {
 			total: membri.length,
 			orase: orase.length,

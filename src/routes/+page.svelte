@@ -10,6 +10,7 @@
 		type ProiectHub,
 		type ProiectEditie,
 	} from "$lib/data/proiecte";
+	import type { MembruEchipa } from "$lib/data/echipa";
 
 	let { data }: PageProps = $props();
 
@@ -94,29 +95,6 @@
 	const targulImg =
 		"https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg";
 
-	const services = [
-		{
-			icon: "fa-solid fa-graduation-cap",
-			title: "Sprijin pentru admitere",
-			desc: "Informații și asistență pentru înscrierea la universități, licee și școli profesionale din România.",
-		},
-		{
-			icon: "fa-solid fa-scale-balanced",
-			title: "Asistență pentru acte legale",
-			desc: "Ghidare privind obținerea vizei de studii, actelor de ședere temporară și documentației necesare.",
-		},
-		{
-			icon: "fa-solid fa-handshake",
-			title: "Integrare socială",
-			desc: "Evenimente și programe care conectează studenții basarabeni și facilitează adaptarea în România.",
-		},
-		{
-			icon: "fa-solid fa-seedling",
-			title: "Implicare civică",
-			desc: "Proiecte de voluntariat și oportunități de dezvoltare personală și profesională pentru tineri.",
-		},
-	] as const;
-
 	/* Featured project — the flagship, currently AdmiteRO during admission season */
 	const featuredProject: { hub: ProiectHub; editie: ProiectEditie; imagine?: string } | null = (() => {
 		const hub = huburi.find((h) => h.slug === "admiteri");
@@ -141,6 +119,31 @@
 		)
 		.filter((x) => x.hub.slug !== (featuredProject?.hub.slug ?? "__none__"))
 		.slice(0, 3);
+
+	/* Team data (reactive) for the "Despre noi" showcase layouts */
+	const echipa = $derived(data.echipa ?? []);
+	const board = $derived(echipa.filter((m) => m.categorie === "birou"));
+
+	function initials(nume: string): string {
+		return nume
+			.split(" ")
+			.map((w) => w[0])
+			.join("")
+			.slice(0, 2)
+			.toUpperCase();
+	}
+
+	/* Modal — selected team member */
+	let selected = $state<MembruEchipa | null>(null);
+	let dialog = $state<HTMLDialogElement | null>(null);
+
+	$effect(() => {
+		if (selected) {
+			dialog?.showModal();
+		} else {
+			dialog?.close();
+		}
+	});
 </script>
 
 <svelte:head>
@@ -365,46 +368,7 @@
 		</div>
 	</section>
 
-	<!-- 4. What we do — numbered editorial pillars -->
-	<section class="anim-section bg-bg py-16 md:py-20">
-		<div class="mx-auto max-w-5xl px-6">
-			<div class="mb-12 max-w-2xl">
-				<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
-					Ce facem
-				</h2>
-				<p class="mt-3 text-text-muted text-base font-light leading-relaxed">
-					Susținem tinerii basarabeni la fiecare pas — de la admitere până la
-					integrarea profesională.
-				</p>
-			</div>
-
-			<ol class="divide-y divide-bg-alt">
-				{#each services as { icon, title, desc }, i}
-					<li class="flex items-start gap-5 py-7">
-						<span
-							class="pt-1 text-lg font-bold tabular-nums text-blue/50"
-							aria-hidden="true"
-						>
-							{String(i + 1).padStart(2, "0")}
-						</span>
-						<div
-							class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-light text-blue"
-						>
-							<i class="{icon} text-lg" aria-hidden="true"></i>
-						</div>
-						<div>
-							<h3 class="font-semibold text-text mb-1.5">{title}</h3>
-							<p class="max-w-xl text-sm text-text-muted leading-relaxed">
-								{desc}
-							</p>
-						</div>
-					</li>
-				{/each}
-			</ol>
-		</div>
-	</section>
-
-	<!-- 5. Projects — featured + what's in progress -->
+	<!-- 4. Projects — featured + what's in progress -->
 	<section class="anim-section bg-white py-16 md:py-20">
 		<div class="mx-auto max-w-6xl px-6">
 			<div class="flex items-end justify-between mb-12">
@@ -568,7 +532,7 @@
 		</div>
 	</section>
 
-	<!-- 6. Latest news — featured + compact list -->
+	<!-- 5. Latest news — featured + compact list -->
 	{#if data.posts.length > 0}
 		{@const featured = data.posts[0]}
 		{@const rest = data.posts.slice(1)}
@@ -580,7 +544,7 @@
 							Ultimele noutăți
 						</h2>
 						<p class="text-text-muted text-sm font-light mt-2">
-							Actualizări și anunțuri de la FTB
+							Povești, anunțuri și momente de la FTB
 						</p>
 					</div>
 					<a
@@ -592,13 +556,13 @@
 					</a>
 				</div>
 
-				<div class="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-12">
-					<!-- Featured article -->
+				<div class="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-14">
+					<!-- Featured story -->
 					{#if featured}
 						{@const furl = `/noutati/${featured.slug}`}
-						<article class="group bg-white rounded-2xl border border-bg-alt overflow-hidden">
+						<article class="group">
 							{#if featured.featuredImage?.node?.sourceUrl}
-								<a href={furl} class="block aspect-[16/9] overflow-hidden" tabindex="-1">
+								<a href={furl} class="block aspect-[16/9] overflow-hidden rounded-2xl" tabindex="-1">
 									<picture>
 										<source
 											type="image/webp"
@@ -606,7 +570,7 @@
 											sizes="(max-width: 900px) 100vw, 600px"
 										/>
 										<img
-											class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+											class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
 											src={featured.featuredImage.node.sourceUrl}
 											srcset={featured.featuredImage.node.srcSet ?? undefined}
 											sizes="(max-width: 900px) 100vw, 600px"
@@ -619,48 +583,46 @@
 									</picture>
 								</a>
 							{/if}
-							<div class="p-6 lg:p-8">
-								<time class="text-xs text-text-muted">
-									{new Date(featured.date).toLocaleString("ro-RO", dateOpts)}
-								</time>
-								<h3 class="mt-2 text-xl lg:text-2xl font-bold text-text leading-snug">
-									<a
-										href={furl}
-										class="no-underline hover:text-blue transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
-									>
-										{featured.title}
-									</a>
-								</h3>
-								{#if featured.excerpt}
-									<p class="mt-3 text-sm text-text-muted leading-relaxed line-clamp-3">
-										{featured.excerpt.replace(/(<([^>]+)>)/gi, "").trim()}
-									</p>
-								{/if}
+							<time class="mt-6 block text-xs uppercase tracking-widest text-text-muted">
+								{new Date(featured.date).toLocaleString("ro-RO", dateOpts)}
+							</time>
+							<h3 class="mt-3 text-2xl lg:text-3xl font-bold text-text leading-snug tracking-tight">
 								<a
 									href={furl}
-									class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+									class="no-underline hover:text-blue transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
 								>
-									Citește articolul
-									<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+									{featured.title}
 								</a>
-							</div>
+							</h3>
+							{#if featured.excerpt}
+								<p class="mt-4 max-w-prose text-base text-text-muted leading-relaxed">
+									{featured.excerpt.replace(/(<([^>]+)>)/gi, "").trim()}
+								</p>
+							{/if}
+							<a
+								href={furl}
+								class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+							>
+								Citește articolul
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+							</a>
 						</article>
 					{/if}
 
-					<!-- Compact list -->
+					<!-- Headline list -->
 					{#if rest.length > 0}
 						<div class="flex flex-col">
-							<h3 class="mb-4 text-xs font-semibold uppercase tracking-widest text-text-muted">
+							<p class="mb-4 border-b border-bg-alt pb-4 text-xs font-semibold uppercase tracking-widest text-text-muted">
 								Mai recente
-							</h3>
+							</p>
 							<ol class="flex flex-col divide-y divide-bg-alt">
 								{#each rest as post}
 									{@const url = `/noutati/${post.slug}`}
-									<li class="py-4 first:pt-0 last:pb-0">
-										<time class="text-xs text-text-muted">
+									<li class="py-5 first:pt-0 last:pb-0">
+										<time class="text-xs uppercase tracking-widest text-text-muted">
 											{new Date(post.date).toLocaleString("ro-RO", dateOpts)}
 										</time>
-										<h4 class="mt-1 font-semibold text-text leading-snug">
+										<h4 class="mt-2 text-lg font-semibold text-text leading-snug">
 											<a
 												href={url}
 												class="no-underline hover:text-blue transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
@@ -668,6 +630,11 @@
 												{post.title}
 											</a>
 										</h4>
+										{#if post.excerpt}
+											<p class="mt-2 text-sm text-text-muted leading-relaxed line-clamp-2">
+												{post.excerpt.replace(/(<([^>]+)>)/gi, "").trim()}
+											</p>
+										{/if}
 									</li>
 								{/each}
 							</ol>
@@ -687,7 +654,188 @@
 		</section>
 	{/if}
 
-	<!-- 7. CTA — get involved -->
+	<!-- 6. Despre noi — mission -->
+	<section class="anim-section bg-white py-16 md:py-20">
+		<div class="mx-auto max-w-4xl px-6 text-center">
+			<span class="mx-auto inline-block h-1.5 w-12 rounded-full bg-cerry" aria-hidden="true"></span>
+			<h2 class="mt-4 text-3xl lg:text-4xl font-bold tracking-tight text-text">
+				Cine suntem
+			</h2>
+			<p class="mx-auto mt-6 max-w-2xl text-base text-text-muted leading-relaxed">
+				Federația Tinerilor Basarabeni reunește asociațiile studențești și de
+				tineret basarabene active în România, oferindu-le sprijin, resurse și o
+				voce comună în societatea românească. Din 2021 construim o comunitate
+				care-i ajută pe tinerii basarabeni să studieze, să se integreze și să se
+				implice — de la primii pași ai admisiei până la proiecte cu impact civic.
+			</p>
+			<dl class="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-bg-alt pt-8">
+				<div>
+					<dt class="text-3xl font-bold tabular-nums text-cerry">17</dt>
+					<dd class="mt-1 text-sm text-text-muted">asociații membre</dd>
+				</div>
+				<div>
+					<dt class="text-3xl font-bold tabular-nums text-oxford">16+</dt>
+					<dd class="mt-1 text-sm text-text-muted">centre universitare</dd>
+				</div>
+				<div>
+					<dt class="text-3xl font-bold tabular-nums text-blue">2021</dt>
+					<dd class="mt-1 text-sm text-text-muted">anul înființării</dd>
+				</div>
+			</dl>
+			<div class="mt-8 flex flex-wrap justify-center gap-4">
+				<a
+					href="/despre-noi"
+					class="inline-flex items-center gap-2 rounded-lg bg-oxford px-5 py-2.5 text-sm font-semibold text-white no-underline transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+				>
+					Mai multe despre noi
+					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+				</a>
+				<a
+					href="/echipa"
+					class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+				>
+					Toată echipa
+				</a>
+			</div>
+		</div>
+	</section>
+
+	<!-- 7. Team — LAYOUT A: Portrait tiles -->
+	{#if board.length > 0}
+		<section class="anim-section bg-bg py-16 md:py-20">
+			<div class="mx-auto max-w-6xl px-6">
+				<div class="mb-10 flex items-end justify-between">
+					<div>
+						<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">Layout A</p>
+						<h2 class="mt-1 text-3xl lg:text-4xl font-bold tracking-tight text-text">
+							Conducerea federației
+						</h2>
+					</div>
+					<a href="/echipa" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors">
+						Toată echipa
+						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+					</a>
+				</div>
+
+				<ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+					{#each board as member}
+						<li>
+							<button
+								type="button"
+								onclick={() => (selected = member)}
+								aria-haspopup="dialog"
+								class="card-hover group flex w-full flex-col items-center overflow-hidden rounded-2xl bg-white text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford cursor-pointer no-underline"
+							>
+								<div class="relative w-full aspect-square overflow-hidden">
+									{#if member.foto}
+										<img
+											src={member.foto}
+											alt={member.nume}
+											class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+											loading="lazy"
+											decoding="async"
+										/>
+									{:else}
+										<div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-oxford to-blue text-5xl font-bold text-white transition-transform duration-500 group-hover:scale-105">
+											{initials(member.nume)}
+										</div>
+									{/if}
+								</div>
+								<div class="w-full px-3 py-4">
+									<p class="font-semibold text-text leading-snug">{member.nume}</p>
+									<p class="mt-0.5 text-sm text-text-muted leading-snug">{member.rol}</p>
+								</div>
+							</button>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		</section>
+	{/if}
+
+	<!-- Member info modal -->
+	{#if selected}
+		{@const m = selected}
+		<dialog
+			bind:this={dialog}
+			class="m-auto w-full max-w-md rounded-2xl bg-white p-0 shadow-2xl backdrop:bg-oxford-dark/50 backdrop:backdrop-blur-sm open:animate-[fadeInUp_.25s_ease-out]"
+			onclose={() => (selected = null)}
+			onclick={(e) => e.target === dialog && (selected = null)}
+		>
+			<div class="relative">
+				<div class="relative w-full aspect-[4/3] overflow-hidden">
+					{#if m.foto}
+						<img src={m.foto} alt={m.nume} class="h-full w-full object-cover" loading="lazy" decoding="async" />
+					{:else}
+						<div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-oxford to-blue text-7xl font-bold text-white">
+							{initials(m.nume)}
+						</div>
+					{/if}
+					<button
+						type="button"
+						onclick={() => (selected = null)}
+						aria-label="Închide"
+						class="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-lg leading-none text-text shadow-md transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+					>
+						×
+					</button>
+				</div>
+				<div class="p-6">
+					<p class="text-sm font-medium text-cerry">{m.rol}</p>
+					<h3 class="mt-1 text-2xl font-bold tracking-tight text-text">{m.nume}</h3>
+
+					{#if m.descriere}
+						<p class="mt-4 text-base text-text-muted leading-relaxed">{m.descriere}</p>
+					{:else}
+						<p class="mt-4 text-base text-text-muted leading-relaxed">
+							Membru al biroului de conducere al Federației Tinerilor Basarabeni.
+						</p>
+					{/if}
+
+					{#if m.oras || m.email || m.socials}
+						<dl class="mt-6 space-y-3 border-t border-bg-alt pt-5 text-sm">
+							{#if m.oras}
+								<div class="flex items-center gap-2 text-text-muted">
+									<i class="fa-solid fa-location-dot w-4 text-blue" aria-hidden="true"></i>
+									<span>{m.oras}</span>
+								</div>
+							{/if}
+							{#if m.email}
+								<div class="flex items-center gap-2 text-text-muted">
+									<i class="fa-solid fa-building-columns w-4 text-oxford" aria-hidden="true"></i>
+									<a href={`mailto:${m.email}`} class="no-underline hover:text-blue transition-colors">{m.email}</a>
+								</div>
+							{/if}
+							{#if m.socials?.length}
+								<div class="flex items-center gap-2">
+									{#each m.socials as social}
+										<a
+											href={social.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											class="inline-flex items-center justify-center rounded-full bg-bg-alt px-3 py-1.5 text-xs font-medium text-text transition-colors hover:bg-blue-light hover:text-blue"
+										>
+											{social.label}
+										</a>
+									{/each}
+								</div>
+							{/if}
+						</dl>
+					{/if}
+
+					<a
+						href="/echipa"
+						class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+					>
+						Vezi echipa completă
+						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+					</a>
+				</div>
+			</div>
+		</dialog>
+	{/if}
+
+	<!-- 8. CTA — get involved -->
 	<section class="anim-section bg-oxford py-16 md:py-20 text-white">
 		<div class="mx-auto max-w-2xl px-6 text-center">
 			<h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-4">
