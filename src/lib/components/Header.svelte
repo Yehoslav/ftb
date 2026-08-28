@@ -256,6 +256,13 @@
 					{label}
 				</a>
 			{/each}
+
+			<a
+				href="/contact"
+				class="ml-1 inline-flex items-center gap-1.5 rounded-lg bg-cerry px-4 py-2 text-sm font-semibold text-white no-underline transition-colors hover:bg-cerry-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cerry"
+			>
+				Vreau să mă implic
+			</a>
 		</nav>
 
 		<!-- Mobile hamburger -->
@@ -351,6 +358,14 @@
 					{label}
 				</a>
 			{/each}
+
+			<a
+				href="/contact"
+				class="block bg-cerry px-4 py-3 text-sm font-semibold text-white no-underline hover:bg-cerry-dark"
+				onclick={() => (mobileOpen = false)}
+			>
+				Vreau să mă implic
+			</a>
 		</nav>
 		</div>
 	{/if}
