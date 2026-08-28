@@ -86,8 +86,8 @@
 		}
 	}
 
-	const headerCtx = getContext<{ readonly height: number; readonly visible: boolean }>('header');
-	let tocTop = $derived(headerCtx.visible ? headerCtx.height : 0);
+	const headerCtx = getContext<{ readonly height: number }>('header');
+	let tocTop = $derived(headerCtx.height);
 </script>
 
 <svelte:head>

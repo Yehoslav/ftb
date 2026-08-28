@@ -43,11 +43,9 @@
 		{ href: '/contact', label: 'Contact' }
 	];
 
-	let { headerHeight = $bindable(0), headerVisible = $bindable(true) } = $props();
+	let { headerHeight = $bindable(0) } = $props();
 
 	let header: HTMLElement | undefined = $state();
-	let lastScroll = $state(0);
-	let hidden = $state(false);
 	let mobileOpen = $state(false);
 	let openDropdown: string | null = $state(null);
 	let openMobileGroup: string | null = $state(null);
@@ -137,28 +135,17 @@
 		if (header) headerHeight = header.offsetHeight;
 	});
 
-	$effect(() => {
-		headerVisible = !hidden;
-	});
-
 	function onPageShow(e: PageTransitionEvent) {
 		if (e.persisted) {
 			mobileOpen = false;
 			openDropdown = null;
 			openMobileGroup = null;
-			hidden = false;
-			lastScroll = window.pageYOffset || document.documentElement.scrollTop;
 		}
 	}
 
 </script>
 
 <svelte:window
-	onscroll={() => {
-		const cur = window.pageYOffset || document.documentElement.scrollTop;
-		hidden = cur > lastScroll && cur > 80;
-		lastScroll = cur;
-	}}
 	onclick={(e: MouseEvent) => {
 		const target = e.target as HTMLElement;
 		if (!target.closest('[data-dropdown]')) {
@@ -173,8 +160,7 @@
 
 <header
 	bind:this={header}
-	style="transform: translateY({hidden ? '-100%' : '0'});"
-	class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-bg-alt transition-transform duration-300"
+	class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-bg-alt"
 >
 	<div class="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-3">
 		<a href="/" class="font-bold text-xl text-oxford no-underline hover:text-oxford-light transition-colors">

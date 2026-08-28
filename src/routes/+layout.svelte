@@ -10,11 +10,9 @@ import { dev } from '$app/environment';
 
 let { children }: LayoutProps = $props();
 let headerHeight = $state(0);
-let headerVisible = $state(true);
 
 setContext('header', {
-	get height() { return headerHeight; },
-	get visible() { return headerVisible; }
+	get height() { return headerHeight; }
 });
 </script>
 
@@ -50,7 +48,7 @@ setContext('header', {
 	Sari la conținut
 </a>
 
-<Header bind:headerHeight bind:headerVisible />
+<Header bind:headerHeight />
 
 <main id="main-content" class="min-h-screen" style="padding-top: {headerHeight}px">
 	{@render children()}

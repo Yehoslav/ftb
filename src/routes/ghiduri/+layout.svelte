@@ -6,7 +6,7 @@
 
 	let { children }: LayoutProps = $props();
 
-	const headerCtx = getContext<{ readonly height: number; readonly visible: boolean }>('header');
+	const headerCtx = getContext<{ readonly height: number }>('header');
 
 	let sidebarOpen = $state(false);
 
@@ -19,7 +19,7 @@
 		return item?.title ?? '';
 	});
 
-	let sidebarTop = $derived(headerCtx.visible ? headerCtx.height : 0);
+	let sidebarTop = $derived(headerCtx.height);
 </script>
 
 <svelte:head>
