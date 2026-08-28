@@ -104,20 +104,11 @@
                         </h3>
                         <p class="text-white/65 text-sm leading-relaxed">
                             {#if item.bold}
-                                {#each                             item.text.split(
-                                item.bold,
-                            ) as
-                                    part,
-                                    i
-                                }
+                                {#each item.text.split(item.bold) as part, i}
+                                    {@const textLength = item.text.split(item.bold).length}
                                     <span>
                                         {part}
-                                        {#if                                 i <
-                                    item.text
-                                            .split(
-                                                item.bold,
-                                            ).length -
-                                        1}
+                                        {#if i < textLength - 1}
                                             <strong
                                                 class="text-white font-semibold"
                                             >{item.bold}</strong>

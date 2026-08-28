@@ -1,7 +1,14 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
 	import logoIcon from "$lib/assets/FTB_logo_long_default-2_1.png";
-	import { huburi } from "$lib/data/proiecte";
+	import {
+		huburi,
+		getHubBySlug,
+		etichetaStare,
+		editii,
+		type ProiectHub,
+		type ProiectEditie,
+	} from "$lib/data/proiecte";
 
 	let { data }: PageProps = $props();
 
@@ -23,20 +30,23 @@
 			desc: "Ghiduri pas-cu-pas pentru studii în România: înscriere, viză, acte de ședere.",
 			icon: "fa-solid fa-graduation-cap",
 			iconBg: "bg-blue-light text-blue",
+			span: "sm:col-span-2 lg:col-span-2",
 		},
 		{
 			href: "/proiecte",
 			title: "Proiecte",
-			desc: "Campanii și programe Anuale: AdmiteRO, Târgul Universităților, Summit și altele.",
+			desc: "Campanii și programe anuale: AdmiteRO, Târgul Universităților, Summit și altele.",
 			icon: "fa-solid fa-lightbulb",
 			iconBg: "bg-bg-alt text-orange",
+			span: "",
 		},
 		{
 			href: "/evenimente",
 			title: "Evenimente",
-			desc: "Ce urmează — activități și întâlniri pentru tinerii basarabeni din România.",
+			desc: "Ce urmează — activități și întâlniri pentru tinerii basarabeni.",
 			icon: "fa-solid fa-calendar-plus",
 			iconBg: "bg-bg-alt text-cerry",
+			span: "",
 		},
 		{
 			href: "/ghiduri#ghiduri",
@@ -44,6 +54,7 @@
 			desc: "Ghiduri de implicare civică, scriere de proiecte și finanțări pentru tineri.",
 			icon: "fa-solid fa-handshake",
 			iconBg: "bg-bg-alt text-blue",
+			span: "sm:col-span-2 lg:col-span-2",
 		},
 		{
 			href: "/noutati",
@@ -51,6 +62,7 @@
 			desc: "Articole, anunțuri și actualizări despre activitatea FTB România.",
 			icon: "fa-regular fa-newspaper",
 			iconBg: "bg-blue-light text-blue",
+			span: "",
 		},
 		{
 			href: "/organizatii-membre",
@@ -58,6 +70,7 @@
 			desc: "16+ asociații de studenți și tineri basarabeni din centrele universitare.",
 			icon: "fa-solid fa-users",
 			iconBg: "bg-bg-alt text-oxford",
+			span: "",
 		},
 		{
 			href: "/echipa",
@@ -65,6 +78,7 @@
 			desc: "Cunoaște oamenii din spatele celor 16 asociații ale federației.",
 			icon: "fa-solid fa-university",
 			iconBg: "bg-bg-alt text-cerry",
+			span: "",
 		},
 		{
 			href: "/ghiduri#resurse-generale",
@@ -72,8 +86,12 @@
 			desc: "Cum ajungi din Republica Moldova în România — autobuze, trenuri, microbuze.",
 			icon: "fa-solid fa-location-dot",
 			iconBg: "bg-blue-light text-blue",
+			span: "",
 		},
 	] as const;
+
+	const targulImg =
+		"https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg";
 
 	const services = [
 		{
@@ -98,12 +116,31 @@
 		},
 	] as const;
 
-	const proiecteRich = [
-		huburi.find((h) => h.slug === "admiteri"),
-		huburi.find((h) => h.slug === "summitul-tinerilor"),
-		huburi.find((h) => h.slug === "ziua-nationala"),
-		huburi.find((h) => h.slug === "save-ukraine"),
-	].filter((h) => h !== undefined);
+	const proiecteShowcase: Array<{ hub: ProiectHub; imagine?: string }> = [
+		{
+			hub: huburi.find((h) => h.slug === "admiteri"),
+			imagine: "https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg",
+		},
+		{
+			hub: huburi.find((h) => h.slug === "summitul-tinerilor"),
+			imagine: undefined,
+		},
+		{
+			hub: huburi.find((h) => h.slug === "save-ukraine"),
+			imagine: "https://www.ftbromania.ro/wp-content/uploads/2021/08/Constanta-11-1024x658.jpg",
+		},
+	].filter((p): p is { hub: ProiectHub; imagine?: string } => p.hub !== undefined);
+
+	/* Momentum — projects currently in progress or next up */
+	const activeEditii = editii
+		.filter((e) => e.stare === "in-desfasurare" || e.stare === "planificat")
+		.sort((a, b) => a.an - b.an)
+		.map((e) => ({ editie: e, hub: getHubBySlug(e.proiectSlug) }))
+		.filter((x): x is { editie: ProiectEditie; hub: ProiectHub } => x.hub !== undefined)
+		.filter(
+			(x, i, arr) => arr.findIndex((y) => y.hub.slug === x.hub.slug) === i
+		)
+		.slice(0, 3);
 </script>
 
 <svelte:head>
@@ -268,7 +305,7 @@
 				{#each actions as action}
 					<a
 						href={action.href}
-						class="action-card card-hover group flex flex-col rounded-2xl border border-bg-alt bg-white p-5 no-underline"
+						class="action-card card-hover group flex flex-col rounded-2xl border border-bg-alt bg-white p-5 no-underline {action.span}"
 					>
 						<div
 							class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg {action.iconBg}"
@@ -290,23 +327,66 @@
 						</span>
 					</a>
 				{/each}
+
+				<!-- Real FTB photo tile → Târgul Universităților -->
+				<a
+					href="/proiecte/targul-universitatilor"
+					class="action-card card-hover group relative overflow-hidden rounded-2xl border border-bg-alt sm:col-span-2 min-h-[220px] no-underline"
+				>
+					<img
+						src={targulImg}
+						alt="Târgul Universităților din România"
+						class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+						loading="lazy"
+						decoding="async"
+					/>
+					<div
+						class="absolute inset-0 bg-gradient-to-t from-oxford-dark/90 via-oxford-dark/40 to-transparent"
+					></div>
+					<div class="relative flex h-full min-h-[220px] flex-col justify-end p-5">
+						<h3 class="font-bold text-white leading-snug">
+							Târgul Universităților din România
+						</h3>
+						<p class="mt-1.5 text-sm text-white/80 leading-relaxed">
+							Oferte educaționale și consiliere pentru absolvenții de liceu — ediție după ediție.
+						</p>
+						<span
+							class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-sunglow"
+						>
+							Vezi proiectul
+							<i
+								class="action-arrow fa-solid fa-arrow-right text-xs"
+								aria-hidden="true"
+							></i>
+						</span>
+					</div>
+				</a>
 			</div>
 		</div>
 	</section>
 
-	<!-- 4. What we do — mission reinforcement -->
+	<!-- 4. What we do — numbered editorial pillars -->
 	<section class="anim-section bg-bg py-16 md:py-20">
 		<div class="mx-auto max-w-5xl px-6">
-			<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text text-center">
-				Ce facem
-			</h2>
-			<p class="mx-auto mt-3 mb-12 max-w-lg text-center text-text-muted text-base font-light">
-				Susținem tinerii basarabeni la fiecare pas — de la admitere până la
-				integrarea profesională.
-			</p>
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-				{#each services as { icon, title, desc }}
-					<div class="card-hover flex gap-5 p-6 rounded-xl bg-white border border-bg-alt">
+			<div class="mb-12 max-w-2xl">
+				<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
+					Ce facem
+				</h2>
+				<p class="mt-3 text-text-muted text-base font-light leading-relaxed">
+					Susținem tinerii basarabeni la fiecare pas — de la admitere până la
+					integrarea profesională.
+				</p>
+			</div>
+
+			<ol class="divide-y divide-bg-alt">
+				{#each services as { icon, title, desc }, i}
+					<li class="flex items-start gap-5 py-7">
+						<span
+							class="pt-1 text-lg font-bold tabular-nums text-blue/50"
+							aria-hidden="true"
+						>
+							{String(i + 1).padStart(2, "0")}
+						</span>
 						<div
 							class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-light text-blue"
 						>
@@ -314,18 +394,20 @@
 						</div>
 						<div>
 							<h3 class="font-semibold text-text mb-1.5">{title}</h3>
-							<p class="text-sm text-text-muted leading-relaxed">{desc}</p>
+							<p class="max-w-xl text-sm text-text-muted leading-relaxed">
+								{desc}
+							</p>
 						</div>
-					</div>
+					</li>
 				{/each}
-			</div>
+			</ol>
 		</div>
 	</section>
 
-	<!-- 5. Projects preview -->
+	<!-- 5. Projects preview — alternating editorial showcase -->
 	<section class="anim-section bg-white py-16 md:py-20">
-		<div class="mx-auto max-w-5xl px-6">
-			<div class="flex items-end justify-between mb-10">
+		<div class="mx-auto max-w-6xl px-6">
+			<div class="flex items-end justify-between mb-12">
 				<div>
 					<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
 						Proiectele noastre
@@ -343,35 +425,137 @@
 				</a>
 			</div>
 
-			<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-				{#each proiecteRich as hub}
-					<a
-						href="/proiecte/{hub.slug}"
-						class="card-hover rounded-2xl border border-bg-alt bg-bg p-6 no-underline flex flex-col"
+			<div class="flex flex-col gap-16 md:gap-20">
+				{#each proiecteShowcase as { hub, imagine }, i}
+					{@const reversed = i % 2 === 1}
+					<article
+						class="grid items-center gap-8 lg:grid-cols-2"
 					>
-						<span
-							class="mb-4 inline-block h-1.5 w-12 rounded-full"
-							style="background-color: {hub.culoare}"
-							aria-hidden="true"
-						></span>
-						<h3 class="font-bold text-text leading-snug">{hub.titlu}</h3>
-						<p class="mt-2 flex-1 text-sm text-text-muted leading-relaxed line-clamp-3">
-							{hub.descriere}
-						</p>
-						<div class="mt-4 flex flex-wrap gap-1.5">
-							{#each hub.domenii as domeniu}
-								<span
-									class="text-xs text-text-muted bg-white border border-bg-alt px-2.5 py-0.5 rounded-full"
+						<!-- Media -->
+						<a
+							href="/proiecte/{hub.slug}"
+							class="group relative block aspect-[16/10] overflow-hidden rounded-2xl {reversed ? 'lg:order-2' : ''}"
+							tabindex="-1"
+						>
+							{#if imagine}
+								<img
+									src={imagine}
+									alt={hub.titlu}
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+									loading="lazy"
+									decoding="async"
+								/>
+							{:else}
+								<div
+									class="flex h-full w-full items-center justify-center"
+									style="background: linear-gradient(135deg, {hub.culoare} 0%, oklch(0.4 0.12 {i * 60}) 100%)"
 								>
-									{domeniu}
-								</span>
-							{/each}
+									<i
+										class="fa-solid fa-handshake text-6xl text-white/80"
+										aria-hidden="true"
+									></i>
+								</div>
+							{/if}
+							<span
+								class="absolute left-4 top-4 rounded-full bg-oxford-dark/80 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white"
+							>
+								{hub.categorie === "anuale" ? "Anual" : "Singular"}
+							</span>
+						</a>
+
+						<!-- Copy -->
+						<div class={reversed ? "lg:order-1" : ""}>
+							<span
+								class="mb-4 inline-block h-1.5 w-12 rounded-full"
+								style="background-color: {hub.culoare}"
+								aria-hidden="true"
+							></span>
+							<h3 class="text-2xl lg:text-3xl font-bold tracking-tight text-text">
+								<a
+									href="/proiecte/{hub.slug}"
+									class="no-underline hover:text-oxford transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+								>
+									{hub.titlu}
+								</a>
+							</h3>
+							<p class="mt-4 text-base text-text-muted leading-relaxed">
+								{hub.descriere}
+							</p>
+							<div class="mt-5 flex flex-wrap gap-1.5">
+								{#each hub.domenii as domeniu}
+									<span
+										class="text-xs text-text-muted bg-bg-alt border border-bg-alt px-2.5 py-0.5 rounded-full"
+									>
+										{domeniu}
+									</span>
+								{/each}
+							</div>
+							<a
+								href="/proiecte/{hub.slug}"
+								class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+							>
+								Vezi proiectul
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+							</a>
 						</div>
-					</a>
+					</article>
 				{/each}
 			</div>
 
-			<div class="mt-8 text-center sm:hidden">
+			{#if activeEditii.length > 0}
+				<div class="mt-14 overflow-hidden rounded-2xl bg-oxford-dark text-white">
+					<div class="grid md:grid-cols-[1fr_2fr]">
+						<div class="flex flex-col justify-center gap-1 bg-oxford p-6 md:p-8">
+							<span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-sunglow">
+								<span class="relative flex h-2 w-2">
+									<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sunglow opacity-75"></span>
+									<span class="relative inline-flex h-2 w-2 rounded-full bg-sunglow"></span>
+								</span>
+								Acum & urmează
+							</span>
+							<h3 class="mt-3 text-2xl lg:text-3xl font-bold tracking-tight">
+								Ce e în lucru
+							</h3>
+							<p class="mt-2 text-sm text-white/70 leading-relaxed">
+								Proiectele noastre sunt ridicate acum — hai să te implici.
+							</p>
+						</div>
+
+						<div class="divide-y divide-white/10">
+							{#each activeEditii as { editie, hub }}
+								<a
+									href="/proiecte/{editie.proiectSlug}/{editie.slug}"
+									class="flex items-center gap-4 px-6 py-5 transition-colors hover:bg-white/5 no-underline"
+								>
+									<span
+										class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white"
+										style="background-color: {hub.culoare}"
+									>
+										<i class="fa-solid fa-calendar-plus text-lg" aria-hidden="true"></i>
+									</span>
+									<span class="min-w-0 flex-1">
+										<span class="block truncate font-semibold text-white">
+											{hub.titlu}
+										</span>
+										<span class="block truncate text-sm text-white/60">
+											{editie.perioada}
+										</span>
+									</span>
+									<span
+										class="hidden sm:inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-semibold
+											{editie.stare === 'in-desfasurare' ? 'bg-sunglow text-oxford' : 'bg-white/15 text-white'}"
+									>
+										{etichetaStare(editie.stare)}
+									</span>
+									<i class="fa-solid fa-arrow-right text-sm text-white/50" aria-hidden="true"></i>
+								</a>
+							{/each}
+						</div>
+					</div>
+				</div>
+			{/if}
+
+			<div class="mt-12 text-center sm:hidden">
 				<a
 					href="/proiecte"
 					class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline"
@@ -383,11 +567,13 @@
 		</div>
 	</section>
 
-	<!-- 6. Latest news -->
+	<!-- 6. Latest news — featured + compact list -->
 	{#if data.posts.length > 0}
+		{@const featured = data.posts[0]}
+		{@const rest = data.posts.slice(1)}
 		<section class="anim-section bg-bg py-16 md:py-20">
 			<div class="mx-auto max-w-5xl px-6">
-				<div class="flex items-end justify-between mb-10">
+				<div class="flex items-end justify-between mb-12">
 					<div>
 						<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
 							Ultimele noutăți
@@ -404,25 +590,27 @@
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 					</a>
 				</div>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-					{#each data.posts as post}
-						{@const url = `/noutati/${post.slug}`}
-						<article class="card-hover bg-white rounded-xl border border-bg-alt overflow-hidden">
-							{#if post.featuredImage?.node?.sourceUrl}
-								<a href={url} class="block aspect-[16/9] overflow-hidden" tabindex="-1">
+
+				<div class="grid gap-10 lg:grid-cols-[1.6fr_1fr] lg:gap-12">
+					<!-- Featured article -->
+					{#if featured}
+						{@const furl = `/noutati/${featured.slug}`}
+						<article class="group bg-white rounded-2xl border border-bg-alt overflow-hidden">
+							{#if featured.featuredImage?.node?.sourceUrl}
+								<a href={furl} class="block aspect-[16/9] overflow-hidden" tabindex="-1">
 									<picture>
 										<source
 											type="image/webp"
-											srcset={toWebp(post.featuredImage.node.srcSet)}
-											sizes="(max-width: 768px) 100vw, 400px"
+											srcset={toWebp(featured.featuredImage.node.srcSet)}
+											sizes="(max-width: 900px) 100vw, 600px"
 										/>
 										<img
-											class="w-full h-full object-cover transition duration-500 hover:scale-105"
-											src={post.featuredImage.node.sourceUrl}
-											srcset={post.featuredImage.node.srcSet ?? undefined}
-											sizes="(max-width: 768px) 100vw, 400px"
-											width={post.featuredImage.node.mediaDetails?.width ?? undefined}
-											height={post.featuredImage.node.mediaDetails?.height ?? undefined}
+											class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+											src={featured.featuredImage.node.sourceUrl}
+											srcset={featured.featuredImage.node.srcSet ?? undefined}
+											sizes="(max-width: 900px) 100vw, 600px"
+											width={featured.featuredImage.node.mediaDetails?.width ?? undefined}
+											height={featured.featuredImage.node.mediaDetails?.height ?? undefined}
 											alt=""
 											loading="lazy"
 											decoding="async"
@@ -430,21 +618,69 @@
 									</picture>
 								</a>
 							{/if}
-							<div class="p-5">
+							<div class="p-6 lg:p-8">
 								<time class="text-xs text-text-muted">
-									{new Date(post.date).toLocaleString("ro-RO", dateOpts)}
+									{new Date(featured.date).toLocaleString("ro-RO", dateOpts)}
 								</time>
-								<h3 class="font-semibold text-text mt-1.5 leading-snug">
+								<h3 class="mt-2 text-xl lg:text-2xl font-bold text-text leading-snug">
 									<a
-										href={url}
+										href={furl}
 										class="no-underline hover:text-blue transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
 									>
-										{post.title}
+										{featured.title}
 									</a>
 								</h3>
+								{#if featured.excerpt}
+									<p class="mt-3 text-sm text-text-muted leading-relaxed line-clamp-3">
+										{featured.excerpt.replace(/(<([^>]+)>)/gi, "").trim()}
+									</p>
+								{/if}
+								<a
+									href={furl}
+									class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+								>
+									Citește articolul
+									<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+								</a>
 							</div>
 						</article>
-					{/each}
+					{/if}
+
+					<!-- Compact list -->
+					{#if rest.length > 0}
+						<div class="flex flex-col">
+							<h3 class="mb-4 text-xs font-semibold uppercase tracking-widest text-text-muted">
+								Mai recente
+							</h3>
+							<ol class="flex flex-col divide-y divide-bg-alt">
+								{#each rest as post}
+									{@const url = `/noutati/${post.slug}`}
+									<li class="py-4 first:pt-0 last:pb-0">
+										<time class="text-xs text-text-muted">
+											{new Date(post.date).toLocaleString("ro-RO", dateOpts)}
+										</time>
+										<h4 class="mt-1 font-semibold text-text leading-snug">
+											<a
+												href={url}
+												class="no-underline hover:text-blue transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+											>
+												{post.title}
+											</a>
+										</h4>
+									</li>
+								{/each}
+							</ol>
+							<div class="mt-auto pt-5 sm:hidden">
+								<a
+									href="/noutati"
+									class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline"
+								>
+									Vezi toate noutățile
+									<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+								</a>
+							</div>
+						</div>
+					{/if}
 				</div>
 			</div>
 		</section>
