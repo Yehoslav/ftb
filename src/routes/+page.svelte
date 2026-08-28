@@ -4,6 +4,7 @@
 	import {
 		huburi,
 		getHubBySlug,
+		getEditieCurenta,
 		etichetaStare,
 		editii,
 		type ProiectHub,
@@ -116,23 +117,21 @@
 		},
 	] as const;
 
-	const proiecteShowcase: Array<{ hub: ProiectHub; imagine?: string }> = [
-		{
-			hub: huburi.find((h) => h.slug === "admiteri"),
-			imagine: "https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg",
-		},
-		{
-			hub: huburi.find((h) => h.slug === "summitul-tinerilor"),
-			imagine: undefined,
-		},
-		{
-			hub: huburi.find((h) => h.slug === "save-ukraine"),
-			imagine: "https://www.ftbromania.ro/wp-content/uploads/2021/08/Constanta-11-1024x658.jpg",
-		},
-	].filter((p): p is { hub: ProiectHub; imagine?: string } => p.hub !== undefined);
+	/* Featured project — the flagship, currently AdmiteRO during admission season */
+	const featuredProject: { hub: ProiectHub; editie: ProiectEditie; imagine?: string } | null = (() => {
+		const hub = huburi.find((h) => h.slug === "admiteri");
+		const editie = hub ? getEditieCurenta(hub.slug) : undefined;
+		if (!hub || !editie) return null;
+		return {
+			hub,
+			editie,
+			imagine:
+				"https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg",
+		};
+	})();
 
-	/* Momentum — projects currently in progress or next up */
-	const activeEditii = editii
+	/* Momentum — the other projects currently in progress or next up (excluding featured) */
+	const otherProjects: Array<{ editie: ProiectEditie; hub: ProiectHub }> = editii
 		.filter((e) => e.stare === "in-desfasurare" || e.stare === "planificat")
 		.sort((a, b) => a.an - b.an)
 		.map((e) => ({ editie: e, hub: getHubBySlug(e.proiectSlug) }))
@@ -140,6 +139,7 @@
 		.filter(
 			(x, i, arr) => arr.findIndex((y) => y.hub.slug === x.hub.slug) === i
 		)
+		.filter((x) => x.hub.slug !== (featuredProject?.hub.slug ?? "__none__"))
 		.slice(0, 3);
 </script>
 
@@ -404,7 +404,7 @@
 		</div>
 	</section>
 
-	<!-- 5. Projects preview — alternating editorial showcase -->
+	<!-- 5. Projects — featured + what's in progress -->
 	<section class="anim-section bg-white py-16 md:py-20">
 		<div class="mx-auto max-w-6xl px-6">
 			<div class="flex items-end justify-between mb-12">
@@ -425,85 +425,86 @@
 				</a>
 			</div>
 
-			<div class="flex flex-col gap-16 md:gap-20">
-				{#each proiecteShowcase as { hub, imagine }, i}
-					{@const reversed = i % 2 === 1}
-					<article
-						class="grid items-center gap-8 lg:grid-cols-2"
-					>
-						<!-- Media -->
-						<a
-							href="/proiecte/{hub.slug}"
-							class="group relative block aspect-[16/10] overflow-hidden rounded-2xl {reversed ? 'lg:order-2' : ''}"
-							tabindex="-1"
-						>
-							{#if imagine}
-								<img
-									src={imagine}
-									alt={hub.titlu}
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-									loading="lazy"
-									decoding="async"
-								/>
-							{:else}
-								<div
-									class="flex h-full w-full items-center justify-center"
-									style="background: linear-gradient(135deg, {hub.culoare} 0%, oklch(0.4 0.12 {i * 60}) 100%)"
-								>
-									<i
-										class="fa-solid fa-handshake text-6xl text-white/80"
-										aria-hidden="true"
-									></i>
-								</div>
-							{/if}
-							<span
-								class="absolute left-4 top-4 rounded-full bg-oxford-dark/80 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-white"
-							>
-								{hub.categorie === "anuale" ? "Anual" : "Singular"}
-							</span>
-						</a>
+			{#if featuredProject}
+				{@const href = `/proiecte/${featuredProject.editie.proiectSlug}/${featuredProject.editie.slug}`}
+				<article
+					class="group relative overflow-hidden rounded-3xl bg-oxford-dark text-white"
+				>
+					{#if featuredProject.imagine}
+						<img
+							src={featuredProject.imagine}
+							alt=""
+							class="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-105"
+							loading="eager"
+							decoding="async"
+						/>
+						<div
+							class="absolute inset-0 bg-gradient-to-t from-oxford-dark via-oxford-dark/80 to-oxford-dark/30"
+						></div>
+					{/if}
 
-						<!-- Copy -->
-						<div class={reversed ? "lg:order-1" : ""}>
+					<div class="relative flex min-h-[420px] flex-col justify-end p-7 md:p-12">
+						<div class="flex flex-wrap items-center gap-2">
 							<span
-								class="mb-4 inline-block h-1.5 w-12 rounded-full"
-								style="background-color: {hub.culoare}"
-								aria-hidden="true"
-							></span>
-							<h3 class="text-2xl lg:text-3xl font-bold tracking-tight text-text">
-								<a
-									href="/proiecte/{hub.slug}"
-									class="no-underline hover:text-oxford transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
-								>
-									{hub.titlu}
-								</a>
-							</h3>
-							<p class="mt-4 text-base text-text-muted leading-relaxed">
-								{hub.descriere}
-							</p>
-							<div class="mt-5 flex flex-wrap gap-1.5">
-								{#each hub.domenii as domeniu}
-									<span
-										class="text-xs text-text-muted bg-bg-alt border border-bg-alt px-2.5 py-0.5 rounded-full"
-									>
-										{domeniu}
-									</span>
-								{/each}
-							</div>
-							<a
-								href="/proiecte/{hub.slug}"
-								class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
+								class="inline-flex items-center gap-2 rounded-full bg-sunglow px-3 py-1 text-xs font-semibold text-oxford"
 							>
-								Vezi proiectul
+								<span class="relative flex h-2 w-2">
+									<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-oxford opacity-60"></span>
+									<span class="relative inline-flex h-2 w-2 rounded-full bg-oxford"></span>
+								</span>
+								{etichetaStare(featuredProject.editie.stare)}
+							</span>
+							<span
+								class="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm"
+							>
+								{featuredProject.editie.perioada}
+							</span>
+						</div>
+
+						<h2 class="mt-5 text-3xl lg:text-5xl font-bold tracking-tight">
+							<a
+								href={href}
+								class="no-underline hover:text-sunglow transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+							>
+								{featuredProject.hub.titlu}
+							</a>
+						</h2>
+
+						<p class="mt-4 max-w-2xl text-base lg:text-lg text-white/80 leading-relaxed">
+							{featuredProject.editie.descriere}
+						</p>
+
+						<div class="mt-6 flex flex-wrap gap-1.5">
+							{#each featuredProject.hub.domenii as domeniu}
+								<span
+									class="text-xs text-white/80 bg-white/10 border border-white/15 px-2.5 py-0.5 rounded-full"
+								>
+									{domeniu}
+								</span>
+							{/each}
+						</div>
+
+						<div class="mt-8 flex flex-wrap gap-3">
+							<a
+								href={href}
+								class="inline-flex items-center gap-2 rounded-lg bg-sunglow px-6 py-3 text-sm font-semibold text-oxford no-underline transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+							>
+								Vezi ediția curentă
 								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 							</a>
+							<a
+								href="/proiecte/{featuredProject.hub.slug}"
+								class="inline-flex items-center rounded-lg border border-white/30 px-6 py-3 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+							>
+								Despre {featuredProject.hub.titlu}
+							</a>
 						</div>
-					</article>
-				{/each}
-			</div>
+					</div>
+				</article>
+			{/if}
 
-			{#if activeEditii.length > 0}
-				<div class="mt-14 overflow-hidden rounded-2xl bg-oxford-dark text-white">
+			{#if otherProjects.length > 0}
+				<div class="mt-8 overflow-hidden rounded-2xl bg-oxford-dark text-white">
 					<div class="grid md:grid-cols-[1fr_2fr]">
 						<div class="flex flex-col justify-center gap-1 bg-oxford p-6 md:p-8">
 							<span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-sunglow">
@@ -517,12 +518,12 @@
 								Ce e în lucru
 							</h3>
 							<p class="mt-2 text-sm text-white/70 leading-relaxed">
-								Proiectele noastre sunt ridicate acum — hai să te implici.
+								Și pe acestea le ridicăm acum — hai să te implici.
 							</p>
 						</div>
 
 						<div class="divide-y divide-white/10">
-							{#each activeEditii as { editie, hub }}
+							{#each otherProjects as { editie, hub }}
 								<a
 									href="/proiecte/{editie.proiectSlug}/{editie.slug}"
 									class="flex items-center gap-4 px-6 py-5 transition-colors hover:bg-white/5 no-underline"
