@@ -40,7 +40,7 @@
 	];
 </script>
 
-<footer class="bg-[#253680] text-white">
+<footer class="bg-oxford-dark text-white border-t border-white/10">
     <div class="max-w-screen-xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-8">
         <div class="flex flex-col gap-6">
             <img src={logoMonochrome} alt="FTB Romania" class="h-10 w-fit object-contain mb-4" />
@@ -54,7 +54,7 @@
                         aria-label={label}
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="flex items-center justify-center w-10 h-10 rounded text-lg text-text-white/70 hover:text-oxford hover:bg-bg-alt transition-colors"
+                        class="flex items-center justify-center w-10 h-10 rounded text-lg text-white/70 hover:text-white hover:bg-white/10 transition-colors"
                     >
                         <i class={icon}></i>
                     </a>
