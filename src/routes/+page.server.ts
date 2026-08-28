@@ -37,6 +37,7 @@ export const load: PageServerLoad = async () => {
 	return {
 		info,
 		posts: postsData?.posts.nodes ?? [],
+		membri,
 		membreStats: {
 			total: membri.length,
 			orase: orase.length,

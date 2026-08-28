@@ -1,4 +1,6 @@
 <script lang="ts">
+    import logoMonochrome from "$lib/assets/Vector-4.png"
+
 	const quickLinks = [
 		{ href: '/despre-noi', label: 'Despre Noi' },
 		{ href: '/echipa', label: 'Echipă' },
@@ -38,59 +40,45 @@
 	];
 </script>
 
-<footer class="border-t border-bg-alt bg-white">
-	<div class="mx-auto w-full max-w-screen-xl px-4 py-10">
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-			<div class="flex flex-col gap-3">
-				<a href="/" class="font-bold text-xl text-oxford no-underline">FTB România</a>
-				<p class="text-sm text-text-muted leading-relaxed">
-					Federația Tinerilor Basarabeni s-a înființat din dorința de a aduna la un loc toate
-					asociațiile de studenți și tineri basarabeni din România.
-				</p>
-			</div>
+<footer class="bg-[#253680] text-white">
+    <div class="max-w-screen-xl mx-auto px-6 py-12 grid md:grid-cols-3 gap-8">
+        <div class="flex flex-col gap-6">
+            <img src={logoMonochrome} alt="FTB Romania" class="h-10 w-fit object-contain mb-4" />
+            <p class="text-white/60 text-sm leading-relaxed">
+                Federația Tinerilor Basarabeni — unind studenții moldoveni din toată România.
+            </p>
+            <div class="flex gap-2">
+                {#each socials as { href, label, icon }}
+                    <a
+                        {href}
+                        aria-label={label}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center justify-center w-10 h-10 rounded text-lg text-text-white/70 hover:text-oxford hover:bg-bg-alt transition-colors"
+                    >
+                        <i class={icon}></i>
+                    </a>
+                {/each}
+            </div>
+        </div>
+        <div>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-4">Navigare</h3>
+            <div class="flex flex-col gap-2">
 
-			<div>
-				<h3 class="font-semibold text-sm uppercase tracking-wider text-text-muted mb-3">
-					Link-uri rapide
-				</h3>
-				<ul class="flex flex-col gap-2">
-					{#each quickLinks as { href, label }}
-						<li>
-							<a {href} class="text-sm text-text hover:text-oxford no-underline transition-colors">
-								{label}
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
-
-			<div>
-				<h3 class="font-semibold text-sm uppercase tracking-wider text-text-muted mb-3">
-					Social
-				</h3>
-				<div class="flex gap-2">
-					{#each socials as { href, label, icon }}
-						<a
-							{href}
-							aria-label={label}
-							target="_blank"
-							rel="noopener noreferrer"
-							class="flex items-center justify-center w-10 h-10 rounded text-lg text-text-muted hover:text-oxford hover:bg-bg-alt transition-colors"
-						>
-							<i class={icon}></i>
-						</a>
-					{/each}
-				</div>
-			</div>
-		</div>
-
-		<div class="mt-8 pt-6 border-t border-bg-alt flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted">
-			<p>&copy; {new Date().getFullYear()} FTB România</p>
-			<div class="flex gap-4">
-				{#each legalLinks as { href, label }}
-					<a {href} class="hover:text-oxford no-underline transition-colors">{label}</a>
-				{/each}
-			</div>
-		</div>
-	</div>
+                {#each quickLinks as { href, label }}
+                    <a href={href} class="text-sm text-white/70 hover:text-white transition-colors duration-150">
+                        {label}
+                    </a>
+                {/each}
+            </div>
+        </div>
+        <div>
+            <h3 class="text-sm font-semibold uppercase tracking-widest text-white/40 mb-4">Contact</h3>
+            <p class="text-sm text-white/70 mb-1">contact@ftbromania.ro</p>
+            <p class="text-sm text-white/70">ftbromania.ro</p>
+        </div>
+    </div>
+    <div class="border-t border-white/10 py-4 text-center text-xs text-white/40">
+        &copy; {new Date().getFullYear()} FTB Romania. Toate drepturile rezervate.
+    </div>
 </footer>

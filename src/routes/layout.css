@@ -84,7 +84,7 @@ body {
 }
 
 ::selection {
-	background-color: color-mix(in oklch, var(--color-oxford) 15%, transparent);
+	background-color: color-mix(in oklch, var(--color-orange) 25%, transparent);
 }
 
 :focus-visible {
