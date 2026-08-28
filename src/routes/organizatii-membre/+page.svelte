@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { membri } from '$lib/data/membre';
+	import type { PageProps } from './$types';
 	import type { Membru } from '$lib/data/membre';
+
+	let { data }: PageProps = $props();
 
 	const sectiuni: Array<{ titlu: string; cheie: Membru['categorii'][number]; }> = [
 		{ titlu: 'Membri fondatori', cheie: 'fondator' },
@@ -32,13 +34,13 @@
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
 	<div class="anim-hero">
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Organizații Membre</h1>
-		<p class="text-text-muted mt-2 mb-4">Federația Tinerilor Basarabeni reunește {membri.length} de asociații studențești din toată România.</p>
+		<p class="text-text-muted mt-2 mb-4">Federația Tinerilor Basarabeni reunește {data.membri.length} de asociații studențești din toată România.</p>
 		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
 	</div>
 
 	<div class="anim-lists space-y-12">
 		{#each sectiuni as { titlu, cheie }}
-			{@const filtrati = membri.filter((m) => m.categorii.includes(cheie))}
+			{@const filtrati = data.membri.filter((m) => m.categorii.includes(cheie))}
 			{#if filtrati.length > 0}
 				<section>
 					<h2 class="text-xl lg:text-2xl font-bold text-text tracking-tight mb-6">{titlu} ({filtrati.length})</h2>
@@ -53,6 +55,14 @@
 											{membru.oras}, jud. {membru.judet}
 										</p>
 									</div>
+									{#if membru.logo}
+										<img
+											src={membru.logo}
+											alt={membru.abreviere}
+											class="w-12 h-12 object-contain shrink-0"
+											loading="lazy"
+										/>
+									{/if}
 								</div>
 
 								<div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-text-muted">

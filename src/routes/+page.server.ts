@@ -1,11 +1,11 @@
 import type { PageServerLoad } from './$types';
-import { getInfo } from '$lib/server/grist';
+import { getInfo, getMembri } from '$lib/server/googleSheets';
 import { queryWP } from '$lib/server/wp';
 import type { PostsQueryResult } from '$lib/types/wp';
-import { membri } from '$lib/data/membre';
 
 export const load: PageServerLoad = async () => {
 	const info = await getInfo().catch(() => null);
+	const membri = await getMembri();
 
 	const orase = [...new Set(membri.map((m) => m.oras))];
 

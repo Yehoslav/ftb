@@ -20,7 +20,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | Build | Vite 7 |
 | Adapter | `@deno/svelte-adapter` |
 | Backend | WordPress (GraphQL at `WP_GRAPHQL_ENDPOINT` env var) |
-| Data layer | Grist API for homepage stats + association data |
+| Data layer | Google Sheets API for member organisations + homepage stats (was Grist) |
 | Form tool | OpnForm (embedded iframe on /contact) |
 
 ## Commands
@@ -40,12 +40,12 @@ src/
 │   │   ├── Footer.svelte
 │   │   ├── Header.svelte
 │   │   └── Seo.svelte
-│   ├── data/             # Hardcoded data files (to migrate to WP/Grist)
-│   │   ├── echipa.ts
-│   │   ├── membre.ts
+│   ├── data/             # Hardcoded fallback data (source: Google Sheets / WP / Grist)
+│   │   ├── echipa.ts      # Fallback for the "Echipa" sheet tab
+│   │   ├── membre.ts      # Fallback for the "Membri" sheet tab
 │   │   └── proiecte.ts
 │   ├── server/
-│   │   ├── grist.ts      # Grist API client
+│   │   ├── googleSheets.ts # Google Sheets API client (membri + info, with cache)
 │   │   └── wp.ts          # WordPress GraphQL client (with cache)
 │   └── types/
 │       ├── seo.ts
@@ -61,7 +61,7 @@ src/
 │   ├── noutati/            # News listing + [slug] article view
 │   ├── evenimente/         # Events listing + [slug] detail
 │   ├── proiecte/
-│   ├── api/                # API routes (grist proxy, cache revalidate)
+│   ├── api/                # API routes (posts, cache revalidate)
 │   └── sitemap.xml/
 └── app.html                # Root HTML template
 ```
@@ -122,17 +122,18 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - Server load functions in `+page.server.ts` / `+layout.server.ts`.
 - Data passed to page components via `data` prop typed with `PageProps`.
 - WordPress GraphQL queries in `src/lib/server/wp.ts`.
-- Grist API calls in `src/lib/server/grist.ts`.
+- Google Sheets API calls in `src/lib/server/googleSheets.ts` (read-only via `GOOGLE_SHEETS_API_KEY`; `Membri` and `Info` tabs).
 - Static/hardcoded data in `src/lib/data/`.
 
 ## Current status / known TODOs
 
-- [ ] **Team photos** — avatar placeholders use initials; replace with real images when ACF CPT is ready on WP
+- [x] **Team photos** — `foto` column în foaia "Echipa"; placeholder initials dacă lipsește
 - [ ] **Despre Noi** — hardcoded text; migrate to WP GraphQL when WP page stops using Elementor
 - [ ] **Projects data** — two-tier model (hub + editions) implemented as hardcoded `src/lib/data/proiecte.ts`; migrate to ACF CPT (Phase 6)
 - [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte`, subprojects via `proiectParinteSlug` (e.g. Târgul Universităților → AdmiteRO; parent hub aggregates subproject events/posts) (Phases 1–5)
-- [ ] **Member orgs data** — hardcoded in `src/lib/data/membre.ts`; migrate to Grist / WP CPT
-- [ ] **Team data** — hardcoded in `src/lib/data/echipa.ts`; migrate to ACF CPT
+- [x] **Member orgs data** — Google Sheets "Membri" tab (Google Sheets API), fallback în `src/lib/data/membre.ts`
+- [x] **Homepage stats** — Google Sheets "Info" tab (migrat din Grist; fallback hardcoded în `googleSheets.ts`)
+- [x] **Team data** — Google Sheets "Echipa" tab (Google Sheets API, fallback în `src/lib/data/echipa.ts`)
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (timeline listing + `[slug]` detail), sidebar în articole
 - [x] **Pagination** — "older articles" + "newer articles" buttons on noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
@@ -160,7 +161,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 
 - When creating new features, keep the data strategy in mind:
   1. **WordPress GraphQL** for posts/pages content (with caching)
-  2. **Grist API** for numeric stats and association data
+  2. **Google Sheets API** for member organisations + homepage stats (with caching + fallback)
   3. **Hardcoded TypeScript** only as temporary fallback
 - The WP GraphQL client has an in-memory cache with 1-hour TTL. Clear via `POST /api/revalidate`.
 - Never commit API keys or secrets.

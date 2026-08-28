@@ -2,15 +2,14 @@ export interface MembruEchipa {
 	nume: string;
 	rol: string;
 	categorie: 'birou' | 'extinsa';
-	/* TODO: adaugă foto URL când ACF e gata */
 	foto?: string;
 }
 
 /*
- * TODO: De migrat la ACF CPT (câmpuri: nume, rol, categorie, foto)
- * când plugin-ul WPGraphQL pentru ACF e activat pe WP.
+ * Fallback folosit doar când Google Sheets nu este accesibil.
+ * Sursa oficială: foaia "Echipa" din Google Sheets (vezi $lib/server/googleSheets.ts).
  */
-export const membri: MembruEchipa[] = [
+export const echipaFallback: MembruEchipa[] = [
 	/* Birou de conducere */
 	{ nume: 'Paula Bodlev', rol: 'Președinte', categorie: 'birou' },
 	{ nume: 'Laura Șoimu', rol: 'Secretar General', categorie: 'birou' },

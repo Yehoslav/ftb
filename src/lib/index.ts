@@ -1,4 +1,4 @@
 export { queryWP } from './server/wp';
-export { getInfo, getAsociatii } from './server/grist';
+export { getInfo, getMembri, getEchipa, clearSheetsCache } from './server/googleSheets';
 export type { WPPost, WPPage, PostsQueryResult, PostQueryResult } from './types/wp';
-export type { InfoFields, AsociatieFields } from './server/grist';
+export type { InfoFields } from './server/googleSheets';

@@ -9,15 +9,16 @@ export interface Membru {
 	presedinte?: string;
 	telefon?: string;
 	email?: string;
+	logo?: string;
 	socialLinks?: Record<string, string>;
 	categorii: ('fondator' | 'activ' | 'candidat' | 'potential')[];
 }
 
 /*
- * TODO: De migrat într-un sistem de gestiune date (Grist / Google Sheets / WP CPT)
- * când se decide care va fi sursa oficială.
+ * Fallback folosit doar când Google Sheets nu este accesibil.
+ * Sursa oficială: foaia "Membri" din Google Sheets (vezi $lib/server/googleSheets.ts).
  */
-export const membri: Membru[] = [
+export const membriFallback: Membru[] = [
 	/* Membri fondatori + activi */
 	{
 		abreviere: 'ATRAG',

@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { membri } from '$lib/data/echipa';
+	import type { PageProps } from './$types';
 
-	const birou = membri.filter((m) => m.categorie === 'birou');
-	const extinsa = membri.filter((m) => m.categorie === 'extinsa');
+	let { data }: PageProps = $props();
+
+	const birou = data.echipa.filter((m) => m.categorie === 'birou');
+	const extinsa = data.echipa.filter((m) => m.categorie === 'extinsa');
 
 	function initials(nume: string): string {
 		return nume
@@ -40,14 +42,23 @@
 	<section class="anim-team mb-16">
 		<h2 class="text-xl lg:text-2xl font-bold text-text tracking-tight mb-8">Birou de conducere</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each birou as { nume, rol }}
+			{#each birou as member}
 				<div class="member-card bg-white rounded-xl border border-bg-alt p-8 flex flex-col items-center text-center gap-4">
-					<div class="w-20 h-20 rounded-full bg-blue text-white flex items-center justify-center text-xl font-bold shrink-0">
-						{initials(nume)}
-					</div>
+					{#if member.foto}
+						<img
+							src={member.foto}
+							alt={member.nume}
+							class="w-20 h-20 rounded-full object-cover shrink-0"
+							loading="lazy"
+						/>
+					{:else}
+						<div class="w-20 h-20 rounded-full bg-blue text-white flex items-center justify-center text-xl font-bold shrink-0">
+							{initials(member.nume)}
+						</div>
+					{/if}
 					<div>
-						<h3 class="font-semibold text-text text-lg">{nume}</h3>
-						<p class="text-sm text-text-muted mt-0.5">{rol}</p>
+						<h3 class="font-semibold text-text text-lg">{member.nume}</h3>
+						<p class="text-sm text-text-muted mt-0.5">{member.rol}</p>
 					</div>
 				</div>
 			{/each}
@@ -57,14 +68,23 @@
 	<section class="anim-team">
 		<h2 class="text-xl lg:text-2xl font-bold text-text tracking-tight mb-8">Echipa extinsă</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-			{#each extinsa as { nume, rol }}
+			{#each extinsa as member}
 				<div class="member-card bg-white rounded-xl border border-bg-alt p-8 flex flex-col items-center text-center gap-4">
-					<div class="w-20 h-20 rounded-full bg-blue-light text-blue flex items-center justify-center text-xl font-bold shrink-0">
-						{initials(nume)}
-					</div>
+					{#if member.foto}
+						<img
+							src={member.foto}
+							alt={member.nume}
+							class="w-20 h-20 rounded-full object-cover shrink-0"
+							loading="lazy"
+						/>
+					{:else}
+						<div class="w-20 h-20 rounded-full bg-blue-light text-blue flex items-center justify-center text-xl font-bold shrink-0">
+							{initials(member.nume)}
+						</div>
+					{/if}
 					<div>
-						<h3 class="font-semibold text-text text-lg">{nume}</h3>
-						<p class="text-sm text-text-muted mt-0.5">{rol}</p>
+						<h3 class="font-semibold text-text text-lg">{member.nume}</h3>
+						<p class="text-sm text-text-muted mt-0.5">{member.rol}</p>
 					</div>
 				</div>
 			{/each}
