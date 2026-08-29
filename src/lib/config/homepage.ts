@@ -69,5 +69,5 @@ export function getSpotlight(azi: Date = new Date()): Spotlight {
 export const homepageConfig = {
 	showDonate: false,
 	showPartners: false,
-	showSectionLabels: true
+	showSectionLabels: false
 } as const;

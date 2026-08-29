@@ -2,6 +2,12 @@
 	import type { PageProps } from "./$types";
 	import logoIcon from "$lib/assets/FTB_logo_long_default-2_1.png";
 	import { getSpotlight, homepageConfig } from "$lib/config/homepage";
+	import RomaniaMap from "$lib/components/RomaniaMap.svelte";
+	import {
+		judetByCity,
+		romaniaJudete,
+		type JudetId,
+	} from "$lib/data/romaniaJudete";
 	import {
 		huburi,
 		getHubBySlug,
@@ -108,6 +114,27 @@
 	$effect(() => {
 		localStorage.setItem("ftb:sectionLabels", showLabels ? "1" : "0");
 	});
+
+	/* Mission content for the "about" region */
+	const mission = {
+		lede: "Federația Tinerilor Basarabeni reunește asociațiile studențești și de tineret basarabene active în România, oferindu-le sprijin, resurse și o voce comună în societatea românească.",
+		body: "Din 2021 construim o comunitate care-i ajută pe tinerii basarabeni să studieze, să se integreze și să se implice — de la primii pași ai admisiei până la proiecte cu impact civic.",
+	} as const;
+
+	/* Județe cu organizații membre — pentru harta României (unirea orașelor → județe) */
+	const judeteCuMembri = $derived(
+		oraseCuMembri.reduce<{ id: JudetId; name: string; count: number }[]>((acc, c) => {
+			const id = judetByCity[c.oras];
+			if (!id) return acc;
+			const found = acc.find((a) => a.id === id);
+			if (found) {
+				found.count += c.count;
+			} else {
+				acc.push({ id, name: romaniaJudete[id].name, count: c.count });
+			}
+			return acc;
+		}, [])
+	);
 </script>
 
 <svelte:head>
@@ -190,6 +217,44 @@
 	{/if}
 {/snippet}
 
+<!-- Reusable: the board portrait tiles (click → modal) -->
+{#snippet teamTiles()}
+	{#if board.length > 0}
+		<ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+			{#each board as member}
+				<li>
+					<button
+						type="button"
+						onclick={() => (selected = member)}
+						aria-haspopup="dialog"
+						class="card-hover group flex w-full flex-col items-center overflow-hidden rounded-2xl bg-white text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford cursor-pointer no-underline"
+					>
+						<div class="relative w-full aspect-square overflow-hidden">
+							{#if member.foto}
+								<img
+									src={member.foto}
+									alt={member.nume}
+									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+									loading="lazy"
+									decoding="async"
+								/>
+							{:else}
+								<div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-oxford to-blue text-5xl font-bold text-white transition-transform duration-500 group-hover:scale-105">
+									{initials(member.nume)}
+								</div>
+							{/if}
+						</div>
+						<div class="w-full px-3 py-4">
+							<p class="font-semibold text-text leading-snug">{member.nume}</p>
+							<p class="mt-0.5 text-sm text-text-muted leading-snug">{member.rol}</p>
+						</div>
+					</button>
+				</li>
+			{/each}
+		</ul>
+	{/if}
+{/snippet}
+
 <div class="mx-auto w-full">
 	<!-- 1. Hero — who we are, in short -->
 	<section
@@ -252,10 +317,10 @@
 				"Seasonal spotlight — rotates by month; summer pushes admission, the rest of the year addresses enrolled students (papers, visa, language)",
 				"accent"
 			)}
-			<div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-4">
-				<div class="flex min-w-0 flex-1 items-center gap-3">
-					<i class="fa-solid fa-graduation-cap text-oxford text-xl" aria-hidden="true"></i>
-					<div class="min-w-0">
+			<div class="mx-auto flex max-w-6xl flex-col lg:flex-row lg:flex-nowrap items-end lg:items-center gap-3 lg:gap-x-6 px-6 py-4">
+				<div class="flex w-full lg:flex-1 min-w-0 items-center gap-3">
+					<i class="fa-solid fa-graduation-cap text-oxford text-xl shrink-0" aria-hidden="true"></i>
+					<div class="min-w-0 flex-1">
 						<p class="text-sm font-bold text-oxford leading-snug">{spotlight.titlu}</p>
 						<p class="mt-0.5 text-sm text-oxford/80 leading-snug">{spotlight.descriere}</p>
 					</div>
@@ -359,97 +424,6 @@
 		</div>
 	</section>
 
-	<!-- 2b. Member orgs by city — for students who already know their university town -->
-	{#if oraseCuMembri.length > 0}
-		<section class="border-b border-bg-alt bg-white py-10 md:py-12">
-			{@render sectionLabel(
-				"04",
-				"Member organisations by city — for students who already know where they want to study; each pill lists the orgs in that city"
-			)}
-			<div class="mx-auto max-w-6xl px-6">
-				<div class="flex flex-wrap items-end justify-between gap-4">
-					<div>
-						<h2 class="text-2xl lg:text-3xl font-bold tracking-tight text-text">
-							Alege orașul unde vrei să studiezi
-						</h2>
-						<p class="mt-2 max-w-xl text-sm text-text-muted font-light leading-relaxed">
-							Asociațiile noastre membre te pot ajuta direct în orașul tău de studiu —
-							de la primire până la integrare.
-						</p>
-					</div>
-					<a
-						href="/organizatii-membre"
-						class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
-					>
-						Toate organizațiile
-						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-					</a>
-				</div>
-				<ul class="mt-6 flex flex-wrap gap-2.5">
-					{#each oraseCuMembri as { oras, count }}
-						<li>
-							<a
-								href="/organizatii-membre?oras={encodeURIComponent(oras)}"
-								class="inline-flex items-center gap-2 rounded-full border border-bg-alt bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:border-blue hover:text-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
-							>
-								<i class="fa-solid fa-location-dot text-xs text-blue" aria-hidden="true"></i>
-								{oras}
-								<span class="rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-text-muted tabular-nums">
-									{count}
-								</span>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		</section>
-	{/if}
-
-	<!-- 3. Dashboard stats — quick proof points -->
-	{#if data.info}
-		{@const stats = [
-			{
-				val: parseInt(data.info.Nr_Org_Membre),
-				label: "Organizații Membre",
-				hint: "de studenți și tineri basarabeni, unite",
-			},
-			{
-				val: parseInt(data.info.Nr_Voluntari),
-				label: "Voluntari",
-				suffix: "+",
-				hint: "active în programe în fiecare an",
-			},
-			{
-				val: parseInt(data.info.Nr_Parteneri),
-				label: "Parteneri",
-				hint: "instituții, universități și susținători",
-			},
-			{
-				val: parseInt(data.info.Nr_Evenimente),
-				label: "Evenimente Anuale",
-				hint: "ateliere, forumuri și întâlniri",
-			},
-		]}
-		<section class="anim-stats border-b border-bg-alt bg-bg">
-			{@render sectionLabel(
-				"05",
-				"Key figures — organisations, volunteers, partners, yearly events; quick proof points"
-			)}
-			<div class="mx-auto max-w-5xl px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
-				{#each stats as { val, label, suffix, hint }}
-					<div class="text-center">
-						<div class="text-3xl md:text-4xl font-bold text-oxford">
-							{Number.isNaN(val) ? "—" : val}{suffix}
-						</div>
-						<div class="mt-1 text-sm font-semibold text-text">{label}</div>
-						{#if false}
-							<div class="mt-1 mx-auto max-w-[14ch] text-xs text-text-muted leading-snug">{hint}</div>
-						{/if}
-					</div>
-				{/each}
-			</div>
-		</section>
-	{/if}
 
 	<!-- 5. Projects — featured + what's in progress -->
 	<section class="anim-section bg-white py-16 md:py-20">
@@ -461,10 +435,10 @@
 			<div class="flex items-end justify-between mb-12">
 				<div>
 					<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
-						Proiectele noastre
+						Ce facem
 					</h2>
 					<p class="text-text-muted text-sm font-light mt-2">
-						Programe anuale și inițiative care contează
+						Programe anuale și inițiative pentru studenții basarabeni.
 					</p>
 				</div>
 				<a
@@ -556,8 +530,8 @@
 
 			{#if otherProjects.length > 0}
 				<div class="mt-8 overflow-hidden rounded-2xl bg-oxford-dark text-white">
-					<div class="grid md:grid-cols-[1fr_2fr]">
-						<div class="flex flex-col justify-center gap-1 bg-oxford p-6 md:p-8">
+					<div class="grid min-w-0 md:grid-cols-[1fr_2fr]">
+						<div class="flex min-w-0 flex-col justify-center gap-1 bg-oxford p-6 md:p-8">
 							<span class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-sunglow">
 								<span class="relative flex h-2 w-2">
 									<span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sunglow opacity-75"></span>
@@ -573,12 +547,12 @@
 							</p>
 						</div>
 
-						<div class="divide-y divide-white/10">
+						<div class="min-w-0 divide-y divide-white/10">
 							{#each otherProjects as { editie, hub }}
-								<a
-									href="/proiecte/{editie.proiectSlug}/{editie.slug}"
-									class="flex items-center gap-4 px-6 py-5 transition-colors hover:bg-white/5 no-underline"
-								>
+							<a
+								href="/proiecte/{editie.proiectSlug}/{editie.slug}"
+								class="flex items-center gap-3 px-4 py-5 transition-colors hover:bg-white/5 no-underline sm:gap-4 sm:px-6"
+							>
 									<span
 										class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white"
 										style="background-color: {hub.culoare}"
@@ -593,12 +567,12 @@
 											{editie.perioada}
 										</span>
 									</span>
-									<span
-										class="hidden sm:inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-semibold
-											{editie.stare === 'in-desfasurare' ? 'bg-sunglow text-oxford' : 'bg-white/15 text-white'}"
-									>
-										{etichetaStare(editie.stare)}
-									</span>
+								<span
+									class="inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-semibold
+										{editie.stare === 'in-desfasurare' ? 'bg-sunglow text-oxford' : 'bg-white/15 text-white'}"
+								>
+									{etichetaStare(editie.stare)}
+								</span>
 									<i class="fa-solid fa-arrow-right text-sm text-white/50" aria-hidden="true"></i>
 								</a>
 							{/each}
@@ -632,11 +606,8 @@
 				<div class="flex items-end justify-between mb-12">
 					<div>
 						<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
-							Ultimele noutăți
+                            Fii la curent cu activitatea FTB
 						</h2>
-						<p class="text-text-muted text-sm font-light mt-2">
-							Povești, anunțuri și momente de la FTB
-						</p>
 					</div>
 					<a
 						href="/noutati"
@@ -745,41 +716,108 @@
 		</section>
 	{/if}
 
-	<!-- 7. Despre noi — mission -->
-	<section class="anim-section bg-white py-16 md:py-20">
-		{@render sectionLabel(
-			"08",
-			"About — who the federation is; a trust moment for visitors who scroll this far"
-		)}
-		<div class="mx-auto max-w-4xl px-6 text-center">
-			<span class="mx-auto inline-block h-1.5 w-12 rounded-full bg-cerry" aria-hidden="true"></span>
-			<h2 class="mt-4 text-3xl lg:text-4xl font-bold tracking-tight text-text">
-				Cine suntem
-			</h2>
-			<p class="mx-auto mt-6 max-w-2xl text-base text-text-muted leading-relaxed">
-				Federația Tinerilor Basarabeni reunește asociațiile studențești și de
-				tineret basarabene active în România, oferindu-le sprijin, resurse și o
-				voce comună în societatea românească. Din 2021 construim o comunitate
-				care-i ajută pe tinerii basarabeni să studieze, să se integreze și să se
-				implice — de la primii pași ai admisiei până la proiecte cu impact civic.
-			</p>
-			<div class="mt-8 flex flex-wrap justify-center gap-4">
-				<a
-					href="/despre-noi"
-					class="inline-flex items-center gap-2 rounded-lg bg-oxford px-5 py-2.5 text-sm font-semibold text-white no-underline transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
-				>
-					Mai multe despre noi
-					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-				</a>
-				<a
-					href="/echipa"
-					class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
-				>
-					Toată echipa
-				</a>
+	<!-- 7. About — mission intro + map of member orgs, then stats, then the team -->
+	{#if data.info}
+		{@const stats = [
+			{ val: parseInt(data.info.Nr_Org_Membre), label: "Organizații Membre" },
+			{ val: parseInt(data.info.Nr_Voluntari), label: "Voluntari", suffix: "+" },
+			{ val: parseInt(data.info.Nr_Parteneri), label: "Parteneri" },
+			{ val: parseInt(data.info.Nr_Evenimente), label: "Evenimente Anuale" },
+		]}
+		<section class="anim-section bg-white py-16 md:py-20">
+			{@render sectionLabel("08", "About intro — mission + Romania map of our member organisations")}
+			<div class="mx-auto max-w-6xl px-6">
+				<div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+					<div>
+						<span class="inline-block h-1.5 w-12 rounded-full bg-cerry" aria-hidden="true"></span>
+						<h2 class="mt-4 text-3xl lg:text-4xl font-bold tracking-tight text-text">
+							O rețea de tineri, din toată România
+						</h2>
+						<p class="mt-6 text-base text-text-muted leading-relaxed">
+							{mission.lede}
+						</p>
+						<p class="mt-4 text-base text-text-muted leading-relaxed">
+							{mission.body}
+						</p>
+						<div class="mt-8 flex flex-wrap gap-4">
+							<a
+								href="/despre-noi"
+								class="inline-flex items-center gap-2 rounded-lg bg-oxford px-5 py-2.5 text-sm font-semibold text-white no-underline transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+							>
+								Mai multe despre noi
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+							</a>
+							<a
+								href="/organizatii-membre"
+								class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+							>
+								Toate organizațiile
+							</a>
+						</div>
+					</div>
+
+					{#if judeteCuMembri.length > 0}
+						<div>
+							<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">
+								Județele unde suntem prezenți
+							</p>
+							<div class="mt-3 overflow-hidden rounded-2xl border border-bg-alt bg-bg p-4">
+								<RomaniaMap highlight={judeteCuMembri} />
+							</div>
+							<p class="mt-4 text-sm text-text-muted leading-relaxed">
+								{judeteCuMembri.length} de județe, prin cele {stats[0].val || "17"} de
+								asociații membre. Trece cu cursorul peste un județ ca să afli câte organizații
+								activează acolo.
+							</p>
+						</div>
+					{/if}
+				</div>
 			</div>
-		</div>
-	</section>
+		</section>
+
+		<section class="anim-stats border-b border-bg-alt bg-bg">
+			{@render sectionLabel("08b", "Stats — credentials, moved here from the top of the page")}
+			<div class="mx-auto max-w-5xl px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
+				{#each stats as { val, label, suffix }}
+					<div class="text-center">
+						<div class="text-3xl md:text-4xl font-bold text-oxford">
+							{Number.isNaN(val) ? "—" : val}{suffix}
+						</div>
+						<div class="mt-1 text-sm font-semibold text-text">{label}</div>
+					</div>
+				{/each}
+			</div>
+		</section>
+
+		{#if board.length > 0}
+			<section class="anim-section bg-white py-16 md:py-20">
+				{@render sectionLabel("10", "The team — the faces behind the federation")}
+				<div class="mx-auto max-w-6xl px-6">
+					<div class="mb-10 flex items-end justify-between">
+						<div>
+							<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">
+								Echipa
+							</p>
+							<h2 class="mt-1 text-3xl lg:text-4xl font-bold tracking-tight text-text">
+								Oamenii care duc lucrurile mai departe
+							</h2>
+							<p class="mt-2 max-w-xl text-sm text-text-muted font-light leading-relaxed">
+								Câțiva dintre oamenii cu care vei lucra, de fiecare dată.
+							</p>
+						</div>
+						<a
+							href="/echipa"
+							class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors"
+						>
+							Toată echipa
+							<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+						</a>
+					</div>
+					{@render teamTiles()}
+				</div>
+			</section>
+		{/if}
+	{/if}
 
 	<!-- 8. Trust — partners & funders (hidden until logos are confirmed) -->
 	{#if homepageConfig.showPartners}
@@ -810,63 +848,6 @@
 			</p>
 		</div>
 	</section>
-	{/if}
-
-	<!-- 9. Team — portrait tiles -->
-	{#if board.length > 0}
-		<section class="anim-section bg-bg py-16 md:py-20">
-			{@render sectionLabel(
-				"10",
-				"Board — the people behind the federation; familiar faces for students met at the university fairs"
-			)}
-			<div class="mx-auto max-w-6xl px-6">
-				<div class="mb-10 flex items-end justify-between">
-					<div>
-						<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">Layout A</p>
-						<h2 class="mt-1 text-3xl lg:text-4xl font-bold tracking-tight text-text">
-							Conducerea federației
-						</h2>
-					</div>
-					<a href="/echipa" class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors">
-						Toată echipa
-						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-					</a>
-				</div>
-
-				<ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-					{#each board as member}
-						<li>
-							<button
-								type="button"
-								onclick={() => (selected = member)}
-								aria-haspopup="dialog"
-								class="card-hover group flex w-full flex-col items-center overflow-hidden rounded-2xl bg-white text-center shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford cursor-pointer no-underline"
-							>
-								<div class="relative w-full aspect-square overflow-hidden">
-									{#if member.foto}
-										<img
-											src={member.foto}
-											alt={member.nume}
-											class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-											loading="lazy"
-											decoding="async"
-										/>
-									{:else}
-										<div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-oxford to-blue text-5xl font-bold text-white transition-transform duration-500 group-hover:scale-105">
-											{initials(member.nume)}
-										</div>
-									{/if}
-								</div>
-								<div class="w-full px-3 py-4">
-									<p class="font-semibold text-text leading-snug">{member.nume}</p>
-									<p class="mt-0.5 text-sm text-text-muted leading-snug">{member.rol}</p>
-								</div>
-							</button>
-						</li>
-					{/each}
-				</ul>
-			</div>
-		</section>
 	{/if}
 
 	<!-- Member info modal -->
@@ -993,7 +974,7 @@
 		</div>
 	</section>
 
-	<!-- Floating toggle — design-review labels (English) -->
+	<!-- Floating toggle — design-review labels -->
 	<button
 		type="button"
 		onclick={() => (showLabels = !showLabels)}
