@@ -132,6 +132,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Projects data** — two-tier model (hub + editions) implemented as hardcoded `src/lib/data/proiecte.ts`; migrate to ACF CPT (Phase 6)
 - [x] **Project pages** — hub `/proiecte/[slug]`, edition `/proiecte/[slug]/[editieSlug]`, archive `/proiecte/[slug]/arhiva`, filtering on `/proiecte`, subprojects via `proiectParinteSlug` (e.g. Târgul Universităților → AdmiteRO; parent hub aggregates subproject events/posts) (Phases 1–5)
 - [x] **Member orgs data** — Google Sheets "Membri" tab (Google Sheets API), fallback în `src/lib/data/membre.ts`
+- [ ] **Student-friendly orgs page** — `/organizatii-membre` e focusată pe structura internă a federației (fondatori/activi/candidați). Mută conținutul ei pe `/structura-organizatie` și face un `/organizatii-membre` orientat pe beneficiul studentului (descoperire pe oraș). Această nouă pagină ar trebui să includă și organizații care NU sunt membre FTB dar pot ajuta studenții care aleg anumite orașe (date de confirmat cu colegii)
 - [x] **Homepage stats** — Google Sheets "Info" tab (migrat din Grist; fallback hardcoded în `googleSheets.ts`)
 - [x] **Team data** — Google Sheets "Echipa" tab (Google Sheets API, fallback în `src/lib/data/echipa.ts`)
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (timeline listing + `[slug]` detail), sidebar în articole

@@ -1,8 +1,14 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import type { PageProps } from './$types';
 	import type { Membru } from '$lib/data/membre';
 
 	let { data }: PageProps = $props();
+
+	const orasFiltru = $derived(page.url.searchParams.get('oras'));
+	const membri = $derived(
+		orasFiltru ? data.membri.filter((m) => m.oras === orasFiltru) : data.membri
+	);
 
 	const sectiuni: Array<{ titlu: string; cheie: Membru['categorii'][number]; }> = [
 		{ titlu: 'Membri fondatori', cheie: 'fondator' },
@@ -34,13 +40,27 @@
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
 	<div class="anim-hero">
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Organizații Membre</h1>
-		<p class="text-text-muted mt-2 mb-4">Federația Tinerilor Basarabeni reunește {data.membri.length} de asociații studențești din toată România.</p>
+		{#if orasFiltru}
+			<p class="text-text-muted mt-2 mb-4">
+				Asociații studențești din {orasFiltru} — {membri.length} organizații membre ale Federației
+				Tinerilor Basarabeni.
+			</p>
+			<a
+				href="/organizatii-membre"
+				class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors"
+			>
+				<i class="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i>
+				Vezi toate orașele
+			</a>
+		{:else}
+			<p class="text-text-muted mt-2 mb-4">Federația Tinerilor Basarabeni reunește {membri.length} de asociații studențești din toată România.</p>
+		{/if}
 		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
 	</div>
 
 	<div class="anim-lists space-y-12">
 		{#each sectiuni as { titlu, cheie }}
-			{@const filtrati = data.membri.filter((m) => m.categorii.includes(cheie))}
+			{@const filtrati = membri.filter((m) => m.categorii.includes(cheie))}
 			{#if filtrati.length > 0}
 				<section>
 					<h2 class="text-xl lg:text-2xl font-bold text-text tracking-tight mb-6">{titlu} ({filtrati.length})</h2>
@@ -106,5 +126,12 @@
 				</section>
 			{/if}
 		{/each}
+
+		{#if membri.length === 0}
+			<p class="rounded-xl border border-dashed border-bg-alt bg-white p-6 text-center text-sm text-text-muted">
+				Nu avem încă asociații înregistrate în {orasFiltru}. Vrei să înființezi una?
+				<a href="/contact" class="text-blue no-underline hover:text-oxford">Contactează-ne</a>.
+			</p>
+		{/if}
 	</div>
 </div>

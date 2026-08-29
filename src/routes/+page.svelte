@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
 	import logoIcon from "$lib/assets/FTB_logo_long_default-2_1.png";
+	import { getSpotlight, homepageConfig } from "$lib/config/homepage";
 	import {
 		huburi,
 		getHubBySlug,
@@ -23,77 +24,6 @@
 	function toWebp(srcSet: string | null | undefined): string | undefined {
 		return srcSet?.replace(/\.(jpe?g|png)(\s|,)/gi, ".webp$2");
 	}
-
-	/* Dashboard quick actions — the "where do you want to go" hub */
-	const actions = [
-		{
-			href: "/ghiduri#admitere",
-			title: "Admitere în România",
-			desc: "Ghiduri pas-cu-pas pentru studii în România: înscriere, viză, acte de ședere.",
-			icon: "fa-solid fa-graduation-cap",
-			iconBg: "bg-blue-light text-blue",
-			span: "sm:col-span-2 lg:col-span-2",
-		},
-		{
-			href: "/proiecte",
-			title: "Proiecte",
-			desc: "Campanii și programe anuale: AdmiteRO, Târgul Universităților, Summit și altele.",
-			icon: "fa-solid fa-lightbulb",
-			iconBg: "bg-bg-alt text-orange",
-			span: "",
-		},
-		{
-			href: "/evenimente",
-			title: "Evenimente",
-			desc: "Ce urmează — activități și întâlniri pentru tinerii basarabeni.",
-			icon: "fa-solid fa-calendar-plus",
-			iconBg: "bg-bg-alt text-cerry",
-			span: "",
-		},
-		{
-			href: "/ghiduri#ghiduri",
-			title: "Resurse & Ghiduri",
-			desc: "Ghiduri de implicare civică, scriere de proiecte și finanțări pentru tineri.",
-			icon: "fa-solid fa-handshake",
-			iconBg: "bg-bg-alt text-blue",
-			span: "sm:col-span-2 lg:col-span-2",
-		},
-		{
-			href: "/noutati",
-			title: "Noutăți",
-			desc: "Articole, anunțuri și actualizări despre activitatea FTB România.",
-			icon: "fa-regular fa-newspaper",
-			iconBg: "bg-blue-light text-blue",
-			span: "",
-		},
-		{
-			href: "/organizatii-membre",
-			title: "Organizații Membre",
-			desc: "16+ asociații de studenți și tineri basarabeni din centrele universitare.",
-			icon: "fa-solid fa-users",
-			iconBg: "bg-bg-alt text-oxford",
-			span: "",
-		},
-		{
-			href: "/echipa",
-			title: "Echipă",
-			desc: "Cunoaște oamenii din spatele celor 16 asociații ale federației.",
-			icon: "fa-solid fa-university",
-			iconBg: "bg-bg-alt text-cerry",
-			span: "",
-		},
-		{
-			href: "/ghiduri#resurse-generale",
-			title: "Rute de transport",
-			desc: "Cum ajungi din Republica Moldova în România — autobuze, trenuri, microbuze.",
-			icon: "fa-solid fa-location-dot",
-			iconBg: "bg-blue-light text-blue",
-			span: "",
-		},
-	] as const;
-
-	const targulImg =
-		"https://www.ftbromania.ro/wp-content/uploads/2022/08/Targul-universitatilor-1170x658.jpg";
 
 	/* National partners & funders — placeholder names pending confirmation from colleagues */
 	const partners: string[] = [
@@ -129,6 +59,21 @@
 		.filter((x) => x.hub.slug !== (featuredProject?.hub.slug ?? "__none__"))
 		.slice(0, 3);
 
+	/* Seasonal spotlight — hardcoded rotation, see $lib/config/homepage */
+	const spotlight = $derived(getSpotlight());
+
+	/* Member orgs by city — students first pick the university town */
+	const oraseCuMembri = $derived(
+		Object.entries(
+			data.membri.reduce<Record<string, number>>((acc, m) => {
+				acc[m.oras] = (acc[m.oras] ?? 0) + 1;
+				return acc;
+			}, {})
+		)
+			.map(([oras, count]) => ({ oras, count }))
+			.sort((a, b) => b.count - a.count || a.oras.localeCompare(b.oras, "ro"))
+	);
+
 	/* Team data (reactive) for the "Despre noi" showcase layouts */
 	const echipa = $derived(data.echipa ?? []);
 	const board = $derived(echipa.filter((m) => m.categorie === "birou"));
@@ -152,6 +97,16 @@
 		} else {
 			dialog?.close();
 		}
+	});
+
+	/* Design-review labels — toggle on the homepage (persisted for the session/user) */
+	const labelsStored =
+		typeof localStorage !== "undefined" ? localStorage.getItem("ftb:sectionLabels") : null;
+	let showLabels = $state(
+		labelsStored !== null ? labelsStored === "1" : homepageConfig.showSectionLabels
+	);
+	$effect(() => {
+		localStorage.setItem("ftb:sectionLabels", showLabels ? "1" : "0");
 	});
 </script>
 
@@ -219,11 +174,32 @@
 	/>
 </svelte:head>
 
+<!-- Design-review labels (English, dev-aid) — toggle via homepageConfig.showSectionLabels or the floating button -->
+{#snippet sectionLabel(nr: string, text: string, tone: "default" | "dark" | "accent" = "default")}
+	{#if showLabels}
+		<p
+			class="select-none px-6 pt-6 font-mono text-[11px] italic leading-relaxed tracking-wide {tone === 'dark'
+				? 'text-white/40'
+				: tone === 'accent'
+					? 'text-oxford/45'
+					: 'text-text-muted/60'}"
+			aria-hidden="true"
+		>
+			// {nr} — {text}
+		</p>
+	{/if}
+{/snippet}
+
 <div class="mx-auto w-full">
 	<!-- 1. Hero — who we are, in short -->
 	<section
 		class="relative overflow-hidden bg-oxford-dark text-white"
 	>
+		{@render sectionLabel(
+			"01",
+			"Hero — who we are in one line; primary CTA points the high-school visitor to admission",
+			"dark"
+		)}
 		<div
 			class="absolute inset-0 opacity-20"
 			style:background-size="28px 28px"
@@ -251,13 +227,13 @@
 				implicarea civică a tinerilor.
 			</p>
 			<div class="anim-hero mt-8 flex flex-wrap justify-center gap-3">
-				<a
-					href="/ghiduri#admitere"
-					class="inline-flex items-center gap-2 rounded-lg bg-sunglow px-7 py-3 text-sm font-semibold text-oxford no-underline transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-				>
-					Începe admiterea în România
-					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-				</a>
+<a
+				href="/admitere"
+				class="inline-flex items-center gap-2 rounded-lg bg-sunglow px-7 py-3 text-sm font-semibold text-oxford no-underline transition-all duration-200 hover:scale-105 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+			>
+				Începe admiterea în România
+				<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+			</a>
 				<a
 					href="/despre-noi"
 					class="inline-flex items-center rounded-lg border border-white/30 px-7 py-3 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
@@ -268,8 +244,39 @@
 		</div>
 	</section>
 
+	<!-- 1b. Seasonal spotlight — relevance by season (admitere vară / studenți restul anului) -->
+	{#if spotlight}
+		<section class="bg-sunglow" aria-label="Temă sezonieră">
+			{@render sectionLabel(
+				"02",
+				"Seasonal spotlight — rotates by month; summer pushes admission, the rest of the year addresses enrolled students (papers, visa, language)",
+				"accent"
+			)}
+			<div class="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 px-6 py-4">
+				<div class="flex min-w-0 flex-1 items-center gap-3">
+					<i class="fa-solid fa-graduation-cap text-oxford text-xl" aria-hidden="true"></i>
+					<div class="min-w-0">
+						<p class="text-sm font-bold text-oxford leading-snug">{spotlight.titlu}</p>
+						<p class="mt-0.5 text-sm text-oxford/80 leading-snug">{spotlight.descriere}</p>
+					</div>
+				</div>
+				<a
+					href={spotlight.href}
+					class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-oxford px-5 py-2.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-oxford-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+				>
+					{spotlight.cta}
+					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+				</a>
+			</div>
+		</section>
+	{/if}
+
 	<!-- 2. Audience — "unde pornești?" visitor match -->
 	<section class="anim-actions bg-white py-14 md:py-16">
+		{@render sectionLabel(
+			"03",
+			"Onboarding — 'where do you start?': each visitor type (pupil/student, student org, volunteer, partner) is routed to the right section"
+		)}
 		<div class="mx-auto max-w-6xl px-6">
 			<div class="mb-8 text-center">
 				<h2 class="text-2xl lg:text-3xl font-bold tracking-tight text-text">
@@ -281,22 +288,22 @@
 			</div>
 
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-				<a
-					href="/ghiduri#admitere"
-					class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
-				>
-					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-light text-blue">
-						<i class="fa-solid fa-graduation-cap text-lg" aria-hidden="true"></i>
-					</div>
-					<h3 class="font-semibold text-text leading-snug">Elev / student</h3>
-					<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
-						Vrei să studiezi în România? Începe de la ghidul de admitere.
-					</p>
-					<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
-						Ghid de admitere
-						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-					</span>
-				</a>
+<a
+				href="/admitere"
+				class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
+			>
+				<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-light text-blue">
+					<i class="fa-solid fa-graduation-cap text-lg" aria-hidden="true"></i>
+				</div>
+				<h3 class="font-semibold text-text leading-snug">Elev / student</h3>
+				<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
+					Vrei să studiezi în România? Începe de la pașii admiterii.
+				</p>
+				<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
+					Pașii admiterii
+					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+				</span>
+			</a>
 
 				<a
 					href="/organizatii-membre"
@@ -352,6 +359,52 @@
 		</div>
 	</section>
 
+	<!-- 2b. Member orgs by city — for students who already know their university town -->
+	{#if oraseCuMembri.length > 0}
+		<section class="border-b border-bg-alt bg-white py-10 md:py-12">
+			{@render sectionLabel(
+				"04",
+				"Member organisations by city — for students who already know where they want to study; each pill lists the orgs in that city"
+			)}
+			<div class="mx-auto max-w-6xl px-6">
+				<div class="flex flex-wrap items-end justify-between gap-4">
+					<div>
+						<h2 class="text-2xl lg:text-3xl font-bold tracking-tight text-text">
+							Alege orașul unde vrei să studiezi
+						</h2>
+						<p class="mt-2 max-w-xl text-sm text-text-muted font-light leading-relaxed">
+							Asociațiile noastre membre te pot ajuta direct în orașul tău de studiu —
+							de la primire până la integrare.
+						</p>
+					</div>
+					<a
+						href="/organizatii-membre"
+						class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+					>
+						Toate organizațiile
+						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+					</a>
+				</div>
+				<ul class="mt-6 flex flex-wrap gap-2.5">
+					{#each oraseCuMembri as { oras, count }}
+						<li>
+							<a
+								href="/organizatii-membre?oras={encodeURIComponent(oras)}"
+								class="inline-flex items-center gap-2 rounded-full border border-bg-alt bg-bg px-4 py-2 text-sm font-medium text-text no-underline transition-colors hover:border-blue hover:text-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue"
+							>
+								<i class="fa-solid fa-location-dot text-xs text-blue" aria-hidden="true"></i>
+								{oras}
+								<span class="rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-text-muted tabular-nums">
+									{count}
+								</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		</section>
+	{/if}
+
 	<!-- 3. Dashboard stats — quick proof points -->
 	{#if data.info}
 		{@const stats = [
@@ -378,6 +431,10 @@
 			},
 		]}
 		<section class="anim-stats border-b border-bg-alt bg-bg">
+			{@render sectionLabel(
+				"05",
+				"Key figures — organisations, volunteers, partners, yearly events; quick proof points"
+			)}
 			<div class="mx-auto max-w-5xl px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6">
 				{#each stats as { val, label, suffix, hint }}
 					<div class="text-center">
@@ -385,7 +442,7 @@
 							{Number.isNaN(val) ? "—" : val}{suffix}
 						</div>
 						<div class="mt-1 text-sm font-semibold text-text">{label}</div>
-						{#if hint}
+						{#if false}
 							<div class="mt-1 mx-auto max-w-[14ch] text-xs text-text-muted leading-snug">{hint}</div>
 						{/if}
 					</div>
@@ -394,85 +451,12 @@
 		</section>
 	{/if}
 
-	<!-- 4. Quick actions — the navigation hub -->
-	<section class="anim-actions bg-white py-16 md:py-20">
-		<div class="mx-auto max-w-5xl px-6">
-			<div class="mb-10 text-center">
-				<h2 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">
-					Cu ce te putem ajuta?
-				</h2>
-				<p class="mx-auto mt-3 max-w-xl text-text-muted text-base font-light">
-					Alege destinația potrivită — am organizat informația ca la un panou
-					de plecări, ca să ajungi exact unde ai nevoie.
-				</p>
-			</div>
-
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-				{#each actions as action}
-					<a
-						href={action.href}
-						class="action-card card-hover group flex flex-col rounded-2xl border border-bg-alt bg-white p-5 no-underline {action.span}"
-					>
-						<div
-							class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg {action.iconBg}"
-						>
-							<i class="{action.icon} text-lg" aria-hidden="true"></i>
-						</div>
-						<h3 class="font-semibold text-text leading-snug">{action.title}</h3>
-						<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
-							{action.desc}
-						</p>
-						<span
-							class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue"
-						>
-							Mergi acolo
-							<i
-								class="action-arrow fa-solid fa-arrow-right text-xs"
-								aria-hidden="true"
-							></i>
-						</span>
-					</a>
-				{/each}
-
-				<!-- Real FTB photo tile → Târgul Universităților -->
-				<a
-					href="/proiecte/targul-universitatilor"
-					class="action-card card-hover group relative overflow-hidden rounded-2xl border border-bg-alt sm:col-span-2 min-h-[220px] no-underline"
-				>
-					<img
-						src={targulImg}
-						alt="Târgul Universităților din România"
-						class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-						loading="lazy"
-						decoding="async"
-					/>
-					<div
-						class="absolute inset-0 bg-gradient-to-t from-oxford-dark/90 via-oxford-dark/40 to-transparent"
-					></div>
-					<div class="relative flex h-full min-h-[220px] flex-col justify-end p-5">
-						<h3 class="font-bold text-white leading-snug">
-							Târgul Universităților din România
-						</h3>
-						<p class="mt-1.5 text-sm text-white/80 leading-relaxed">
-							Oferte educaționale și consiliere pentru absolvenții de liceu — ediție după ediție.
-						</p>
-						<span
-							class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-sunglow"
-						>
-							Vezi proiectul
-							<i
-								class="action-arrow fa-solid fa-arrow-right text-xs"
-								aria-hidden="true"
-							></i>
-						</span>
-					</div>
-				</a>
-			</div>
-		</div>
-	</section>
-
 	<!-- 5. Projects — featured + what's in progress -->
 	<section class="anim-section bg-white py-16 md:py-20">
+		{@render sectionLabel(
+			"06",
+			"Projects — the flagship campaign of the season + what's running or coming next; the dark panel is a call to get involved"
+		)}
 		<div class="mx-auto max-w-6xl px-6">
 			<div class="flex items-end justify-between mb-12">
 				<div>
@@ -640,6 +624,10 @@
 		{@const featured = data.posts[0]}
 		{@const rest = data.posts.slice(1)}
 		<section class="anim-section bg-bg py-16 md:py-20">
+			{@render sectionLabel(
+				"07",
+				"Latest news — featured story + recent headlines; keeps the site feeling alive"
+			)}
 			<div class="mx-auto max-w-5xl px-6">
 				<div class="flex items-end justify-between mb-12">
 					<div>
@@ -759,6 +747,10 @@
 
 	<!-- 7. Despre noi — mission -->
 	<section class="anim-section bg-white py-16 md:py-20">
+		{@render sectionLabel(
+			"08",
+			"About — who the federation is; a trust moment for visitors who scroll this far"
+		)}
 		<div class="mx-auto max-w-4xl px-6 text-center">
 			<span class="mx-auto inline-block h-1.5 w-12 rounded-full bg-cerry" aria-hidden="true"></span>
 			<h2 class="mt-4 text-3xl lg:text-4xl font-bold tracking-tight text-text">
@@ -771,20 +763,6 @@
 				care-i ajută pe tinerii basarabeni să studieze, să se integreze și să se
 				implice — de la primii pași ai admisiei până la proiecte cu impact civic.
 			</p>
-			<dl class="mx-auto mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-bg-alt pt-8">
-				<div>
-					<dt class="text-3xl font-bold tabular-nums text-cerry">17</dt>
-					<dd class="mt-1 text-sm text-text-muted">asociații membre</dd>
-				</div>
-				<div>
-					<dt class="text-3xl font-bold tabular-nums text-oxford">16+</dt>
-					<dd class="mt-1 text-sm text-text-muted">centre universitare</dd>
-				</div>
-				<div>
-					<dt class="text-3xl font-bold tabular-nums text-blue">2021</dt>
-					<dd class="mt-1 text-sm text-text-muted">anul înființării</dd>
-				</div>
-			</dl>
 			<div class="mt-8 flex flex-wrap justify-center gap-4">
 				<a
 					href="/despre-noi"
@@ -803,9 +781,14 @@
 		</div>
 	</section>
 
-	<!-- 8. Trust — partners & funders -->
-	<section class="anim-section border-t border-bg-alt bg-white py-12 md:py-14">
-		<div class="mx-auto max-w-5xl px-6">
+	<!-- 8. Trust — partners & funders (hidden until logos are confirmed) -->
+	{#if homepageConfig.showPartners}
+<section class="anim-section border-t border-bg-alt bg-white py-12 md:py-14">
+			{@render sectionLabel(
+				"09",
+				"Partners & funders — logos still to be confirmed, hidden in production"
+			)}
+			<div class="mx-auto max-w-5xl px-6">
 			<p class="text-center text-xs font-semibold uppercase tracking-widest text-text-muted">
 				Parteneri instituționali și naționali
 			</p>
@@ -827,10 +810,15 @@
 			</p>
 		</div>
 	</section>
+	{/if}
 
-	<!-- 9. Team — LAYOUT A: Portrait tiles -->
+	<!-- 9. Team — portrait tiles -->
 	{#if board.length > 0}
 		<section class="anim-section bg-bg py-16 md:py-20">
+			{@render sectionLabel(
+				"10",
+				"Board — the people behind the federation; familiar faces for students met at the university fairs"
+			)}
 			<div class="mx-auto max-w-6xl px-6">
 				<div class="mb-10 flex items-end justify-between">
 					<div>
@@ -963,86 +951,13 @@
 		</dialog>
 	{/if}
 
-	<!-- 9. Support & newsletter -->
-	<section class="anim-section bg-bg py-16 md:py-20">
-		<div class="mx-auto max-w-5xl px-6">
-			<div class="grid gap-10 lg:grid-cols-2 lg:gap-12">
-				<!-- Support -->
-				<div class="rounded-2xl bg-white p-7 md:p-9">
-					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-sunglow/20 text-sunglow">
-						<i class="fa-solid fa-handshake text-lg" aria-hidden="true"></i>
-					</div>
-					<h2 class="text-2xl font-bold tracking-tight text-text">Sprijină-ne</h2>
-					<p class="mt-3 text-base text-text-muted leading-relaxed">
-						Fiecare proiect al FTB pornește de la oameni care cred în tinerii
-						basarabeni. Poți contribui ca voluntar, partener sau susținător.
-					</p>
-				<div class="mt-6 flex flex-wrap gap-4">
-					<button
-						type="button"
-						disabled
-						title="Sistem de donații în pregătire"
-						class="inline-flex cursor-not-allowed items-center gap-2 rounded-lg bg-oxford px-5 py-2.5 text-sm font-semibold text-white opacity-60"
-					>
-						Donează
-						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-					</button>
-					<a
-						href="/proiecte"
-						class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
-					>
-						Devino voluntar
-					</a>
-				</div>
-				<p class="mt-4 text-xs text-text-muted">
-					(buton de donație — de activat când decidem un mecanism de plată)
-				</p>
-				</div>
-
-				<!-- Newsletter -->
-				<div class="rounded-2xl bg-white p-7 md:p-9">
-					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-light text-blue">
-						<i class="fa-regular fa-newspaper text-lg" aria-hidden="true"></i>
-					</div>
-					<h2 class="text-2xl font-bold tracking-tight text-text">Ține pasul cu noi</h2>
-					<p class="mt-3 text-base text-text-muted leading-relaxed">
-						Proiecte noi, evenimente și anunțuri importante — direct în inbox,
-						o dată la ceva timp.
-					</p>
-					<form
-						class="mt-6"
-						onsubmit={(e) => {
-							e.preventDefault();
-						}}
-						aria-label="Înscriere la newsletter"
-					>
-						<label for="newsletter-email" class="sr-only">Adresa de e-mail</label>
-						<div class="flex flex-col gap-3 sm:flex-row">
-							<input
-								id="newsletter-email"
-								type="email"
-								required
-								placeholder="adresa@email.ro"
-								class="w-full rounded-lg border border-bg-alt bg-bg px-4 py-2.5 text-sm text-text outline-none transition-colors placeholder:text-text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
-							/>
-							<button
-								type="submit"
-								class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-cerry px-5 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:bg-cerry-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cerry"
-							>
-								Mă abonez
-							</button>
-						</div>
-					</form>
-					<p class="mt-4 text-xs text-text-muted">
-						(necesită conectare la un instrument de newsletter)
-					</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
 	<!-- 10. CTA — get involved -->
 	<section class="anim-section bg-oxford py-16 md:py-20 text-white">
+		{@render sectionLabel(
+			"11",
+			"Closing CTA — get in touch or get involved; the donation button appears here once available",
+			"dark"
+		)}
 		<div class="mx-auto max-w-2xl px-6 text-center">
 			<h2 class="text-3xl lg:text-4xl font-bold tracking-tight mb-4">
 				Vrei să te implici?
@@ -1065,7 +980,31 @@
 				>
 					Vezi proiectele
 				</a>
+				{#if homepageConfig.showDonate}
+					<a
+						href="/contact"
+						class="inline-flex items-center gap-2 rounded-lg border border-white/60 px-7 py-3.5 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+					>
+						Donează
+						<i class="fa-solid fa-handshake text-xs" aria-hidden="true"></i>
+					</a>
+				{/if}
 			</div>
 		</div>
 	</section>
+
+	<!-- Floating toggle — design-review labels (English) -->
+	<button
+		type="button"
+		onclick={() => (showLabels = !showLabels)}
+		aria-pressed={showLabels}
+		aria-label={showLabels ? "Ascunde etichetele secțiunilor" : "Arată etichetele secțiunilor"}
+		class="fixed bottom-5 right-5 z-60 flex items-center gap-2 rounded-lg border px-3.5 py-2 font-mono text-xs italic shadow-lg backdrop-blur transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue
+			{showLabels
+				? 'border-blue/40 bg-white/95 text-oxford'
+				: 'border-bg-alt bg-white/80 text-text-muted/70 hover:text-text'}"
+	>
+		<span class="tabular-nums">//</span>
+		labels {showLabels ? "on" : "off"}
+	</button>
 </div>
