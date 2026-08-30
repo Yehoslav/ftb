@@ -6,6 +6,7 @@ import { setContext } from 'svelte';
 import Header from '$lib/components/Header.svelte';
 import Footer from '$lib/components/Footer.svelte';
 import Seo from '$lib/components/Seo.svelte';
+import PlaceholderToggle from '$lib/components/PlaceholderToggle.svelte';
 import { dev } from '$app/environment';
 
 let { children }: LayoutProps = $props();
@@ -55,3 +56,5 @@ setContext('header', {
 </main>
 
 <Footer />
+
+<PlaceholderToggle />
