@@ -140,18 +140,27 @@ Unlocks everything; lets every page self-document required content.
 
 > **Status: DONE** (implemented + `deno task check` = 0 errors from these files).
 
-- **`src/lib/stores/placeholders.ts`** — Svelte 5 runes module store. `$state` boolean `enabled`,
-  persisted to `localStorage('ftb:placeholders')` = `'1'|'0'`. **Off by default**.
-  Exports: `isPlaceholdersEnabled()`, `setPlaceholdersEnabled(v)`, `togglePlaceholders()`.
+- **`src/lib/stores/devToggles.svelte.ts`** — Svelte 5 runes module store holding all dev toggles.
+  Each persisted to its own `localStorage` key, **off by default**:
+  - `ftb:placeholders`  → `isPlaceholdersEnabled/set/togglePlaceholders`
+  - `ftb:sectionLabels` → `isSectionLabelsEnabled/set/toggleSectionLabels`
+  (Consolidates the placholder toggle AND the homepage section-labels toggle here.)
 - **`src/lib/components/Placeholder.svelte`**
   - Props: `label`, `id?`, `tone` (`info|warning|content`), `children` (Snippet = sample content).
   - **Off** (default): renders only `children` (sample content) — page looks clean/real.
   - **On**: wraps children in a dashed highlighted box + "Conținut preconizat" chip + `label`,
     marked `data-placeholder` for counting/jumping. Highlight uses border + chip (not colour alone) → WCAG.
-- **`src/lib/components/PlaceholderToggle.svelte`** — floating bottom-right button, like the
-  homepage `labels` button. Shows on every page (rendered in root layout). `aria-pressed`, and a
-  count badge + "jump to next" button (`[data-placeholder]` scan) when on.
-- **Wired into `src/routes/+layout.svelte`** — rendered after `<Footer />`.
+- **`src/lib/components/DevMenu.svelte`** — single global floating dev menu (bottom-right),
+  rendered in the root layout. A small gear launcher that expands to a panel containing all dev
+  toggles as switch rows. Currently hosts:
+  - **Conținut lipsă** (placeholders) — with count badge + "jump to next block" (`[data-placeholder]` scan).
+  - **Etichete secțiuni** (homepage design comments).
+  Keyboard accessible (Esc closes, `menuitemcheckbox` semantics). Extensible for future toggles.
+- **`src/routes/+layout.svelte`** — renders `<DevMenu />` after `<Footer />`.
+- **Homepage (`/`)** — the previous standalone floating `labels` button was removed; the
+  `sectionLabel` snippet now reads `isSectionLabelsEnabled()` from the shared store (so the
+  DevMenu controls it).
+- **Removed** `PlaceholderToggle.svelte` and the old `placeholders` store (replaced by DevMenu + devToggles).
 - **Usage:** wrap unfinished content with `<Placeholder label="..."> <sample/> </Placeholder>`.
 
 ### Pass 1 — IA restructure (routes + nav + sitemap)

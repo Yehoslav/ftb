@@ -2,6 +2,7 @@
 	import type { PageProps } from "./$types";
 	import logoIcon from "$lib/assets/FTB_logo_long_default-2_1.png";
 	import { getSpotlight, homepageConfig } from "$lib/config/homepage";
+	import { isSectionLabelsEnabled } from "$lib/stores/devToggles.svelte";
 	import RomaniaMap from "$lib/components/RomaniaMap.svelte";
 	import {
 		judetByCity,
@@ -105,15 +106,8 @@
 		}
 	});
 
-	/* Design-review labels — toggle on the homepage (persisted for the session/user) */
-	const labelsStored =
-		typeof localStorage !== "undefined" ? localStorage.getItem("ftb:sectionLabels") : null;
-	let showLabels = $state(
-		labelsStored !== null ? labelsStored === "1" : homepageConfig.showSectionLabels
-	);
-	$effect(() => {
-		localStorage.setItem("ftb:sectionLabels", showLabels ? "1" : "0");
-	});
+	/* Design-review labels (homepage section comments) — toggled from the DevMenu */
+	let showLabels = $derived(isSectionLabelsEnabled());
 
 	/* Mission content for the "about" region */
 	const mission = {
@@ -201,7 +195,7 @@
 	/>
 </svelte:head>
 
-<!-- Design-review labels (English, dev-aid) — toggle via homepageConfig.showSectionLabels or the floating button -->
+<!-- Design-review labels (English, dev-aid) — toggle via the DevMenu (bottom-right) -->
 {#snippet sectionLabel(nr: string, text: string, tone: "default" | "dark" | "accent" = "default")}
 	{#if showLabels}
 		<p
@@ -973,19 +967,4 @@
 			</div>
 		</div>
 	</section>
-
-	<!-- Floating toggle — design-review labels -->
-	<button
-		type="button"
-		onclick={() => (showLabels = !showLabels)}
-		aria-pressed={showLabels}
-		aria-label={showLabels ? "Ascunde etichetele secțiunilor" : "Arată etichetele secțiunilor"}
-		class="fixed bottom-5 right-5 z-60 flex items-center gap-2 rounded-lg border px-3.5 py-2 font-mono text-xs italic shadow-lg backdrop-blur transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue
-			{showLabels
-				? 'border-blue/40 bg-white/95 text-oxford'
-				: 'border-bg-alt bg-white/80 text-text-muted/70 hover:text-text'}"
-	>
-		<span class="tabular-nums">//</span>
-		labels {showLabels ? "on" : "off"}
-	</button>
 </div>

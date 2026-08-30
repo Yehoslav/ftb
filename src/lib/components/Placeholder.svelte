@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Snippet } from 'svelte';
-    import { isPlaceholdersEnabled } from '$lib/stores/placeholders';
+    import { isPlaceholdersEnabled } from '$lib/stores/devToggles.svelte';
 
     interface Props {
         /** What this block should contain, shown to editors when the toggle is on. */
