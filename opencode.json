@@ -11,8 +11,7 @@
 			"model": "opencode/big-pickle",
 			"color": "#2F378D",
 			"permission": {
-				"edit": "allow",
-				"bash": { "git *": "allow", "deno task check": "allow", "*": "ask" }
+				"edit": "allow"
 			}
 		},
 		"plan": {
