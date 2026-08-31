@@ -365,18 +365,18 @@
 			</a>
 
 				<a
-					href="/organizatii-membre"
+					href="/org/structura-organizatie"
 					class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
 				>
 					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-bg-alt text-oxford">
 						<i class="fa-solid fa-users text-lg" aria-hidden="true"></i>
 					</div>
-					<h3 class="font-semibold text-text leading-snug">Organizație studențească</h3>
+					<h3 class="font-semibold text-text leading-snug">Organizație membră</h3>
 					<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
 						Conduci o asociație locală? Alătură-te rețelei naționale și câștigă o voce comună.
 					</p>
 					<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
-						Organizații membre
+						Structura organizației
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 					</span>
 				</a>
@@ -399,7 +399,7 @@
 				</a>
 
 				<a
-					href="/contact"
+					href="/org"
 					class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
 				>
 					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-sunglow/20 text-sunglow">
@@ -410,7 +410,7 @@
 						Instituție națională, companie sau susținător — hai să colaborăm.
 					</p>
 					<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
-						Contactează-ne
+						Despre organizație
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 					</span>
 				</a>
@@ -742,10 +742,10 @@
 								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 							</a>
 							<a
-								href="/organizatii-membre"
+								href="/organizatii-studentesti"
 								class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
 							>
-								Toate organizațiile
+								Organizații pe orașe
 							</a>
 						</div>
 					</div>
@@ -800,7 +800,7 @@
 							</p>
 						</div>
 						<a
-							href="/echipa"
+							href="/org/structura-organizatie"
 							class="hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors"
 						>
 							Toată echipa
@@ -915,7 +915,7 @@
 					{/if}
 
 					<a
-						href="/echipa"
+						href="/org/structura-organizatie"
 						class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-oxford no-underline hover:text-blue transition-colors"
 					>
 						Vezi echipa completă

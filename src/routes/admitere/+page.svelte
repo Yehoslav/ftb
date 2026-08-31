@@ -282,7 +282,7 @@
 					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 				</a>
 				<a
-					href="/organizatii-membre"
+					href="/organizatii-studentesti"
 					class="inline-flex items-center rounded-lg border border-white/30 px-7 py-3.5 text-sm font-medium text-white no-underline transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
 				>
 					Asociațiile pe orașe

@@ -3,9 +3,11 @@
 
 	const quickLinks = [
 		{ href: '/despre-noi', label: 'Despre Noi' },
-		{ href: '/echipa', label: 'Echipă' },
+		{ href: '/admitere', label: 'Admitere' },
 		{ href: '/proiecte', label: 'Proiecte' },
-		{ href: '/organizatii-membre', label: 'Membre' },
+		{ href: '/organizatii-studentesti', label: 'Organizații studențești' },
+		{ href: '/org', label: 'Organizație' },
+		{ href: '/org/transparenta', label: 'Transparență' },
 		{ href: '/noutati', label: 'Noutăți' },
 		{ href: '/contact', label: 'Contact' }
 	];

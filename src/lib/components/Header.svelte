@@ -17,8 +17,10 @@
 			label: 'Organizație',
 			items: [
 				{ href: '/despre-noi', label: 'Despre Noi' },
-				{ href: '/echipa', label: 'Echipă' },
-				{ href: '/organizatii-membre', label: 'Organizații Membre' },
+				{ href: '/org', label: 'Organizație' },
+				{ href: '/org/structura-organizatie', label: 'Structura organizației' },
+				{ href: '/org/transparenta', label: 'Transparență' },
+				{ href: '/organizatii-studentesti', label: 'Organizații studențești' },
 			]
 		},
 		{
@@ -31,10 +33,13 @@
 		},
 		{
 			label: 'Resurse',
-			items: resurseCategorii.map((c) => ({
-				href: `/ghiduri#${c.id}`,
-				label: c.label
-			}))
+			items: [
+				{ href: '/admitere', label: 'Admitere' },
+				...resurseCategorii.map((c) => ({
+					href: `/ghiduri#${c.id}`,
+					label: c.label
+				}))
+			]
 		}
 	];
 
@@ -60,8 +65,9 @@
 	}
 
 	function isGroupActive(group: DropdownGroup): boolean {
-		if (group.items.some((item) => item.href.startsWith('/ghiduri'))) {
-			return page.url.pathname.startsWith('/ghiduri');
+		const onGhiduri = page.url.pathname.startsWith('/ghiduri');
+		if (onGhiduri && group.items.some((item) => item.href.startsWith('/ghiduri'))) {
+			return true;
 		}
 		return group.items.some((item) => isActive(item.href));
 	}

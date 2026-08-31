@@ -7,14 +7,24 @@ import { huburi, editii } from '$lib/data/proiecte';
 export async function GET() {
 	const staticPages = [
 		{ loc: '/', priority: '1.0' },
+		{ loc: '/admitere', priority: '0.9' },
 		{ loc: '/despre-noi', priority: '0.8' },
-		{ loc: '/echipa', priority: '0.7' },
 		{ loc: '/proiecte', priority: '0.8' },
-		{ loc: '/organizatii-membre', priority: '0.8' },
+		{ loc: '/organizatii-studentesti', priority: '0.8' },
+		{ loc: '/org', priority: '0.8' },
+		{ loc: '/org/structura-organizatie', priority: '0.7' },
+		{ loc: '/org/transparenta', priority: '0.6' },
+		{ loc: '/org/manual', priority: '0.5' },
 		{ loc: '/noutati', priority: '0.9' },
 		{ loc: '/evenimente', priority: '0.7' },
 		{ loc: '/contact', priority: '0.6' },
 		{ loc: '/ghiduri', priority: '0.7' }
+	];
+
+	const manualPages = [
+		{ loc: '/org/manual/nou-in-bc', priority: '0.5' },
+		{ loc: '/org/manual/organizare-evenimente', priority: '0.5' },
+		{ loc: '/org/manual/sabloane', priority: '0.5' }
 	];
 
 	const ghiduriPages = resurseCategorii.flatMap((cat) =>
@@ -69,7 +79,14 @@ export async function GET() {
 		// WP offline — sitemap still works for static pages
 	}
 
-	const urls = [...staticPages, ...ghiduriPages, ...evenimentePages, ...proiectePages, ...newsPages]
+	const urls = [
+		...staticPages,
+		...manualPages,
+		...ghiduriPages,
+		...evenimentePages,
+		...proiectePages,
+		...newsPages
+	]
 		.map(
 			(p) => `  <url>
     <loc>https://ftbromania.ro${p.loc}</loc>

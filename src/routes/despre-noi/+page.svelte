@@ -247,4 +247,14 @@
             în același timp valorile culturale și identitatea românească.
         </p>
     </section>
+
+    <section class="anim-mission mt-8 rounded-xl border border-bg-alt bg-white p-6 max-w-3xl">
+        <p class="text-sm text-text-muted leading-relaxed">
+            Pentru datele organizaționale (structură, conducere, transparență),
+            vezi
+            <a href="/org" class="text-blue no-underline hover:text-oxford transition-colors">
+                pagina Organizație
+            </a>.
+        </p>
+    </section>
 </div>
