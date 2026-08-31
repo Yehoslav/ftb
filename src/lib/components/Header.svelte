@@ -61,7 +61,7 @@
 		if (hash) {
 			return page.url.pathname === path && page.url.hash === `#${hash}`;
 		}
-		return page.url.pathname.startsWith(path);
+		return page.url.pathname === path;
 	}
 
 	function isGroupActive(group: DropdownGroup): boolean {
@@ -69,7 +69,10 @@
 		if (onGhiduri && group.items.some((item) => item.href.startsWith('/ghiduri'))) {
 			return true;
 		}
-		return group.items.some((item) => isActive(item.href));
+		return group.items.some((item) => {
+			const [itemPath] = item.href.split('#');
+			return page.url.pathname === itemPath || itemPath.startsWith(page.url.pathname + '/');
+		});
 	}
 
 	function onToggleMobileGroup(label: string) {

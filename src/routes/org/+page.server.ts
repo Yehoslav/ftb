@@ -8,13 +8,14 @@ export const load: PageServerLoad = async () => {
 
 	const orase = [...new Set(membri.map((m) => m.oras))];
 	const birou = echipa.filter((m) => m.categorie === 'birou');
+	const membre = membri.filter((m) => m.categorii.includes('fondator') || m.categorii.includes('activ'));
 
 	return {
 		membri,
 		echipa,
 		info,
 		stats: {
-			membre: membri.length,
+			membre: membre.length,
 			orase: orase.length,
 			birou: birou.length
 		},

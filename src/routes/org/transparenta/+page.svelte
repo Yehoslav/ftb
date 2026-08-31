@@ -41,7 +41,9 @@
 				</div>
 				<div class="rounded-xl bg-bg border border-bg-alt p-4">
 					<p class="text-sm font-semibold text-text">Înființare legală</p>
-					<p class="text-sm text-text-muted mt-1">24 septembrie 2021</p>
+					<Placeholder label="Data de înființare legală (CUI) — de verificat" tone="content">
+						<p class="text-sm text-text-muted mt-1">Data de înființare — de verificat</p>
+					</Placeholder>
 				</div>
 			</div>
 
