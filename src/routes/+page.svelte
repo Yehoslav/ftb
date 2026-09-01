@@ -410,7 +410,7 @@
 						Instituție națională, companie sau susținător — hai să colaborăm.
 					</p>
 					<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
-						Despre organizație
+						Organizație
 						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 					</span>
 				</a>
@@ -713,7 +713,7 @@
 	<!-- 7. About — mission intro + map of member orgs, then stats, then the team -->
 	{#if data.info}
 		{@const stats = [
-			{ val: parseInt(data.info.Nr_Org_Membre), label: "Organizații Membre" },
+			{ val: parseInt(data.info.Nr_Org_Membre), label: "Organizații membre" },
 			{ val: parseInt(data.info.Nr_Voluntari), label: "Voluntari", suffix: "+" },
 			{ val: parseInt(data.info.Nr_Parteneri), label: "Parteneri" },
 			{ val: parseInt(data.info.Nr_Evenimente), label: "Evenimente Anuale" },
@@ -745,8 +745,8 @@
 								href="/organizatii-studentesti"
 								class="inline-flex items-center rounded-lg border border-bg-alt px-5 py-2.5 text-sm font-medium text-oxford no-underline transition-colors hover:bg-bg-alt focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
 							>
-								Organizații pe orașe
-							</a>
+							Organizații studențești
+						</a>
 						</div>
 					</div>
 

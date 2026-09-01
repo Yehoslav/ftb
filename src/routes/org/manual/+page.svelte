@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import PageIntro from '$lib/components/PageIntro.svelte';
 	import { manualItems, manualCategorii } from '$lib/data/manual';
 
 	let { data }: PageProps = $props();
@@ -12,23 +13,16 @@
 			from { opacity: 0; transform: translateY(20px); }
 			to { opacity: 1; transform: translateY(0); }
 		}
-		.anim-hero { animation: fadeInUp 0.6s ease-out both; animation-delay: 0.05s; }
-		@media (prefers-reduced-motion: reduce) { .anim-hero { animation: none; } }
+		@media (prefers-reduced-motion: reduce) { .pi-anim { animation: none; } }
 	</style>
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="anim-hero">
-		<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">
-			<a href="/org" class="no-underline hover:text-oxford transition-colors text-blue">Organizație</a>
-		</p>
-		<h1 class="mt-2 text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Manual</h1>
-		<p class="text-text-muted mt-2 mb-4 max-w-2xl leading-relaxed">
-			Un ghid public pentru membri și voluntari: proceduri, roluri și șabloane.
-			(Prototip — conținutul se completează cu colegii.)
-		</p>
-		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
-	</div>
+	<PageIntro
+		title="Manual"
+		lede="Un ghid public pentru membri și voluntari: proceduri, roluri și șabloane. (Prototip — conținutul se completează cu colegii.)"
+		parent={{ href: '/org', label: 'Organizație' }}
+	/>
 
 	<div class="space-y-12">
 		{#each manualCategorii as cat}

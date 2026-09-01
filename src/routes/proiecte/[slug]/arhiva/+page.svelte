@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { etichetaStare } from '$lib/data/proiecte';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
 	const { hub, editii, peAni } = data;
@@ -34,12 +35,14 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<a href="/proiecte/{hub.slug}" class="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-blue transition-colors mb-8 no-underline">
-		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-		</svg>
-		{hub.titlu}
-	</a>
+	<Breadcrumbs
+		class="mb-8"
+		items={[
+			{ href: '/proiecte', label: 'Proiecte' },
+			{ href: `/proiecte/${hub.slug}`, label: hub.titlu },
+			{ label: 'Arhiva edițiilor' }
+		]}
+	/>
 
 	<div class="anim-hero">
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Arhiva edițiilor</h1>

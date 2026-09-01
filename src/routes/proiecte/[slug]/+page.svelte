@@ -2,6 +2,7 @@
 	import type { PageProps } from './$types';
 	import { etichetaStare } from '$lib/data/proiecte';
 	import { esteTrecut, sorteazaEvenimente } from '$lib/data/evenimente';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
 	const { hub, editii, editieCurenta, subproiecte, proiectParinte, posturi, evenimente } = data;
@@ -50,12 +51,24 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<a href="/proiecte" class="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-blue transition-colors mb-8 no-underline">
-		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-		</svg>
-		Toate proiectele
-	</a>
+	{#if proiectParinte}
+		<Breadcrumbs
+			class="mb-8"
+			items={[
+				{ href: '/proiecte', label: 'Proiecte' },
+				{ href: `/proiecte/${proiectParinte.slug}`, label: proiectParinte.titlu },
+				{ label: hub.titlu }
+			]}
+		/>
+	{:else}
+		<Breadcrumbs
+			class="mb-8"
+			items={[
+				{ href: '/proiecte', label: 'Proiecte' },
+				{ label: hub.titlu }
+			]}
+		/>
+	{/if}
 
 	<div class="anim-hero">
 		<div class="flex flex-wrap items-center gap-2 mb-4">
@@ -271,7 +284,7 @@
 							<span class="block text-sm font-medium text-text leading-snug">{post.title}</span>
 							<span class="block text-xs text-text-muted mt-1">{formatData(post.date)}</span>
 						</span>
-						<span class="shrink-0 text-text-muted self-center" aria-hidden="true">→</span>
+						<i class="fa-solid fa-arrow-right shrink-0 text-text-muted self-center text-xs" aria-hidden="true"></i>
 					</a>
 				{/each}
 			</div>

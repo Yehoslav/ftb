@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import PageIntro from '$lib/components/PageIntro.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -27,7 +28,6 @@
 			from { opacity: 0; transform: translateY(24px); }
 			to { opacity: 1; transform: translateY(0); }
 		}
-		.anim-hero  { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.1s; }
 		.anim-body  { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.2s; }
 
 		.card {
@@ -41,18 +41,11 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="anim-hero">
-		<p class="text-xs font-semibold uppercase tracking-widest text-text-muted">
-			<a href="/org" class="no-underline hover:text-oxford transition-colors text-blue">Organizație</a>
-		</p>
-		<h1 class="mt-2 text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Structura Organizației</h1>
-		<p class="text-text-muted mt-2 mb-4 max-w-2xl leading-relaxed">
-			Conducerea și rețeaua de asociații ale federației, după statut.
-			Pentru descoperirea pe orașe, vezi
-			<a href="/organizatii-studentesti" class="text-blue no-underline hover:text-oxford">organizațiile studențești</a>.
-		</p>
-		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
-	</div>
+	<PageIntro
+		title="Structura organizației"
+		lede="Conducerea și rețeaua de asociații ale federației, după statut. Pentru descoperirea pe orașe, vezi organizațiile studențești."
+		parent={{ href: '/org', label: 'Organizație' }}
+	/>
 
 	<div class="anim-body space-y-16">
 		<!-- Leadership -->

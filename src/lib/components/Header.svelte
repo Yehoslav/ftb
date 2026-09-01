@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resurseCategorii } from '$lib/data/resurse';
+	import logoLong from '$lib/assets/FTB_logo_long_default-2_1.png';
 
 	interface DropdownItem {
 		href: string;
@@ -16,7 +17,7 @@
 		{
 			label: 'Organizație',
 			items: [
-				{ href: '/despre-noi', label: 'Despre Noi' },
+				{ href: '/despre-noi', label: 'Despre noi' },
 				{ href: '/org', label: 'Organizație' },
 				{ href: '/org/structura-organizatie', label: 'Structura organizației' },
 				{ href: '/org/transparenta', label: 'Transparență' },
@@ -172,8 +173,8 @@
 	class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-bg-alt"
 >
 	<div class="mx-auto flex w-full max-w-screen-xl items-center justify-between px-4 py-3">
-		<a href="/" class="font-bold text-xl text-oxford no-underline hover:text-oxford-light transition-colors">
-			FTB România
+		<a href="/" class="no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford" aria-label="FTB România — Acasă">
+			<img src={logoLong} alt="FTB România" class="h-9 w-auto object-contain" />
 		</a>
 
 		<!-- Desktop nav -->

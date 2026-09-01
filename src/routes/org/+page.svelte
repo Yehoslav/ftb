@@ -218,7 +218,7 @@
 		<div class="mx-auto max-w-5xl px-6">
 			<p class="text-sm text-text-muted leading-relaxed">
 				Cauți o prezentare mai caldă, orientată spre studenți? Vezi
-				<a href="/despre-noi" class="text-blue no-underline hover:text-oxford transition-colors">Despre Noi</a>.
+				<a href="/despre-noi" class="text-blue no-underline hover:text-oxford transition-colors">Despre noi</a>.
 			</p>
 		</div>
 	</section>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import type { WPPost } from '$lib/types/wp';
+	import PageIntro from '$lib/components/PageIntro.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -53,7 +54,6 @@
 		from { opacity: 0; transform: translateY(24px); }
 		to { opacity: 1; transform: translateY(0); }
 	}
-	.anim-hero  { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.1s; }
 	.anim-posts { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.2s; }
 
 	.post-card {
@@ -67,10 +67,7 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="anim-hero">
-		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Noutăți FTB</h1>
-		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
-	</div>
+	<PageIntro title="Noutăți FTB" />
 
 	<div id="noutati-list" class="anim-posts flex flex-col gap-6 max-w-4xl mx-auto">
 		{#each allPosts as post}

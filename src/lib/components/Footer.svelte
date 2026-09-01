@@ -2,7 +2,7 @@
     import logoMonochrome from "$lib/assets/Vector-4.png"
 
 	const quickLinks = [
-		{ href: '/despre-noi', label: 'Despre Noi' },
+		{ href: '/despre-noi', label: 'Despre noi' },
 		{ href: '/admitere', label: 'Admitere' },
 		{ href: '/proiecte', label: 'Proiecte' },
 		{ href: '/organizatii-studentesti', label: 'Organizații studențești' },

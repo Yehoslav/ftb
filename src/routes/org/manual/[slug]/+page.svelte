@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
+	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -19,16 +20,13 @@
 
 <div class="mx-auto w-full max-w-3xl px-6 py-16">
 	<div class="anim-hero">
-		<!-- Breadcrumb -->
-		<nav class="text-xs text-text-muted" aria-label="Breadcrumb">
-			<ol class="flex flex-wrap items-center gap-1.5">
-				<li><a href="/org" class="no-underline hover:text-oxford text-blue transition-colors">Organizație</a></li>
-				<li aria-hidden="true">/</li>
-				<li><a href="/org/manual" class="no-underline hover:text-oxford text-blue transition-colors">Manual</a></li>
-				<li aria-hidden="true">/</li>
-				<li aria-current="page" class="text-text">{item.title}</li>
-			</ol>
-		</nav>
+		<Breadcrumbs
+			items={[
+				{ href: '/org', label: 'Organizație' },
+				{ href: '/org/manual', label: 'Manual' },
+				{ label: item.title }
+			]}
+		/>
 
 		<h1 class="mt-4 text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">{item.title}</h1>
 

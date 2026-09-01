@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { huburi, getProiectParinte } from '$lib/data/proiecte';
+	import PageIntro from '$lib/components/PageIntro.svelte';
 
 	let categorie = $state<'toate' | 'anuale' | 'singulare'>('toate');
 	let domeniu = $state('toate');
@@ -27,7 +28,6 @@
 		from { opacity: 0; transform: translateY(24px); }
 		to { opacity: 1; transform: translateY(0); }
 	}
-	.anim-hero { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.1s; }
 	.anim-projs { animation: fadeInUp 0.7s ease-out both; animation-delay: 0.2s; }
 
 	.proj-card {
@@ -37,10 +37,10 @@
 		transform: translateY(-3px);
 		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 	}
-	.proj-card:hover .proj-card__arrow {
+	.proj-card:hover .fa-arrow-right {
 		transform: translateX(3px);
 	}
-	.proj-card__arrow {
+	.proj-card .fa-arrow-right {
 		transition: transform 0.3s ease;
 	}
 
@@ -54,18 +54,15 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.anim-hero, .anim-projs { animation: none; }
+		.anim-projs { animation: none; }
 		.proj-card:hover { transform: none; }
-		.proj-card:hover .proj-card__arrow { transform: none; }
+		.proj-card:hover .fa-arrow-right { transform: none; }
 	}
 </style>
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="anim-hero">
-		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Proiecte</h1>
-		<div class="w-10 h-0.5 bg-blue mt-3 mb-10 rounded-sm" aria-hidden="true"></div>
-	</div>
+	<PageIntro title="Proiecte" />
 
 	<div class="anim-projs">
 		{#if huburi.length > 0}
@@ -143,7 +140,7 @@
 
 						<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
 							Vezi proiectul
-							<span class="proj-card__arrow" aria-hidden="true">→</span>
+							<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 						</span>
 					</a>
 				{/each}

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import type { Eveniment } from '$lib/data/evenimente';
+	import PageIntro from '$lib/components/PageIntro.svelte';
 	import { esteTrecut, sorteazaEvenimente } from '$lib/data/evenimente';
 
 	let { data }: PageProps = $props();
@@ -53,7 +54,6 @@
 		from { opacity: 0; transform: translateY(24px); }
 		to { opacity: 1; transform: translateY(0); }
 	}
-	.anim-intro { animation: fadeInUp 0.6s ease-out both; animation-delay: 0.05s; }
 	.anim-item  { animation: fadeInUp 0.6s ease-out both; }
 
 	.card-hover {
@@ -82,13 +82,11 @@
 </svelte:head>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
-	<div class="anim-intro mb-12">
-		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">Evenimente</h1>
-		<div class="w-10 h-0.5 bg-blue mt-3 mb-6 rounded-sm" aria-hidden="true"></div>
-		<p class="text-text-muted max-w-2xl leading-relaxed">
-			Evenimente organizate de FTB România și partenerii săi pentru tinerii basarabeni.
-		</p>
-	</div>
+	<PageIntro
+		title="Evenimente"
+		lede="Evenimente organizate de FTB România și partenerii săi pentru tinerii basarabeni."
+		class="mb-12"
+	/>
 
 	{#if sorted.length === 0}
 		<div class="bg-bg-alt rounded-xl p-8 border border-bg-alt text-center">
