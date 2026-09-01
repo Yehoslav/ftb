@@ -14,8 +14,16 @@ export const connections: Record<string, Connection> = {
 		},
 		external: [
 			{
-				label: 'Ambasada Republicii Moldova',
-				url: 'https://ambasada.md/'
+				label: 'Ambasada României în Republica Moldova',
+				url: 'https://chisinau.mae.ro/'
+			},
+			{
+				label: 'Consulatul General al României la Chișinău',
+				url: 'https://cgchisinau.mae.ro/'
+			},
+			{
+				label: 'Consulatul General al României la Bălți',
+				url: 'https://balti.mae.ro/'
 			}
 		]
 	},
