@@ -7,6 +7,7 @@ import Header from '$lib/components/Header.svelte';
 import Footer from '$lib/components/Footer.svelte';
 import Seo from '$lib/components/Seo.svelte';
 import DevMenu from '$lib/components/DevMenu.svelte';
+import { isDemo } from '$lib/demo';
 
 let { children }: LayoutProps = $props();
 let headerHeight = $state(0);
@@ -22,6 +23,9 @@ setContext('header', {
 		description={page.data.seo?.description}
 		image={page.data.seo?.image}
 	/>
+	{#if isDemo}
+		<meta name="robots" content="noindex, nofollow" />
+	{/if}
 	<link rel="stylesheet" href="/fa/css/fa-bare.min.css">
 </svelte:head>
 
