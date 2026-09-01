@@ -1,0 +1,31 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"model": "opencode/big-pickle",
+	"small_model": "opencode/big-pickle",
+	"default_agent": "build",
+	"instructions": ["AGENTS.md"],
+	"agent": {
+		"ui": {
+			"description": "Svelte 5 UI development with Tailwind CSS v4, WCAG accessibility, responsive design",
+			"mode": "primary",
+			"model": "opencode/big-pickle",
+			"color": "#2F378D",
+			"permission": {
+				"edit": "allow"
+			}
+		},
+		"plan": {
+			"model": "opencode/big-pickle"
+		},
+		"build": {
+			"model": "opencode/big-pickle"
+		},
+		"explore": {
+			"model": "opencode/big-pickle"
+		}
+	},
+	"compaction": {
+		"auto": true,
+		"tail_turns": 5
+	}
+}

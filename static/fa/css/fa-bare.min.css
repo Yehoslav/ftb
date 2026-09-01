@@ -1,0 +1,39 @@
+/*! Font Awesome Free 7.2.0 — bare minimum (used icons only) */
+.fa,.fa-brands,.fa-classic,.fa-regular,.fa-solid,.fab,.far,.fas{--_fa-family:var(--fa-family,var(--fa-style-family,"Font Awesome 7 Free"));-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;display:var(--fa-display,inline-block);font-family:var(--_fa-family);font-feature-settings:normal;font-style:normal;font-synthesis:none;font-variant:normal;font-weight:var(--fa-style,900);line-height:1;text-align:center;text-rendering:auto;width:var(--fa-width,1.25em)}:is(.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands,.fa-classic,.fa):before{content:var(--fa)/""}@supports not (content:""/""){:is(.fas,.far,.fab,.fa-solid,.fa-regular,.fa-brands,.fa-classic,.fa):before{content:var(--fa)}}
+:host,:root{--fa-family-classic:"Font Awesome 7 Free";--fa-font-solid:normal 900 1em/1 var(--fa-family-classic);--fa-font-regular:normal 400 1em/1 var(--fa-family-classic);--fa-style-family-classic:var(--fa-family-classic);--fa-family-brands:"Font Awesome 7 Brands";--fa-font-brands:normal 400 1em/1 var(--fa-family-brands)}
+@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:900;font-display:block;src:url(../webfonts/fa-solid-900.woff2)}
+@font-face{font-family:"Font Awesome 7 Free";font-style:normal;font-weight:400;font-display:block;src:url(../webfonts/fa-regular-400.woff2)}
+@font-face{font-family:"Font Awesome 7 Brands";font-style:normal;font-weight:400;font-display:block;src:url(../webfonts/fa-brands-400.woff2)}
+.fas{--fa-style:900}.fa-classic,.fas{--fa-family:var(--fa-family-classic)}.fa-solid{--fa-style:900}
+.far{--fa-style:400}.fa-classic,.far{--fa-family:var(--fa-family-classic)}.fa-regular{--fa-style:400}
+.fa-brands,.fa-classic.fa-brands,.fab{--fa-family:var(--fa-family-brands);--fa-style:400}
+.fa-facebook{--fa:"\f09a"}
+.fa-telegram,.fa-telegram-plane{--fa:"\f2c6"}
+.fa-youtube{--fa:"\f167"}
+.fa-instagram{--fa:"\f16d"}
+.fa-users{--fa:"\f0c0"}
+.fa-lightbulb{--fa:"\f0eb"}
+.fa-graduation-cap,.fa-mortar-board{--fa:"\f19d"}
+.fa-scale-balanced{--fa:"\f24e"}
+.fa-handshake,.fa-handshake-alt,.fa-handshake-simple{--fa:"\f2b5"}
+.fa-seedling,.fa-sprout{--fa:"\f4d8"}
+.fa-arrow-right{--fa:"\f061"}
+.fa-location-dot,.fa-map-marker-alt{--fa:"\f3c5"}
+.fa-building{--fa:"\f1ad"}
+.fa-building-columns,.fa-institution,.fa-museum,.fa-university{--fa:"\f19c"}
+.fa-newspaper{--fa:"\f1ea"}
+.fa-calendar{--fa:"\f133"}
+.fa-calendar-plus{--fa:"\f271"}
+.fa-chevron-down{--fa:"\f078"}
+.fa-chevron-up{--fa:"\f077"}
+.fa-chevron-right{--fa:"\f054"}
+.fa-check{--fa:"\f00c"}
+.fa-envelope{--fa:"\f0e0"}
+.fa-file-lines,.fa-file-alt,.fa-file-text{--fa:"\f15c"}
+.fa-file-invoice{--fa:"\f570"}
+.fa-file-arrow-down,.fa-file-download{--fa:"\f56d"}
+.fa-flag{--fa:"\f024"}
+.fa-triangle-exclamation,.fa-exclamation-triangle{--fa:"\f071"}
+.fa-arrow-up-right-from-square,.fa-external-link-alt{--fa:"\f35d"}
+.fa-layer-group{--fa:"\f5fd"}
+.fa-file-pdf{--fa:"\f1c1"}

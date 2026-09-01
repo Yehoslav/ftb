@@ -1,95 +1,51 @@
 <script lang="ts">
 import './layout.css';
-import { page } from '$app/state';
 import type { LayoutProps } from './$types';
-import favicon from '$lib/assets/favicon.svg';
+import { page, navigating } from '$app/state';
+import { setContext } from 'svelte';
+import Header from '$lib/components/Header.svelte';
+import Footer from '$lib/components/Footer.svelte';
+import Seo from '$lib/components/Seo.svelte';
+import DevMenu from '$lib/components/DevMenu.svelte';
+import { isDemo } from '$lib/demo';
 
 let { children }: LayoutProps = $props();
+let headerHeight = $state(0);
 
-let header: HTMLElement | undefined = $state();
-let lastScrollPosition = $state(0);
-let show = $state(false)
+setContext('header', {
+	get height() { return headerHeight; }
+});
 </script>
 
-<svelte:window onscroll={()=>{
-    var currentScrollposition = window.pageYOffset || document.documentElement.scrollTop; //Get current scroll position
-    if (currentScrollposition < lastScrollPosition) {
-        show = false
-    }else{ 
-        show = true
-    }
-    lastScrollPosition = currentScrollposition;
-}} />
-
 <svelte:head>
-    <link rel="icon" href={favicon} />
-    <script defer src="/fa/js/fontawesome.js"></script>
-    <script defer src="/fa/js/brands.js"></script>
-    <script defer src="/fa/js/solid.js"></script>
+	<Seo
+		title={page.data.seo?.title ?? 'FTB România'}
+		description={page.data.seo?.description}
+		image={page.data.seo?.image}
+	/>
+	{#if isDemo}
+		<meta name="robots" content="noindex, nofollow" />
+	{/if}
+	<link rel="stylesheet" href="/fa/css/fa-bare.min.css">
 </svelte:head>
 
-<header bind:this={header} class:scrolled={show} class="bg-white w-full p-4 border-b-1 border-olive-200">
-    <div class="flex flex-row justify-between lg:w-300 m-auto">
-        <a class="block" href="/">FTB România</a>
-        <nav>
-            {#if page.url.pathname !== "/"}
-                <a class="py-2 px-4 hover:bg-olive-100" href="/">Acasă</a>
-            {/if}
-            <a class="py-2 px-4 hover:bg-olive-100" href="/noutati">Noutăți</a>
-            <a class="py-2 px-4 hover:bg-olive-100" href="/contact">Contact</a>
-        </nav>
-    </div>
-</header>
+{#if navigating.to}
+	<div class="fixed top-0 left-0 right-0 z-100 h-0.5 bg-cerry animate-pulse"></div>
+{/if}
 
-<!-- INFO: Stilizarea conținutului principal o voi face prin componentă -->
-<main style="margin-top: {header?.offsetHeight ?? 0}px;">
-    {@render children()}
+<a
+	href="#main-content"
+	class="fixed -top-full left-4 z-60 px-4 py-2 bg-white text-oxford rounded-lg shadow-lg border border-bg-alt text-sm font-medium no-underline focus:top-4 focus:outline-2 focus:outline-oxford transition-all duration-150"
+>
+	Sari la conținut
+</a>
+
+<Header bind:headerHeight />
+
+<main id="main-content" class="min-h-screen" style={`padding-top: ${headerHeight}px`}>
+	{@render children()}
 </main>
 
-<footer class="w-full p-4 border-t-1 border-olive-200">
-    <div class="flex flex-row justify-between lg:w-300 m-auto">
-        <div class="flex flex-col w-[30ch] gap-4">
-            <h1 class="text-xl font-bold">
-                <a href="/">FTB România</a>
-            </h1>
-            <div>
-                Federația Tinerilor Basarabeni s-a înființat din dorința de a aduna la un loc toate asociațiile de studenți și tineri basarabeni din România 
-            </div>
+<Footer />
 
-            <div class="flex flex-row *:flex *:text-2xl *:items-center *:justify-center *:w-12 *:h-12 *:hover:bg-olive-100">
-
-                <a aria-label="Facebook" class="" href="https://www.facebook.com/ftbromania.ro" target="_blank">
-                    <i class="fa-brands fa-facebook"></i></a>
-
-
-                <a aria-label="Telegram" class="" href="https://t.me/admitereromania" target="_blank">
-                    <i class="fa-brands fa-telegram"></i></a>
-
-
-                <a aria-label="YouTube" class="" href="https://www.youtube.com/@ftbromania5490" target="_blank">
-                    <i class="fa-brands fa-youtube"></i></a>
-
-
-                <a aria-label="Instagram" class="" href="https://instagram.com/ftbromania.ro?igshid=MzRlODBiNWFlZA==" target="_blank">
-                    <i class="fa-brands fa-instagram"></i></a>
-
-            </div>
-        </div>
-
-        <div>
-        </div>
-    </div>
-</footer>
-
-<style>
-
-.scrolled {
-    transform: translate(0,-100%)
-}
-
-header {
-    top: 0;
-    position: fixed;
-    transition: 0.5s ease
-}
-</style>
+<DevMenu />
