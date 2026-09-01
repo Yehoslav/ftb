@@ -377,8 +377,9 @@
 		<div class="anim-gallery mt-16 pt-8 border-t border-bg-alt">
 			<div class="flex flex-wrap items-baseline justify-between gap-2 mb-6">
 				<h2 class="text-xl font-bold text-text tracking-tight">Toate evenimentele — {proiect.titlu}</h2>
-				<a href="/proiecte/{proiect.slug}" class="text-sm text-blue hover:text-oxford transition-colors no-underline">
-					Vezi proiectul →
+				<a href="/proiecte/{proiect.slug}" class="text-sm text-blue hover:text-oxford transition-colors no-underline inline-flex items-center gap-1.5">
+					Vezi proiectul
+					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 				</a>
 			</div>
 

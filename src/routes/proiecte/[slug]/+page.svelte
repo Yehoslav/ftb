@@ -144,9 +144,7 @@
 						class="inline-flex items-center justify-center gap-2 bg-blue text-white px-5 py-3 rounded-xl font-medium hover:bg-oxford transition-colors no-underline"
 					>
 						Vezi ediția {editieCurenta.an}
-						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-						</svg>
+						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 					</a>
 					{#if editieCurenta.registrationUrl}
 						<a
@@ -179,7 +177,8 @@
 						<h3 class="font-bold text-text leading-snug mb-2">{subproiect.titlu}</h3>
 						<p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">{subproiect.descriere}</p>
 						<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
-							Vezi proiectul →
+							Vezi proiectul
+							<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 						</span>
 					</a>
 				{/each}
@@ -191,8 +190,9 @@
 		<section class="anim-list mt-12">
 			<div class="flex items-center justify-between mb-4">
 				<h2 class="text-xl font-bold text-text tracking-tight">Arhiva edițiilor</h2>
-				<a href="/proiecte/{hub.slug}/arhiva" class="text-sm text-blue hover:text-oxford transition-colors no-underline">
-					Vezi toate →
+				<a href="/proiecte/{hub.slug}/arhiva" class="text-sm text-blue hover:text-oxford transition-colors no-underline inline-flex items-center gap-1.5">
+					Vezi toate
+					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 				</a>
 			</div>
 			<div class="flex flex-col divide-y divide-bg-alt border border-bg-alt rounded-xl bg-white">

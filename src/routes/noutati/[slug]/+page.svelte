@@ -7,6 +7,12 @@
 	const dateOptions: Intl.DateTimeFormatOptions = {
 		month: 'long', day: 'numeric', year: 'numeric'
 	};
+
+	let readingTime = $derived.by(() => {
+		const text = data.post.content.replace(/<[^>]+>/g, '');
+		const words = text.split(/\s+/).filter(Boolean).length;
+		return Math.max(1, Math.ceil(words / 200));
+	});
 </script>
 
 <div class="mx-auto w-full max-w-screen-xl px-6 py-16">
@@ -18,9 +24,13 @@
 		]}
 	>
 	{#snippet metadata()}
-		<time class="text-sm text-text-muted">
-			{new Date(data.post.date).toLocaleString('ro', dateOptions)}
-		</time>
+		<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-text-muted">
+			<time>
+				{new Date(data.post.date).toLocaleString('ro', dateOptions)}
+			</time>
+			<span aria-hidden="true">•</span>
+			<span>{readingTime} min de citire</span>
+		</div>
 	{/snippet}
 
 	{#snippet sidebar()}

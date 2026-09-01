@@ -8,7 +8,7 @@ export const load: PageServerLoad = async () => {
 		membri,
 		echipa,
 		seo: {
-			title: 'Structura Organizației',
+			title: 'Structura organizației',
 			description:
 				'Conducerea, membrii și rețeaua de asociații ale Federației Tinerilor Basarabeni, după statut.'
 		}

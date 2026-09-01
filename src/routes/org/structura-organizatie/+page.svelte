@@ -47,6 +47,14 @@
 		parent={{ href: '/org', label: 'Organizație' }}
 	/>
 
+	<a
+		href="/organizatii-studentesti"
+		class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline hover:text-oxford transition-colors"
+	>
+		Organizații studențești
+		<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+	</a>
+
 	<div class="anim-body space-y-16">
 		<!-- Leadership -->
 		<section>

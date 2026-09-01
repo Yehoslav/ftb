@@ -513,8 +513,11 @@ Unlocks everything; lets every page self-document required content.
 - **2c.** Header logo: use the real logo asset (as footer does) instead of text-only "FTB România".
 - **2d.** Unify arrow/CTA affordance: single FA `fa-arrow-right`; remove raw `→` char (proiecte)
   and mixed inline SVGs.
-- **2e.** Shared long-form article template reused by `/ghiduri/[slug]`, `/noutati/[slug]`,
-  `/evenimente/[slug]` (breadcrumbs + metadata + TOC + reading time + related/sidebars).
+- **2e.** Shared long-form article template (`Article`) reused by `/ghiduri/[slug]` and
+  `/noutati/[slug]` (breadcrumbs + metadata + TOC + reading time + related/sidebars).
+  `/evenimente/[slug]` keeps its specialized hero/date/event-details layout — its structure does not
+  map to Article's title/lede/TOC — but shares the `Breadcrumbs` component and CTA arrow conventions.
+  Reading time applies to long-form guides and news articles.
 - **2f.** Breadcrumbs on all deep content (news, event, project hub/edition).
 - **2g.** Consistent labels: one name per destination across header/footer/content —
   use the new audience-specific names (`Organizații studențești`, `Structura organizației`) rather

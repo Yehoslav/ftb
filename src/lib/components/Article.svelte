@@ -202,27 +202,28 @@
 		<Breadcrumbs items={breadcrumbs} class="mb-4" />
 	{/if}
 
-	<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-4">
-		{title}
-	</h1>
+	<article class="min-w-0">
+		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-4">
+			{title}
+		</h1>
 
-	{#if metadata}
-		<div class="mb-4">
-			{@render metadata()}
-		</div>
-	{/if}
+		{#if metadata}
+			<div class="mb-4">
+				{@render metadata()}
+			</div>
+		{/if}
 
-	{#if lede}
-		<p class="text-text-muted max-w-2xl leading-relaxed mb-6">
-			{lede}
-		</p>
-	{/if}
+		{#if lede}
+			<p class="text-text-muted max-w-2xl leading-relaxed mb-6">
+				{lede}
+			</p>
+		{/if}
 
-	<div class="w-10 h-0.5 bg-blue mb-8 rounded-sm" aria-hidden="true"></div>
+		<div class="w-10 h-0.5 bg-blue mb-8 rounded-sm" aria-hidden="true"></div>
 
-	<div class="flex flex-col lg:flex-row gap-10">
-		<article class="min-w-0 flex-1 max-w-3xl">
-			{#if toc.length > 0}
+		<div class="flex flex-col lg:flex-row gap-10">
+			<div class="min-w-0 flex-1 max-w-3xl">
+				{#if toc.length > 0}
 				<details class="lg:hidden mb-8 rounded-xl border border-bg-alt bg-bg-alt/50">
 					<summary class="px-4 py-3 text-sm font-semibold text-text cursor-pointer select-none rounded-xl">
 						Cuprins
@@ -256,7 +257,7 @@
 				<hr class="my-12 border-bg-alt" aria-hidden="true" />
 				{@render related()}
 			{/if}
-		</article>
+		</div>
 
 		{#if toc.length > 0 || sidebar}
 			<aside class="art-anim-side lg:w-72 shrink-0 flex flex-col gap-8">
@@ -293,4 +294,5 @@
 			</aside>
 		{/if}
 	</div>
+	</article>
 </div>
