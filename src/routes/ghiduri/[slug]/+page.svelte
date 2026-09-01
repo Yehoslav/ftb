@@ -1,17 +1,19 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
-	import { resurseCategorii } from '$lib/data/resurse';
+	import { resurseCategorii, getResursaBySlug } from '$lib/data/resurse';
+	import { connections } from '$lib/data/connections';
 	import Article from '$lib/components/Article.svelte';
+	import FreshnessStamp from '$lib/components/FreshnessStamp.svelte';
+	import CrossLinks from '$lib/components/CrossLinks.svelte';
 
 	let { data }: PageProps = $props();
-
-	const dateOptions: Intl.DateTimeFormatOptions = {
-		month: 'long', day: 'numeric', year: 'numeric'
-	};
 
 	let proseEl: HTMLDivElement | undefined = $state();
 	let toc = $state<Array<{ id: string; level: number; text: string }>>([]);
 	let activeId = $state<string | null>(null);
+
+	let currentItem = $derived(getResursaBySlug(data.page.slug));
+	let conn = $derived(connections[data.page.slug]);
 
 	let currentCategory = $derived.by(() => {
 		for (const cat of resurseCategorii) {
@@ -107,11 +109,26 @@
 			{/if}
 			<span>{readingTime} min de citire</span>
 			<span aria-hidden="true">•</span>
-			<time>Actualizat: {new Date(data.page.date).toLocaleString('ro', dateOptions)}</time>
 		</div>
+
+		{#if currentItem}
+			<FreshnessStamp
+				volatility={currentItem.volatility}
+				date={data.page.date}
+				modified={data.page.modified}
+				officialSource={conn?.external?.[0]}
+				slug={data.page.slug}
+			/>
+		{/if}
 	{/snippet}
 
 	<div class="prose" bind:this={proseEl}>{@html data.page.content}</div>
+
+	{#if conn?.nextStep || conn?.external}
+		<div class="mt-10">
+			<CrossLinks slug={data.page.slug} />
+		</div>
+	{/if}
 
 	{#if relatedItems.length > 0}
 		{#snippet related()}

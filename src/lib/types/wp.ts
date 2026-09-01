@@ -27,6 +27,7 @@ export interface WPPage {
 	uri: string;
 	content: string;
 	date: string;
+	modified?: string | null;
 	featuredImage?: WPFeaturedImage | null;
 }
 

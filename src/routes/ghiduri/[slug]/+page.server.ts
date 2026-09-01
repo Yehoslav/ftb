@@ -16,6 +16,7 @@ export const load: PageServerLoad = async ({ params }) => {
 				slug
 				uri
 				date
+				modified
 				featuredImage {
 					node {
 						sourceUrl
