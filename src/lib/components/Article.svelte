@@ -55,8 +55,7 @@
 	}
 </script>
 
-<svelte:head>
-	<style>
+<style>
 		@keyframes art-fadeInUp {
 			from { opacity: 0; transform: translateY(20px); }
 			to { opacity: 1; transform: translateY(0); }
@@ -72,13 +71,14 @@
 
 		/* Shared long-form prose styles */
 		:global(.prose) {
-			line-height: 1.75;
+			font-size: 1.0625rem;
+			line-height: 1.8;
 			color: var(--color-text);
 		}
-		:global(.prose p) { margin-top: 1.25rem; }
+		:global(.prose p) { margin-top: 1.375rem; }
 		:global(.prose p:first-child) { margin-top: 0; }
-		:global(.prose ul), :global(.prose ol) { margin-top: 1rem; }
-		:global(.prose li) { margin-top: 0.25rem; }
+		:global(.prose ul), :global(.prose ol) { margin-top: 1.25rem; padding-left: 1.5rem; }
+		:global(.prose li) { margin-top: 0.375rem; }
 		:global(.prose li::marker) { color: var(--color-blue); }
 		:global(.prose a) {
 			color: var(--color-blue);
@@ -89,21 +89,21 @@
 		}
 		:global(.prose a:hover) { text-decoration-color: var(--color-blue); }
 		:global(.prose h2) {
-			font-size: 1.5rem;
+			font-size: 1.625rem;
 			font-weight: 700;
 			letter-spacing: -0.02em;
 			color: var(--color-text);
-			margin-top: 2.5rem;
-			margin-bottom: 0.75rem;
+			margin-top: 2.75rem;
+			margin-bottom: 0.875rem;
 			scroll-margin-top: 6rem;
 		}
 		:global(.prose h2:first-child) { margin-top: 0; }
 		:global(.prose h3) {
-			font-size: 1.125rem;
+			font-size: 1.25rem;
 			font-weight: 600;
 			color: var(--color-text);
-			margin-top: 2rem;
-			margin-bottom: 0.5rem;
+			margin-top: 2.25rem;
+			margin-bottom: 0.625rem;
 			scroll-margin-top: 6rem;
 		}
 		:global(.heading-anchor) {
@@ -142,12 +142,25 @@
 			height: auto;
 			border-radius: 0.75rem;
 			margin-block: 1.5rem;
+			cursor: zoom-in;
+		}
+		:global(.prose figure) { margin-block: 2rem; }
+		:global(.prose figure img) {
+			margin-block: 0;
+			background: var(--color-bg-alt);
+		}
+		:global(.prose figcaption) {
+			margin-top: 0.625rem;
+			font-size: 0.8125rem;
+			line-height: 1.5;
+			color: var(--color-text-muted);
+			text-align: center;
 		}
 		:global(.prose .wp-block-gallery) {
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-			gap: 0.75rem;
-			margin-block: 1.5rem;
+			grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+			gap: 0.5rem;
+			margin-block: 2rem;
 			margin-inline: 0;
 			padding: 0;
 		}
@@ -165,6 +178,47 @@
 			object-fit: cover;
 			margin: 0;
 			border-radius: 0;
+			transition: filter 0.3s ease;
+		}
+		:global(.prose .wp-block-gallery .wp-block-image:hover img) { filter: brightness(0.92); }
+		:global(.prose iframe) {
+			width: 100%;
+			aspect-ratio: 16 / 9;
+			border: 0;
+			border-radius: 0.75rem;
+			margin-block: 1.5rem;
+		}
+		:global(.prose .wp-block-buttons) {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			margin-top: 1.5rem;
+		}
+		:global(.prose .wp-block-button) { margin: 0; }
+		:global(.prose .wp-block-button__link) {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			background: var(--color-blue);
+			color: #fff;
+			text-decoration: none;
+			padding: 0.75rem 1.5rem;
+			border-radius: 9999px;
+			font-weight: 500;
+			transition: background-color 0.2s ease;
+		}
+		:global(.prose .wp-block-button__link:hover) {
+			background: var(--color-oxford);
+			color: #fff;
+		}
+		:global(.prose .is-style-outline .wp-block-button__link) {
+			background: transparent;
+			color: var(--color-blue);
+			box-shadow: inset 0 0 0 2px var(--color-blue);
+		}
+		:global(.prose .is-style-outline .wp-block-button__link:hover) {
+			background: var(--color-blue);
+			color: #fff;
 		}
 		:global(.prose code) {
 			font-size: 0.875em;
@@ -194,8 +248,7 @@
 			text-align: left;
 		}
 		:global(.prose th) { background: var(--color-bg-alt); font-weight: 600; }
-	</style>
-</svelte:head>
+</style>
 
 <div class="art-anim">
 	{#if breadcrumbs}

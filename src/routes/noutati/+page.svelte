@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import type { WPPost } from '$lib/types/wp';
+	import { stripHtml } from '$lib/utils/html';
 	import PageIntro from '$lib/components/PageIntro.svelte';
 
 	let { data }: PageProps = $props();
@@ -21,19 +22,6 @@
 
 	function toWebp(srcSet: string | null | undefined): string | undefined {
 		return srcSet?.replace(/\.(jpe?g|png)(\s|,)/gi, '.webp$2');
-	}
-
-	/** WP excerpts come wrapped in HTML — strip tags and normalize entities to plain text. */
-	function stripHtml(html: string): string {
-		return html
-			.replace(/<[^>]*>/g, ' ')
-			.replace(/&nbsp;/g, ' ')
-			.replace(/&hellip;|&#8230;/g, '…')
-			.replace(/&rsquo;|&#8217;|&lsquo;|&#8216;/g, "'")
-			.replace(/&amp;/g, '&')
-			.replace(/&quot;|&#8220;|&#8221;/g, '"')
-			.replace(/\s+/g, ' ')
-			.trim();
 	}
 
 	function formatDate(iso: string): string {
