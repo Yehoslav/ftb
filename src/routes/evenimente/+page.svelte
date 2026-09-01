@@ -104,7 +104,7 @@
 					</li>
 				{/if}
 
-				<li class="tl-item relative pl-12 mb-6 anim-item" style="animation-delay: {i * 0.06}s">
+				<li class="tl-item relative pl-12 mb-6 anim-item" style={`animation-delay: ${i * 0.06}s`}>
 					<span class="absolute left-[5px] top-6 w-3 h-3 rounded-full {entry.past ? 'bg-text-muted' : 'bg-blue'} -translate-x-1/2 ring-4 ring-bg" aria-hidden="true"></span>
 
 					<article class="card-hover bg-white rounded-xl border border-bg-alt p-5 lg:p-6">

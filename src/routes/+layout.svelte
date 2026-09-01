@@ -42,7 +42,7 @@ setContext('header', {
 
 <Header bind:headerHeight />
 
-<main id="main-content" class="min-h-screen" style="padding-top: {headerHeight}px">
+<main id="main-content" class="min-h-screen" style={`padding-top: ${headerHeight}px`}>
 	{@render children()}
 </main>
 

@@ -74,7 +74,7 @@
 				<div class="flex flex-wrap items-center gap-3 mb-3">
 					<span
 						class="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full"
-						style="color: {hub.culoare}; background-color: {hub.culoare}1a"
+						style={`color: ${hub.culoare}; background-color: ${hub.culoare}1a`}
 					>
 						{etichetaStare(editie.stare)}
 					</span>
@@ -90,7 +90,7 @@
 					{editie.perioada}
 				</p>
 
-				<div class="w-10 h-0.5 rounded-sm mt-4 mb-6" style="background-color: {hub.culoare}" aria-hidden="true"></div>
+				<div class="w-10 h-0.5 rounded-sm mt-4 mb-6" style={`background-color: ${hub.culoare}`} aria-hidden="true"></div>
 
 				<p class="text-text leading-relaxed mb-8">{editie.descriere}</p>
 
@@ -124,7 +124,7 @@
 						<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 							{#each editie.statistici as stat}
 								<div class="stat-card bg-bg-alt rounded-xl p-4 border border-bg-alt">
-									<p class="text-lg font-bold" style="color: {hub.culoare}">{stat.value}</p>
+									<p class="text-lg font-bold" style={`color: ${hub.culoare}`}>{stat.value}</p>
 									<p class="text-xs text-text-muted mt-0.5">{stat.label}</p>
 								</div>
 							{/each}

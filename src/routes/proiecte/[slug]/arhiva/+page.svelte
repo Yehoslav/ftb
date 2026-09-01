@@ -46,7 +46,7 @@
 
 	<div class="anim-hero">
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text mb-2">Arhiva edițiilor</h1>
-		<div class="w-10 h-0.5 rounded-sm mt-3 mb-6" style="background-color: {hub.culoare}" aria-hidden="true"></div>
+		<div class="w-10 h-0.5 rounded-sm mt-3 mb-6" style={`background-color: ${hub.culoare}`} aria-hidden="true"></div>
 		<p class="text-text-muted mb-10">Toate edițiile proiectului {hub.titlu} ({editii.length}).</p>
 	</div>
 
@@ -54,7 +54,7 @@
 		{#each ani as an}
 			<section>
 				<div class="flex items-center gap-3 mb-5">
-					<span class="text-2xl font-bold text-text" style="color: {hub.culoare}">{an}</span>
+					<span class="text-2xl font-bold text-text" style={`color: ${hub.culoare}`}>{an}</span>
 					<div class="flex-1 h-px bg-bg-alt" aria-hidden="true"></div>
 				</div>
 				<div class="flex flex-col gap-5">
@@ -67,7 +67,7 @@
 								<h2 class="text-lg font-bold text-text">{editie.titlu}</h2>
 								<span
 									class="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full"
-									style="color: {hub.culoare}; background-color: {hub.culoare}1a"
+									style={`color: ${hub.culoare}; background-color: ${hub.culoare}1a`}
 								>
 									{etichetaStare(editie.stare)}
 								</span>

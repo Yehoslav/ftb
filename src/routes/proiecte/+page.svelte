@@ -113,10 +113,10 @@
 						></a>
 
 						<div class="pointer-events-none relative flex flex-1 flex-col">
-							<div class="w-12 h-1 rounded-full mb-5" style="background-color: {hub.culoare}" aria-hidden="true"></div>
+							<div class="w-12 h-1 rounded-full mb-5" style={`background-color: ${hub.culoare}`} aria-hidden="true"></div>
 
 							<div class="flex items-center justify-between gap-2 mb-3">
-								<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
+								<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style={`background-color: ${hub.culoare}`}>
 									{hub.categorie === 'anuale' ? 'Anual' : 'Singular'}
 								</span>
 								{#if hub.website}

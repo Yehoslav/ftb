@@ -67,7 +67,7 @@
 			class="fixed inset-y-0 left-0 z-40 w-56 shrink-0 bg-white lg:bg-transparent overflow-y-auto pb-8 sidebar-panel
 				lg:sticky lg:z-auto lg:block lg:h-fit lg:max-h-screen
 				{sidebarOpen ? 'open' : ''}"
-			style="top: {sidebarTop}px"
+			style={`top: ${sidebarTop}px`}
 			aria-label="Navigare resurse"
 		>
 			<div class="px-3 pt-6 lg:px-0">
@@ -96,7 +96,7 @@
 												{active
 													? 'border-oxford text-oxford font-medium'
 													: 'border-transparent text-text-muted hover:border-bg-alt hover:text-text'}"
-											style="animation-delay: {i * 0.04}s"
+											style={`animation-delay: ${i * 0.04}s`}
 											aria-current={active ? 'page' : undefined}
 										>
 											{item.title}

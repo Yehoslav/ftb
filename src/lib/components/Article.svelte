@@ -237,7 +237,7 @@
 										class="block text-sm py-0.5 text-text-muted hover:text-oxford no-underline"
 										class:font-medium={activeTocId === id}
 										class:text-oxford={activeTocId === id}
-										style="padding-left: {level === 3 ? '1rem' : '0'}"
+										style={`padding-left: ${level === 3 ? '1rem' : '0'}`}
 										onclick={(e) => handleTocClick(e, id)}
 									>
 										{text}
@@ -262,7 +262,7 @@
 		{#if toc.length > 0 || sidebar}
 			<aside class="art-anim-side lg:w-72 shrink-0 flex flex-col gap-8">
 				{#if toc.length > 0}
-					<div class="hidden lg:block sticky" style="top: {tocTop}px;">
+					<div class="hidden lg:block sticky" style={`top: ${tocTop}px;`}>
 						<h2 class="text-xs font-bold uppercase tracking-widest text-text-muted mb-4">
 							Pe această pagină
 						</h2>
@@ -274,7 +274,7 @@
 											href="#{id}"
 											class="toc-link block text-sm py-1.5 pl-3 border-l-2 border-bg-alt text-text-muted hover:text-oxford hover:border-oxford/40 no-underline transition-colors"
 											class:toc-link--active={activeTocId === id}
-											style="padding-left: {level === 3 ? '1.5rem' : '0.75rem'}"
+											style={`padding-left: ${level === 3 ? '1.5rem' : '0.75rem'}`}
 											onclick={(e) => handleTocClick(e, id)}
 										>
 											{text}

@@ -6,7 +6,15 @@
         "indentWidth": 4,
         "semiColons": true,
         "singleQuote": false,
-        "proseWrap": "preserve"
+        "proseWrap": "preserve",
+        "exclude": [
+            "**/*.svelte",
+            "**/*.css",
+            "src/app.html",
+            ".svelte-kit/",
+            "node_modules/",
+            "static/"
+        ]
     },
     "tasks": {
         "dev": "deno run -A --env-file npm:vite dev",

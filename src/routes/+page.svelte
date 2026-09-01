@@ -566,7 +566,7 @@
 							>
 									<span
 										class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-white"
-										style="background-color: {hub.culoare}"
+										style={`background-color: ${hub.culoare}`}
 									>
 										<i class="fa-solid fa-calendar-plus text-lg" aria-hidden="true"></i>
 									</span>

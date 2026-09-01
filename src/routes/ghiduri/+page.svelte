@@ -29,7 +29,7 @@
 	/>
 
 	{#each resurseCategorii as category, i}
-	<section id={category.id} class="anim-section mb-14" style="animation-delay: {i * 0.05}s">
+	<section id={category.id} class="anim-section mb-14" style={`animation-delay: ${i * 0.05}s`}>
 		<h2 class="text-xl font-bold tracking-tight text-text mb-6">{category.label}</h2>
 		<div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
 			{#each category.items as item}

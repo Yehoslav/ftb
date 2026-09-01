@@ -78,7 +78,7 @@
 
 	<div class="anim-hero">
 		<div class="flex flex-wrap items-center gap-2 mb-4">
-			<span class="inline-flex items-center gap-1.5 text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
+			<span class="inline-flex items-center gap-1.5 text-xs font-medium text-white px-3 py-1 rounded-full" style={`background-color: ${hub.culoare}`}>
 				{hub.categorie === 'anuale' ? 'Proiect anual' : 'Proiect singular'}
 			</span>
 			{#if proiectParinte}
@@ -98,7 +98,7 @@
 		</div>
 
 		<h1 class="text-3xl lg:text-4xl font-bold tracking-tight text-text">{hub.titlu}</h1>
-		<div class="w-10 h-0.5 rounded-sm mt-3 mb-6" style="background-color: {hub.culoare}" aria-hidden="true"></div>
+		<div class="w-10 h-0.5 rounded-sm mt-3 mb-6" style={`background-color: ${hub.culoare}`} aria-hidden="true"></div>
 
 		{#if hub.imagine}
 			<img
@@ -133,7 +133,7 @@
 						<h2 class="text-xl font-bold text-text tracking-tight">Ediția curentă: {editieCurenta.titlu}</h2>
 						<span
 							class="inline-flex items-center text-xs font-medium px-3 py-1 rounded-full"
-							style="color: {hub.culoare}; background-color: {hub.culoare}1a"
+							style={`color: ${hub.culoare}; background-color: ${hub.culoare}1a`}
 						>
 							{etichetaStare(editieCurenta.stare)}
 						</span>
@@ -179,7 +179,7 @@
 						href="/proiecte/{subproiect.slug}"
 						class="related-card bg-white rounded-xl border border-bg-alt p-5 no-underline block"
 					>
-						<div class="w-10 h-1 rounded-full mb-4" style="background-color: {subproiect.culoare}" aria-hidden="true"></div>
+						<div class="w-10 h-1 rounded-full mb-4" style={`background-color: ${subproiect.culoare}`} aria-hidden="true"></div>
 						<h3 class="font-bold text-text leading-snug mb-2">{subproiect.titlu}</h3>
 						<p class="text-sm text-text-muted leading-relaxed line-clamp-2 mb-4">{subproiect.descriere}</p>
 						<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
@@ -212,7 +212,7 @@
 							<span class="block text-sm font-medium text-text truncate">{editie.titlu}</span>
 							<span class="block text-xs text-text-muted">{editie.perioada}</span>
 						</span>
-						<span class="shrink-0 text-xs font-medium px-3 py-1 rounded-full" style="color: {hub.culoare}; background-color: {hub.culoare}1a">
+						<span class="shrink-0 text-xs font-medium px-3 py-1 rounded-full" style={`color: ${hub.culoare}; background-color: ${hub.culoare}1a`}>
 							{etichetaStare(editie.stare)}
 						</span>
 					</a>
