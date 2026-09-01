@@ -346,7 +346,7 @@
 				</p>
 			</div>
 
-			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 <a
 				href="/admitere"
 				class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
@@ -354,15 +354,32 @@
 				<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-light text-blue">
 					<i class="fa-solid fa-graduation-cap text-lg" aria-hidden="true"></i>
 				</div>
-				<h3 class="font-semibold text-text leading-snug">Elev / student</h3>
+				<h3 class="font-semibold text-text leading-snug">Vreau să studiez în România</h3>
 				<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
-					Vrei să studiezi în România? Începe de la pașii admiterii.
+					Ghidurile și pașii admiterii, de la alegerea facultății până la înscriere.
 				</p>
 				<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
 					Pașii admiterii
 					<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 				</span>
 			</a>
+
+				<a
+					href="/student-in-romania"
+					class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
+				>
+					<div class="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-blue-light text-blue">
+						<i class="fa-solid fa-location-dot text-lg" aria-hidden="true"></i>
+					</div>
+					<h3 class="font-semibold text-text leading-snug">Sunt deja student în România</h3>
+					<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">
+						Acte de ședere, transport, comunitate și implicare — resurse pentru viața ta de student.
+					</p>
+					<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
+						Viața de student
+						<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+					</span>
+				</a>
 
 				<a
 					href="/org/structura-organizatie"
