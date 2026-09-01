@@ -5,14 +5,20 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
-	const { hub, editii, editieCurenta, subproiecte, proiectParinte, posturi, evenimente } = data;
+	const hub = $derived(data.hub);
+	const editii = $derived(data.editii);
+	const editieCurenta = $derived(data.editieCurenta);
+	const subproiecte = $derived(data.subproiecte);
+	const proiectParinte = $derived(data.proiectParinte);
+	const posturi = $derived(data.posturi);
+	const evenimente = $derived(data.evenimente);
 
 	const LIMIT = 3;
 
-	const evenimenteSortate = sorteazaEvenimente(evenimente);
-	const upcoming = evenimenteSortate.filter((e) => !esteTrecut(e));
-	const shownUpcoming = Math.min(LIMIT, upcoming.length);
-	const hasHidden = shownUpcoming > 0 && shownUpcoming < evenimenteSortate.length;
+	const evenimenteSortate = $derived(sorteazaEvenimente(evenimente));
+	const upcoming = $derived(evenimenteSortate.filter((e) => !esteTrecut(e)));
+	const shownUpcoming = $derived(Math.min(LIMIT, upcoming.length));
+	const hasHidden = $derived(shownUpcoming > 0 && shownUpcoming < evenimenteSortate.length);
 
 	let showAll = $state(false);
 

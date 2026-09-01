@@ -105,44 +105,52 @@
 		{:else}
 			<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 				{#each filtrate as hub}
-					<a href="/proiecte/{hub.slug}" class="proj-card bg-white rounded-xl border border-bg-alt p-6 lg:p-7 no-underline block flex flex-col">
-						<div class="w-12 h-1 rounded-full mb-5" style="background-color: {hub.culoare}" aria-hidden="true"></div>
+					<div class="proj-card relative bg-white rounded-xl border border-bg-alt p-6 lg:p-7 flex flex-col">
+						<a
+							href="/proiecte/{hub.slug}"
+							aria-label="Vezi proiectul {hub.titlu}"
+							class="absolute inset-0 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+						></a>
 
-					<div class="flex items-center justify-between gap-2 mb-3">
-						<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
-							{hub.categorie === 'anuale' ? 'Anual' : 'Singular'}
-						</span>
-						{#if hub.website}
-							<i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-sm" aria-hidden="true"></i>
-						{/if}
-					</div>
+						<div class="pointer-events-none relative flex flex-1 flex-col">
+							<div class="w-12 h-1 rounded-full mb-5" style="background-color: {hub.culoare}" aria-hidden="true"></div>
 
-					<h2 class="text-lg font-bold text-text leading-snug mb-3">{hub.titlu}</h2>
-
-					{#if getProiectParinte(hub)}
-						<p class="text-xs text-text-muted mb-2">
-							Parte din{' '}
-							<a href="/proiecte/{getProiectParinte(hub)!.slug}" class="text-blue hover:text-oxford transition-colors no-underline">
-								{getProiectParinte(hub)!.titlu}
-							</a>
-						</p>
-					{/if}
-
-						<p class="text-sm text-text-muted leading-relaxed line-clamp-3 mb-5 flex-1">{hub.descriere}</p>
-
-						<div class="flex flex-wrap gap-1.5 mb-5">
-							{#each hub.domenii as domeniu}
-								<span class="text-xs text-text-muted bg-bg-alt border border-bg-alt px-2.5 py-0.5 rounded-full">
-									{domeniu}
+							<div class="flex items-center justify-between gap-2 mb-3">
+								<span class="inline-flex items-center text-xs font-medium text-white px-3 py-1 rounded-full" style="background-color: {hub.culoare}">
+									{hub.categorie === 'anuale' ? 'Anual' : 'Singular'}
 								</span>
-							{/each}
-						</div>
+								{#if hub.website}
+									<i class="fa-solid fa-arrow-up-right-from-square text-text-muted text-sm" aria-hidden="true"></i>
+								{/if}
+							</div>
 
-						<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
-							Vezi proiectul
-							<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-						</span>
-					</a>
+							<h2 class="text-lg font-bold text-text leading-snug mb-3">{hub.titlu}</h2>
+
+							{#if getProiectParinte(hub)}
+								<p class="pointer-events-auto text-xs text-text-muted mb-2">
+									Parte din{' '}
+									<a href="/proiecte/{getProiectParinte(hub)!.slug}" class="text-blue hover:text-oxford transition-colors no-underline">
+										{getProiectParinte(hub)!.titlu}
+									</a>
+								</p>
+							{/if}
+
+							<p class="text-sm text-text-muted leading-relaxed line-clamp-3 mb-5 flex-1">{hub.descriere}</p>
+
+							<div class="flex flex-wrap gap-1.5 mb-5">
+								{#each hub.domenii as domeniu}
+									<span class="text-xs text-text-muted bg-bg-alt border border-bg-alt px-2.5 py-0.5 rounded-full">
+										{domeniu}
+									</span>
+								{/each}
+							</div>
+
+							<span class="inline-flex items-center gap-1.5 text-sm font-medium text-blue no-underline">
+								Vezi proiectul
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+							</span>
+						</div>
+					</div>
 				{/each}
 			</div>
 		{/if}

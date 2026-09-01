@@ -13,7 +13,7 @@
 	}: { highlight?: Highlight[]; title?: string } = $props();
 
 	const all = Object.keys(romaniaJudete) as JudetId[];
-	const active = new Set(highlight.map((h) => h.id));
+	const active = $derived(new Set(highlight.map((h) => h.id)));
 
 	function fill(id: JudetId): string {
 		return active.has(id) ? "judet-active" : "judet";

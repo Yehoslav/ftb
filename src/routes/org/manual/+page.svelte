@@ -1,10 +1,6 @@
 <script lang="ts">
-	import type { PageProps } from './$types';
 	import PageIntro from '$lib/components/PageIntro.svelte';
 	import { manualItems, manualCategorii } from '$lib/data/manual';
-
-	let { data }: PageProps = $props();
-	void data;
 </script>
 
 <svelte:head>

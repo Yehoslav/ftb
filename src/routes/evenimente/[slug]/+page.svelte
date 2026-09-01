@@ -4,8 +4,9 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
-	const ev = data.event!;
-	const { proiect, siblingEvents } = data;
+	const ev = $derived(data.event!);
+	const proiect = $derived(data.proiect);
+	const siblingEvents = $derived(data.siblingEvents);
 	const locale = 'ro';
 	const monthOpts: Intl.DateTimeFormatOptions = { month: 'long' };
 	const dayOpts: Intl.DateTimeFormatOptions = { day: 'numeric' };

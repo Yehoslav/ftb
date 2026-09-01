@@ -9,8 +9,10 @@
 		month: 'long', day: 'numeric', year: 'numeric'
 	};
 
-	let allPosts = $state<WPPost[]>(data.posts);
-	let pageInfo = $state(data.pageInfo);
+	// svelte-ignore state_referenced_locally — intentional one-time init from server data
+	let allPosts = $state<WPPost[]>($state.snapshot(data.posts));
+	// svelte-ignore state_referenced_locally — intentional one-time init from server data
+	let pageInfo = $state($state.snapshot(data.pageInfo));
 	let loading = $state(false);
 	let hasOlder = $state(false);
 

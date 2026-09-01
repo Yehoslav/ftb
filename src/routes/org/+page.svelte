@@ -28,11 +28,11 @@
 		'Proiecte educaționale, culturale și civice cu beneficiari reali'
 	];
 
-	const exempleImpact = [
+	const exempleImpact = $derived([
 		{ label: 'Asociații membre', value: data.stats.membre },
 		{ label: 'Orașe universitare', value: data.stats.orase },
 		{ label: 'Membri ai biroului', value: data.stats.birou }
-	];
+	]);
 </script>
 
 <svelte:head>

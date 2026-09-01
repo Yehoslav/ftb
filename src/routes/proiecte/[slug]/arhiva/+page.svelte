@@ -4,10 +4,10 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
-	const { hub, editii, peAni } = data;
-	const ani = Object.keys(peAni)
-		.map(Number)
-		.sort((a, b) => b - a);
+	const hub = $derived(data.hub);
+	const editii = $derived(data.editii);
+	const peAni = $derived(data.peAni);
+	const ani = $derived(Object.keys(peAni).map(Number).sort((a, b) => b - a));
 </script>
 
 <svelte:head>

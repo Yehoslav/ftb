@@ -15,10 +15,10 @@
 
 	const LIMIT = 5;
 
-	const sorted = sorteazaEvenimente(data.evenimente);
-	const upcoming = sorted.filter((e) => !esteTrecut(e));
-	const shownUpcoming = Math.min(LIMIT, upcoming.length);
-	const hasHidden = shownUpcoming > 0 && shownUpcoming < sorted.length;
+	const sorted = $derived(sorteazaEvenimente(data.evenimente));
+	const upcoming = $derived(sorted.filter((e) => !esteTrecut(e)));
+	const shownUpcoming = $derived(Math.min(LIMIT, upcoming.length));
+	const hasHidden = $derived(shownUpcoming > 0 && shownUpcoming < sorted.length);
 
 	let showAll = $state(false);
 

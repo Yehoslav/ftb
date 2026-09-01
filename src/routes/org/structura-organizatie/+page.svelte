@@ -4,8 +4,8 @@
 
 	let { data }: PageProps = $props();
 
-	const birou = data.echipa.filter((m) => m.categorie === 'birou');
-	const extinsa = data.echipa.filter((m) => m.categorie === 'extinsa');
+	const birou = $derived(data.echipa.filter((m) => m.categorie === 'birou'));
+	const extinsa = $derived(data.echipa.filter((m) => m.categorie === 'extinsa'));
 
 	const sectiuni: Array<{ titlu: string; cheie: 'fondator' | 'activ' | 'candidat' | 'potential' }> = [
 		{ titlu: 'Membri fondatori', cheie: 'fondator' },

@@ -4,7 +4,8 @@
 	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
 
 	let { data }: PageProps = $props();
-	const { hub, editie } = data;
+	const hub = $derived(data.hub);
+	const editie = $derived(data.editie);
 
 	function fullSizeUrl(thumb: string): string {
 		return thumb.replace(/-\d+x\d+(?=\.[^.]+$)/, '');
