@@ -19,6 +19,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | Runtime | Deno (Node compat via `deno.json`) |
 | Build | Vite 7 |
 | Adapter | `@deno/svelte-adapter` |
+| VCS | Jujutsu (jj) — repo is initialized as a `jj` working copy, so `git` shows a detached HEAD |
 | Backend | WordPress (GraphQL at `WP_GRAPHQL_ENDPOINT` env var) |
 | Data layer | Google Sheets API for member organisations + homepage stats (was Grist) |
 | Form tool | OpnForm (embedded iframe on /contact) |
