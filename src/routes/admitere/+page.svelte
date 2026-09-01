@@ -40,6 +40,14 @@
 			icon: 'fa-solid fa-scale-balanced'
 		}
 	];
+
+	function pasNext(i: number): { href: string; label: string } {
+		const next = pasi[i + 1];
+		if (next) {
+			return { href: next.href, label: `Pasul următor: ${next.titlu}` };
+		}
+		return { href: '/student-in-romania', label: 'După admitere: Student în România' };
+	}
 </script>
 
 <svelte:head>
@@ -120,6 +128,28 @@
 		</div>
 	</section>
 
+	<!-- Settled-student pointer -->
+	<section class="border-b border-bg-alt bg-white">
+		<div class="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3 px-6 py-4">
+			<div class="flex items-center gap-3">
+				<i class="fa-solid fa-graduation-cap text-blue text-lg" aria-hidden="true"></i>
+				<p class="text-sm text-text">
+					<span class="font-semibold">Ești deja student?</span>
+					<span class="text-text-muted">
+						Treci direct la resursele pentru viața de student în România.
+					</span>
+				</p>
+			</div>
+			<a
+				href="/student-in-romania"
+				class="inline-flex items-center gap-1.5 rounded-lg border border-blue/30 px-4 py-2 text-sm font-medium text-blue no-underline transition-colors hover:bg-blue-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-oxford"
+			>
+				Începe aici
+				<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+			</a>
+		</div>
+	</section>
+
 	<!-- Period + status -->
 	{#if editie}
 		<section class="border-b border-bg-alt bg-bg">
@@ -147,24 +177,32 @@
 			</div>
 
 			<ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-				{#each pasi as pas}
-					<a
-						href={pas.href}
-						class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5 no-underline"
-					>
-						<div class="mb-4 flex items-center justify-between">
-							<span class="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-lg text-blue">
-								<i class="{pas.icon}" aria-hidden="true"></i>
+				{#each pasi as pas, i}
+					<li class="card-hover group flex flex-col rounded-2xl border border-bg-alt bg-bg p-5">
+						<a href={pas.href} class="flex flex-1 flex-col no-underline">
+							<div class="mb-4 flex items-center justify-between">
+								<span class="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-lg text-blue">
+									<i class="{pas.icon}" aria-hidden="true"></i>
+								</span>
+								<span class="text-3xl font-bold text-bg-alt">{pas.nr}</span>
+							</div>
+							<h3 class="font-semibold text-text leading-snug">{pas.titlu}</h3>
+							<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">{pas.desc}</p>
+							<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
+								{pas.cta}
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
 							</span>
-							<span class="text-3xl font-bold text-bg-alt">{pas.nr}</span>
+						</a>
+						<div class="mt-4 border-t border-bg-alt pt-3">
+							<a
+								href={pasNext(i).href}
+								class="inline-flex items-center gap-1.5 text-xs font-medium text-oxford no-underline transition-colors hover:text-blue"
+							>
+								{pasNext(i).label}
+								<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
+							</a>
 						</div>
-						<h3 class="font-semibold text-text leading-snug">{pas.titlu}</h3>
-						<p class="mt-1.5 flex-1 text-sm text-text-muted leading-relaxed">{pas.desc}</p>
-						<span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-blue">
-							{pas.cta}
-							<i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i>
-						</span>
-					</a>
+					</li>
 				{/each}
 			</ol>
 		</div>

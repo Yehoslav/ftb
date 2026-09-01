@@ -36,6 +36,7 @@
 			label: 'Resurse',
 			items: [
 				{ href: '/admitere', label: 'Admitere' },
+				{ href: '/student-in-romania', label: 'Student în România' },
 				...resurseCategorii.map((c) => ({
 					href: `/ghiduri#${c.id}`,
 					label: c.label

@@ -9,8 +9,8 @@ export interface Connection {
 export const connections: Record<string, Connection> = {
 	'aplica-pentru-viza-de-studii': {
 		nextStep: {
-			href: '/admitere',
-			label: 'Pasul următor: Înscriere la facultate'
+			href: '/student-in-romania',
+			label: 'După viză: viața de student în România'
 		},
 		external: [
 			{
@@ -20,6 +20,10 @@ export const connections: Record<string, Connection> = {
 		]
 	},
 	'aplica-pentru-acte-de-sedere-temporara': {
+		nextStep: {
+			href: '/student-in-romania',
+			label: 'După ședere: viața de student în România'
+		},
 		external: [
 			{
 				label: 'Direcția Generală de Imigrări — Permise de ședere',

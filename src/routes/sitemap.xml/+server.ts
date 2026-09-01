@@ -8,6 +8,7 @@ export async function GET() {
 	const staticPages = [
 		{ loc: '/', priority: '1.0' },
 		{ loc: '/admitere', priority: '0.9' },
+		{ loc: '/student-in-romania', priority: '0.7' },
 		{ loc: '/despre-noi', priority: '0.8' },
 		{ loc: '/proiecte', priority: '0.8' },
 		{ loc: '/organizatii-studentesti', priority: '0.8' },
