@@ -22,7 +22,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | VCS | Jujutsu (jj) — repo is initialized as a `jj` working copy, so `git` shows a detached HEAD |
 | Backend | WordPress (GraphQL at `WP_GRAPHQL_ENDPOINT` env var) |
 | Data layer | Google Sheets API for member organisations + homepage stats (was Grist) |
-| Form tool | OpnForm (embedded iframe on /contact) |
+| Contact form | Native frontend stub; message-delivery backend pending |
 
 ## Commands
 
@@ -139,7 +139,7 @@ Always use these semantic color names (`text-oxford`, `bg-cerry`, `border-bg-alt
 - [ ] **Event calendar** — placeholder on article pages; integrate with WP Events  ✅ **Portat** — vezi `/evenimente/` (timeline listing + `[slug]` detail), sidebar în articole
 - [x] **Pagination** — "older articles" + "newer articles" buttons on noutati
 - [ ] **Favicon** — currently the default Svelte logo; replace with FTB brand favicon
-- [ ] **Contact form** — replace OpnForm iframe with in-house form connected to Gmail API
+- [ ] **Contact form backend** — native page stub implemented; connect message delivery when the backend approach is chosen
 
 ### 🔴 Security
 - [x] **Auth on `/api/revalidate`** — Bearer token via `REVALIDATE_TOKEN` env var
