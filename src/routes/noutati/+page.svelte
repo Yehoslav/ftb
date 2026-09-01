@@ -136,14 +136,14 @@
 </div>
 
 <style>
-	:global(article p, article ul) {
+	:global(.post-card p, .post-card ul) {
 		margin-top: 1rem;
 	}
-	:global(article li) {
+	:global(.post-card li) {
 		list-style-type: circle;
 		margin-left: 2rem;
 	}
-	:global(article a) {
+	:global(.post-card a) {
 		color: var(--color-blue);
 	}
 </style>
