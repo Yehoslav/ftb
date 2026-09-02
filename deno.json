@@ -23,10 +23,13 @@
         "prepare": "deno run -A npm:@sveltejs/kit sync || echo ''",
         "check": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json",
         "check:watch": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json --watch",
-        "db:generate": "deno run -A --env-file npm:drizzle-kit generate",
-        "db:migrate": "deno run -A --env-file npm:drizzle-kit migrate",
-        "db:push": "deno run -A --env-file npm:drizzle-kit push",
-        "db:studio": "deno run -A --env-file npm:drizzle-kit studio"
+		"db:generate": "deno run -A --env-file npm:drizzle-kit generate",
+		"db:migrate": "deno run -A --env-file npm:drizzle-kit migrate",
+		"db:push": "deno run -A --env-file npm:drizzle-kit push",
+		"db:studio": "deno run -A --env-file npm:drizzle-kit studio",
+		"db:seed": "deno run -A --env-file src/scripts/seed.ts",
+		"db:seed:wp": "deno run -A --env-file src/scripts/migrate-wp.ts",
+		"db:seed:data": "deno run -A --env-file src/scripts/migrate-data.ts"
     },
     "imports": {
         "$lib": "./src/lib",
