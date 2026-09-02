@@ -11,6 +11,7 @@ import { isDemo } from '$lib/demo';
 
 let { children }: LayoutProps = $props();
 let headerHeight = $state(0);
+const isAdmin = $derived(page.url.pathname.startsWith('/admin'));
 
 setContext('header', {
 	get height() { return headerHeight; }
@@ -18,11 +19,13 @@ setContext('header', {
 </script>
 
 <svelte:head>
-	<Seo
-		title={page.data.seo?.title ?? 'FTB România'}
-		description={page.data.seo?.description}
-		image={page.data.seo?.image}
-	/>
+	{#if !isAdmin}
+		<Seo
+			title={page.data.seo?.title ?? 'FTB România'}
+			description={page.data.seo?.description}
+			image={page.data.seo?.image}
+		/>
+	{/if}
 	{#if isDemo}
 		<meta name="robots" content="noindex, nofollow" />
 	{/if}
@@ -40,12 +43,18 @@ setContext('header', {
 	Sari la conținut
 </a>
 
-<Header bind:headerHeight />
+{#if !isAdmin}
+	<Header bind:headerHeight />
 
-<main id="main-content" class="min-h-screen" style={`padding-top: ${headerHeight}px`}>
-	{@render children()}
-</main>
+	<main id="main-content" class="min-h-screen" style={`padding-top: ${headerHeight}px`}>
+		{@render children()}
+	</main>
 
-<Footer />
+	<Footer />
 
-<DevMenu />
+	<DevMenu />
+{:else}
+	<main id="main-content" class="min-h-screen">
+		{@render children()}
+	</main>
+{/if}
