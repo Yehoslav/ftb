@@ -21,8 +21,12 @@
         "build": "deno run -A npm:vite build",
         "preview": "deno run -A --env-file npm:vite preview",
         "prepare": "deno run -A npm:@sveltejs/kit sync || echo ''",
-"check": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json --watch"
+        "check": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json",
+        "check:watch": "deno run -A npm:@sveltejs/kit sync && deno run -A npm:svelte-check --tsconfig ./tsconfig.json --watch",
+        "db:generate": "deno run -A --env-file npm:drizzle-kit generate",
+        "db:migrate": "deno run -A --env-file npm:drizzle-kit migrate",
+        "db:push": "deno run -A --env-file npm:drizzle-kit push",
+        "db:studio": "deno run -A --env-file npm:drizzle-kit studio"
     },
     "imports": {
         "$lib": "./src/lib",

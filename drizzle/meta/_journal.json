@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1788365681259,
+      "tag": "0000_spooky_the_hunter",
+      "breakpoints": true
+    }
+  ]
+}
