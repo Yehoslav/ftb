@@ -1,43 +1,16 @@
-import { json } from '@sveltejs/kit';
-import { queryWP } from '$lib/server/wp';
-import type { PostsQueryResult } from '$lib/types/wp';
+import { json } from "@sveltejs/kit";
+import { decodeCursor, getPublishedPosts } from "$lib/server/queries/posts";
 
 const POSTS_PER_PAGE = 10;
 
 export async function GET({ url }) {
-	const after = url.searchParams.get('after');
+    const after = url.searchParams.get("after");
+    const offset = decodeCursor(after) ?? 0;
 
-	const data = await queryWP<PostsQueryResult>(
-		`query Posts($first: Int!, $after: String) {
-			posts(first: $first, after: $after, where: { categoryName: "actualitati" }) {
-				nodes {
-					title
-					slug
-					excerpt
-					date
-					featuredImage {
-						node {
-							sourceUrl
-							srcSet
-							sizes
-							mediaDetails {
-								width
-								height
-							}
-						}
-					}
-				}
-				pageInfo {
-					hasNextPage
-					endCursor
-				}
-			}
-		}`,
-		{ first: POSTS_PER_PAGE, after }
-	);
+    const data = await getPublishedPosts(POSTS_PER_PAGE, offset);
 
-	return json({
-		posts: data.posts.nodes,
-		pageInfo: data.posts.pageInfo
-	});
+    return json({
+        posts: data.nodes,
+        pageInfo: data.pageInfo,
+    });
 }

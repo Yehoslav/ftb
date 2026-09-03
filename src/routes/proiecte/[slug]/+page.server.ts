@@ -1,73 +1,49 @@
-import type { PageServerLoad } from './$types';
-import { error } from '@sveltejs/kit';
+import type { PageServerLoad } from "./$types";
+import { error } from "@sveltejs/kit";
 import {
-	getHubBySlug,
-	getEditiiAle,
-	getEditieCurenta,
-	getPosturiAle,
-	getSubproiecteAle,
-	getProiectParinte
-} from '$lib/data/proiecte';
-import { getEvenimenteAle } from '$lib/data/evenimente';
-import { queryWP } from '$lib/server/wp';
-import type { PostsQueryResult } from '$lib/types/wp';
+    getEditieCurenta,
+    getEditiiAle,
+    getHubBySlug,
+    getPosturiAle,
+    getProiectParinte,
+    getSubproiecteAle,
+} from "$lib/data/proiecte";
+import { getEvenimenteAle } from "$lib/data/evenimente";
+import { getPostsBySlugs } from "$lib/server/queries/posts";
+import type { WPPost } from "$lib/types/wp";
 
 export const load: PageServerLoad = async ({ params }) => {
-	const hub = getHubBySlug(params.slug);
-	if (!hub) error(404, 'Proiectul nu a fost găsit');
+    const hub = getHubBySlug(params.slug);
+    if (!hub) error(404, "Proiectul nu a fost găsit");
 
-	const editii = getEditiiAle(hub.slug);
-	const editieCurenta = getEditieCurenta(hub.slug);
-	const evenimente = getEvenimenteAle(hub.slug);
-	const subproiecte = getSubproiecteAle(hub.slug);
-	const proiectParinte = getProiectParinte(hub);
+    const editii = getEditiiAle(hub.slug);
+    const editieCurenta = getEditieCurenta(hub.slug);
+    const evenimente = getEvenimenteAle(hub.slug);
+    const subproiecte = getSubproiecteAle(hub.slug);
+    const proiectParinte = getProiectParinte(hub);
 
-	let posturi: PostsQueryResult['posts']['nodes'] = [];
-	const postSlugs = getPosturiAle(hub.slug);
-	if (postSlugs.length > 0) {
-		try {
-			const result = await queryWP<PostsQueryResult>(
-				`query Posts($slugs: [String!]) {
-					posts(where: { nameIn: $slugs }) {
-						nodes {
-							title
-							slug
-							excerpt
-							date
-							featuredImage {
-								node {
-									sourceUrl
-									srcSet
-									sizes
-									mediaDetails {
-										width
-										height
-									}
-								}
-							}
-						}
-					}
-				}`,
-				{ slugs: postSlugs }
-			);
-			posturi = result.posts.nodes;
-		} catch {
-			// WP offline — hub page still renders with static data
-		}
-	}
+    let posturi: WPPost[] = [];
+    const postSlugs = getPosturiAle(hub.slug);
+    if (postSlugs.length > 0) {
+        try {
+            posturi = await getPostsBySlugs(postSlugs);
+        } catch {
+            // DB indisponibil — pagina hub se randează cu datele statice
+        }
+    }
 
-	return {
-		hub,
-		editii,
-		editieCurenta,
-		subproiecte,
-		proiectParinte,
-		posturi,
-		evenimente,
-		seo: {
-			title: hub.titlu,
-			description: hub.descriere.slice(0, 160),
-			image: hub.imagine
-		}
-	};
+    return {
+        hub,
+        editii,
+        editieCurenta,
+        subproiecte,
+        proiectParinte,
+        posturi,
+        evenimente,
+        seo: {
+            title: hub.titlu,
+            description: hub.descriere.slice(0, 160),
+            image: hub.imagine,
+        },
+    };
 };

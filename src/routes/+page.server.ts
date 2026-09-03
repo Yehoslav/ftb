@@ -1,7 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { getInfo, getMembri, getEchipa } from '$lib/server/googleSheets';
-import { queryWP } from '$lib/server/wp';
-import type { PostsQueryResult } from '$lib/types/wp';
+import { getRecentPosts } from '$lib/server/queries/posts';
 
 export const load: PageServerLoad = async () => {
 	const info = await getInfo().catch(() => null);
@@ -10,34 +9,11 @@ export const load: PageServerLoad = async () => {
 
 	const orase = [...new Set(membri.map((m) => m.oras))];
 
-	const postsData = await 	queryWP<PostsQueryResult>(
-		`query RecentPosts($first: Int!) {
-			posts(first: $first, where: { categoryName: "actualitati" }) {
-				nodes {
-					title
-					slug
-					excerpt
-					date
-					featuredImage {
-						node {
-							sourceUrl
-							srcSet
-							sizes
-							mediaDetails {
-								width
-								height
-							}
-						}
-					}
-				}
-			}
-		}`,
-		{ first: 3 }
-	).catch(() => null);
+	const posts = await getRecentPosts(3).catch(() => []);
 
 	return {
 		info,
-		posts: postsData?.posts.nodes ?? [],
+		posts,
 		membri,
 		echipa,
 		membreStats: {
