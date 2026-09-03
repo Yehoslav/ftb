@@ -83,9 +83,9 @@
     });
 </script>
 
-<div class="space-y-4">
+<div class="@container space-y-4">
     <div
-        class="rounded-lg border-2 border-dashed p-6 text-center transition-colors {dragOver
+        class="rounded-lg border-2 border-dashed p-4 text-center transition-colors @md:p-6 {dragOver
             ? 'border-blue bg-blue/5'
             : 'border-bg-alt bg-bg'}"
         role="region"
@@ -121,7 +121,7 @@
         />
     </div>
 
-    <div class="flex gap-2" role="group" aria-label="Filtrează după tip">
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrează după tip">
         {#each [["all", "Toate"], ["image", "Imagini"], ["document", "Documente"], ["video", "Video"]] as [value, label]}
             <button
                 type="button"
@@ -139,7 +139,7 @@
     {:else if filtered.length === 0}
         <p class="text-sm text-text-muted">Niciun fișier încărcat.</p>
     {:else}
-        <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4" role="list">
+        <ul class="grid grid-cols-2 gap-3 @sm:grid-cols-3 @2xl:grid-cols-4" role="list">
             {#each filtered as item (item.id)}
                 <li class="overflow-hidden rounded-lg border border-bg-alt bg-white">
                     {#if item.type === "image"}
