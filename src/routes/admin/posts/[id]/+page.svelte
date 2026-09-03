@@ -4,6 +4,13 @@
 
 	let { data }: PageProps = $props();
 
+	// svelte-ignore state_referenced_locally — input datetime-local nu acceptă zonă orară/secunde
+	const dateInput = (value: string | Date) => {
+		const d = value instanceof Date ? value : new Date(value);
+		const pad = (n: number) => String(n).padStart(2, '0');
+		return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+	};
+
 	const post = $derived({
 		id: data.row.id,
 		slug: data.row.slug,
@@ -14,7 +21,7 @@
 		category: data.row.category,
 		featuredImageUrl: data.row.featuredImageUrl,
 		featuredImageAlt: data.row.featuredImageAlt,
-		date: new Date(data.row.date).toISOString()
+		date: dateInput(data.row.date)
 	});
 </script>
 
