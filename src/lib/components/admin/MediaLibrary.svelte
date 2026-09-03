@@ -15,9 +15,21 @@
 
     interface Props {
         onPick?: (media: MediaItem) => void;
+        imageOnly?: boolean;
+        maxSizeBytes?: number;
     }
 
-    let { onPick }: Props = $props();
+    const ALLOWED_IMAGE_TYPES = ["image/webp", "image/jpeg", "image/jxl", "image/png"];
+    const IMAGE_ACCEPT = ALLOWED_IMAGE_TYPES.join(",");
+
+    let {
+        onPick,
+        imageOnly = false,
+        maxSizeBytes = 5 * 1024 * 1024
+    }: Props = $props();
+
+    // svelte-ignore state_referenced_locally — maxSizeBytes e prop fixă per instanță
+    const maxSizeLabel = `${Math.round(maxSizeBytes / 1024 / 1024)} MB`;
 
     let items = $state<MediaItem[]>([]);
     let loading = $state(true);
@@ -27,7 +39,10 @@
     let fileInput: HTMLInputElement | undefined;
     let dragOver = $state(false);
 
-    const filtered = $derived(filter === "all" ? items : items.filter((i) => i.type === filter));
+    const effectiveFilter = $derived(imageOnly ? "image" : filter);
+    const filtered = $derived(
+        effectiveFilter === "all" ? items : items.filter((i) => i.type === effectiveFilter),
+    );
 
     async function load() {
         loading = true;
@@ -47,6 +62,17 @@
         uploading = true;
         try {
             for (const file of Array.from(files)) {
+                if (imageOnly) {
+                    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                        error =
+                            `"${file.name}" nu este o imagine permisă. Doar WEBP, JPG, JXL sau PNG.`;
+                        continue;
+                    }
+                    if (file.size > maxSizeBytes) {
+                        error = `"${file.name}" depășește limita de ${maxSizeLabel}.`;
+                        continue;
+                    }
+                }
                 const form = new FormData();
                 form.append("file", file);
                 const resp = await fetch("/api/admin/media", { method: "POST", body: form });
@@ -98,7 +124,9 @@
         ondrop={onDrop}
     >
         <p class="mb-3 text-sm text-text-muted">
-            Trage fișiere aici sau selectează-le. Imagini, documente PDF/Word, video (max 25 MB).
+            {imageOnly
+                ? `Trage imagini aici sau selectează-le. Formate permise: WEBP, JPG, JXL sau PNG (max ${maxSizeLabel}).`
+                : "Trage fișiere aici sau selectează-le. Imagini, documente PDF/Word, video (max 25 MB)."}
         </p>
         <button
             type="button"
@@ -115,24 +143,27 @@
             bind:this={fileInput}
             type="file"
             multiple
+            accept={imageOnly ? IMAGE_ACCEPT : undefined}
             class="hidden"
             onchange={onChosen}
             aria-label="Selectează fișiere pentru upload"
         />
     </div>
 
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrează după tip">
-        {#each [["all", "Toate"], ["image", "Imagini"], ["document", "Documente"], ["video", "Video"]] as [value, label]}
-            <button
-                type="button"
-                class="rounded-full px-3 py-1 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-blue {filter === value ? 'bg-oxford text-white' : 'bg-bg text-text hover:bg-bg-alt'}"
-                aria-pressed={filter === value}
-                onclick={() => (filter = value as typeof filter)}
-            >
-                {label}
-            </button>
-        {/each}
-    </div>
+    {#if !imageOnly}
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrează după tip">
+            {#each [["all", "Toate"], ["image", "Imagini"], ["document", "Documente"], ["video", "Video"]] as [value, label]}
+                <button
+                    type="button"
+                    class="rounded-full px-3 py-1 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-blue {filter === value ? 'bg-oxford text-white' : 'bg-bg text-text hover:bg-bg-alt'}"
+                    aria-pressed={filter === value}
+                    onclick={() => (filter = value as typeof filter)}
+                >
+                    {label}
+                </button>
+            {/each}
+        </div>
+    {/if}
 
     {#if loading}
         <p class="text-sm text-text-muted">Se încarcă biblioteca media…</p>

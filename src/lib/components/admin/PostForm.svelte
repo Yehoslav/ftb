@@ -237,12 +237,13 @@
 						Scoate imaginea
 					</button>
 				{:else}
-					<MediaLibrary
-						onPick={(item) => {
-							featuredImageUrl = item.url;
-							if (!featuredImageAlt) featuredImageAlt = item.alt;
-						}}
-					/>
+				<MediaLibrary
+					imageOnly
+					onPick={(item) => {
+						featuredImageUrl = item.url;
+						if (!featuredImageAlt) featuredImageAlt = item.alt;
+					}}
+				/>
 				{/if}
 				{#if featuredImageUrl}
 					<div>
