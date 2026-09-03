@@ -31,5 +31,7 @@
 
 	<h1 class="mb-6 text-2xl font-bold text-oxford">Editează articolul</h1>
 
-	<PostForm {post} />
+	{#key data.row.id}
+		<PostForm {post} />
+	{/key}
 </div>

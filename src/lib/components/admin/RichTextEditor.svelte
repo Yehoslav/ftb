@@ -11,14 +11,12 @@
     import Youtube from "@tiptap/extension-youtube";
 
     interface Props {
-        content?: string;
         html?: string;
         placeholder?: string;
         uploadImage?: (file: File) => Promise<string>;
     }
 
     let {
-        content = "",
         html = $bindable(""),
         placeholder = "Scrie aici…",
         uploadImage
@@ -59,7 +57,7 @@
                 TableCell,
                 Youtube.configure({ controls: true, nocookie: true })
             ],
-            content,
+            content: html,
             editorProps: {
                 attributes: {
                     class: "rte-content",
