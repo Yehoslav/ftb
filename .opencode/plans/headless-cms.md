@@ -3,7 +3,72 @@
 > Hybrid content management: Turso (libSQL) as local content store, WordPress as media-only
 > backend. Admin UI with TipTap rich text editor for content creation/management.
 
-Status: **APPROVED — STARTING IMPLEMENTATION**
+Status: **PHASES 1–5 IMPLEMENTED** (jj commits `feat(cms)` series, Sep 2026).
+Remaining: Phase 4b (admin CRUD UI for pages/projects/events/members/team — API exists,
+only posts+media have admin pages) and Phase 6 (polish/deploy). See §9.
+
+---
+
+## 9. Implementation status (Sep 2026)
+
+### Done
+- **Phase 1** — Turso/libSQL + Drizzle; schema `posts, pages, projects, events, members,
+  team, media, users` (`src/lib/server/schema.ts`); migrations in `drizzle/`; tasks
+  `db:generate/migrate/push/studio`. Local dev works with `TURSO_DATABASE_URL="file:local.db"`.
+- **Phase 2** — `src/scripts/{migrate-wp,migrate-data,seed}.ts`; tasks
+  `db:seed[:wp|:data]`. Seeded: 27 posts, 12 guide pages (+categorie/volatility),
+  16 projects (6 hubs + 10 ediții), 8 events, 16 members, 9 team. Upsert by slug
+  (posts/pages/projects/events); members+team replaced on re-seed (no unique key).
+- **Phase 3** — `auth.ts` (WP Application Passwords via `/users/me?context=edit`,
+  HMAC-signed cookie `ftb_session`, 7d, role map administrator→admin, users table upsert);
+  `media.ts` (WP REST upload + alt/title, registry in DB); `content.ts` (zod-validated
+  CRUD per type, unique-slug w/ RO diacritics, pagination); routes:
+  `/api/admin/auth/{login,logout,me}`, `/api/admin/content/[type](/[id])`,
+  `/api/admin/media`. `AUTH_SECRET` env (falls back to REVALIDATE_TOKEN).
+- **Phase 4** — `/admin` (guarded layout, login, dashboard w/ DB counts, posts list w/
+  filters+pagination+delete, new/edit post with TipTap + featured-image picker, media page).
+  `RichTextEditor.svelte` = TipTap v3 (headings, lists, links, image paste/drop/upload,
+  tables, YouTube); `MediaLibrary.svelte` (drag-drop upload, grid, insert hook).
+  Root layout skips site Header/Footer/SEO on `/admin`.
+- **Phase 5a** — `queries/{posts,pages,events}.ts` shape DB rows to the existing
+  `WPPost/WPPage/Eveniment` interfaces (featured-image compat shim) so public components
+  were unchanged. Loaders swapped: noutati listing+article, ghiduri/[slug], homepage,
+  student-in-romania, proiecte/[slug] related posts, api/posts (offset cursor `o:N`),
+  sitemap news. `wp.ts` (WP GraphQL client) DELETED; hooks warm-cache removed;
+  revalidate clears only Sheets cache. `types/wp.ts` kept as compat types.
+- **Phase 5b** — `queries/{projects,members}.ts`; `googleSheets.getMembri/getEchipa`
+  now delegate to DB (same signatures — callers unchanged; Sheets kept ONLY for
+  homepage stats "Info" tab). Loaders swapped: proiecte listing (new `+page.server.ts`,
+  component uses `data.hubs`), hub, edition, arhiva, admitere, evenimente listing,
+  noutati/[slug] sidebar, student-in-romania upcoming events, sitemap (projects/events).
+
+### Deliberate deviations from the original plan
+1. Driver: **`@libsql/client`** (not `@tursodatabase/serverless`) — needed `file:` local dev.
+2. TipTap via **`@tiptap/core` + Svelte 5 wrapper built in-repo** (no `tipex` dependency);
+   TipTap v3 StarterKit already includes Link/Underline/HorizontalRule.
+3. WP media upload via GraphQL `filePath` dropped entirely — REST-only (matches §2 research).
+4. `members.abreviere` is NOT unique (OSB/CTB duplicates in real data) → members/team
+   have no slug; admin CRUD by numeric id; seed replaces those tables.
+5. Static metadata KEPT by design (data-files principle from ia-and-ux plan):
+   `resurse.ts` (guide categories for Header nav / ghiduri listing / admitere /
+   student-in-romania), `proiectPosturi` mapping, pure date helpers
+   (`esteTrecut/sorteazaEvenimente`). Guide CONTENT is in DB.
+6. Generic `/api/admin/content/[type]` instead of 6× per-type route files.
+
+### Known limitations / follow-ups
+- Guides created via admin won't appear in Header/ghiduri listing until `resurse.ts`
+  gains a row (or listing migrates to `getPublishedGuides()` — query already exists).
+- Admin CRUD UI exists only for posts + media; other 5 types need admin pages (API ready).
+- `noutati/[slug]` "featured post" slug is hardcoded (pre-existing behavior).
+
+---
+
+## Phase 6 remaining (original §5 list, adjusted)
+1. Caching layer for hot public reads (optional — DB is fast; measure first)
+2. Rate limiting on admin API routes
+3. Admin CRUD pages for pages/projects/events/members/team
+4. Turso production DB setup (cloud) + `deno.json`/deploy env vars
+5. Contact-form backend decision (out of scope here)
 
 ---
 
