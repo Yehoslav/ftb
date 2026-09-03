@@ -14,6 +14,16 @@
 				"edit": "allow"
 			}
 		},
+		"design": {
+			"description": "Designer agent for Valeria: Svelte 5 UI layout/styles with WCAG, collaborating via vb/ feature branches, PRs into design/valeria, never touching master",
+			"mode": "primary",
+			"model": "opencode/big-pickle",
+			"color": "#F39222",
+			"permission": {
+				"edit": "allow",
+				"bash": "allow"
+			}
+		},
 		"plan": {
 			"model": "opencode/big-pickle"
 		},

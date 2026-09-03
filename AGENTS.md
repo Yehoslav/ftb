@@ -19,7 +19,7 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 | Runtime | Deno (Node compat via `deno.json`) |
 | Build | Vite 7 |
 | Adapter | `@deno/svelte-adapter` |
-| VCS | Jujutsu (jj) — repo is initialized as a `jj` working copy, so `git` shows a detached HEAD |
+| VCS | Jujutsu (jj) for the developer — repo is a colocated `jj` working copy (`.jj` + `.git`), so `git` works too and shows `(no branch)` on the working copy; git branches mirror jj bookmarks. The designer (Valeria) uses plain `git` via feature branches. See "Collaboration & Git workflow" below. |
 | Backend | WordPress (GraphQL at `WP_GRAPHQL_ENDPOINT` env var) |
 | Data layer | Google Sheets API for member organisations + homepage stats (was Grist) |
 | Contact form | Native frontend stub; message-delivery backend pending |
@@ -30,6 +30,38 @@ Staging (headless WP backend): https://ftbromania.ro/incubator
 - `deno task build` — production build
 - `deno task check` — run `svelte-check` for type-checking (uses `tsconfig.json` — do not change)
 - `deno task preview` — preview production build
+
+## Collaboration & Git workflow
+
+Two people work on this repo with different tooling. It is a colocated Jujutsu
+working copy, so both `jj` and `git` operate on the same commits.
+
+**Who uses what**
+- **Developer (you):** Jujutsu. Works on jj change graph; `master` is a jj
+  bookmark that maps to GitHub's `master`. History is published to GitHub with
+  `jj git push --bookmark master` (after `jj git import`).
+- **Designer (Valeria, macOS):** plain `git`. Collaborates only through feature
+  branches + Pull Requests. Her branch/branching rules live in
+  `AGENTS-designer.md` and are enforced by the `design` agent (opencode).
+
+**Branch model**
+```
+master  →  design/valeria  →  vb/<feature>  ──(PR)──▶  design/valeria  →(dev merges)→  master
+```
+- `master` — canonical branch on GitHub; the developer pushes jj work here.
+- `design/valeria` — the designer's long-lived integration branch, always kept in
+  sync with `master`. All her feature work accumulates here, so it is never lost
+  between tasks.
+- `vb/<feature>` — short-lived feature branches the designer creates from
+  `design/valeria` and merges back via Pull Requests into `design/valeria`.
+
+The developer is responsible for the final `design/valeria` → `master` merge and
+for keeping jj's `master` bookmark in sync
+(`jj git fetch --remote origin && jj git import`, then push).
+
+If you are the **developer agent** (jj workflow), do not follow the designer's
+git rules below — keep using jj. If you are the **design agent**
+(`design` agent / Valeria), follow `AGENTS-designer.md` strictly.
 
 ## Project structure
 
