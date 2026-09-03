@@ -1,12 +1,15 @@
-import type { PageServerLoad } from './$types';
-import { evenimente } from '$lib/data/evenimente';
+import type { PageServerLoad } from "./$types";
+import { getPublishedEvents } from "$lib/server/queries/events";
 
 export const load: PageServerLoad = async () => {
-	return {
-		evenimente,
-		seo: {
-			title: 'Evenimente',
-			description: 'Evenimente organizate de FTB România — târguri, workshop-uri, activități pentru tinerii basarabeni.'
-		}
-	};
+    const evenimente = await getPublishedEvents();
+
+    return {
+        evenimente,
+        seo: {
+            title: "Evenimente",
+            description:
+                "Evenimente organizate de FTB România — târguri, workshop-uri, activități pentru tinerii basarabeni.",
+        },
+    };
 };

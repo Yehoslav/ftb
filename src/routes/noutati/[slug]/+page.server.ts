@@ -1,19 +1,17 @@
 import type { PageServerLoad } from "./$types";
 import { error } from "@sveltejs/kit";
 import { getPostBySlug, getRecentPosts } from "$lib/server/queries/posts";
-import {
-    esteTrecut,
-    evenimente,
-    sorteazaEvenimente,
-} from "$lib/data/evenimente";
+import { getPublishedEvents } from "$lib/server/queries/events";
+import { esteTrecut, sorteazaEvenimente } from "$lib/data/evenimente";
 
 export const load: PageServerLoad = async ({ params }) => {
-    const [post, featuredPost, latest] = await Promise.all([
+    const [post, featuredPost, latest, toateEvenimentele] = await Promise.all([
         getPostBySlug(params.slug),
         getPostBySlug(
             "federatia-tinerilor-basarabeni-din-romania-aniverseaza-trei-ani-de",
         ),
         getRecentPosts(4),
+        getPublishedEvents(),
     ]);
 
     if (!post) error(404, "Articolul nu a fost găsit");
@@ -24,7 +22,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
     const azi = new Date();
     const evenimenteVitoare = sorteazaEvenimente(
-        evenimente.filter((e) => !esteTrecut(e, azi)),
+        toateEvenimentele.filter((e) => !esteTrecut(e, azi)),
     ).slice(0, 3);
 
     const related = latest.filter((p) => p.slug !== params.slug).slice(0, 2);

@@ -1,6 +1,13 @@
 <script lang="ts">
-	import { huburi, getProiectParinte } from '$lib/data/proiecte';
+	import type { PageProps } from './$types';
 	import PageIntro from '$lib/components/PageIntro.svelte';
+
+	let { data }: PageProps = $props();
+
+	const huburi = $derived(data.hubs);
+
+	const parinteAl = (slug: string | undefined) =>
+		slug ? data.hubs.find((h) => h.slug === slug) : undefined;
 
 	let categorie = $state<'toate' | 'anuale' | 'singulare'>('toate');
 	let domeniu = $state('toate');
@@ -126,11 +133,11 @@
 
 							<h2 class="text-lg font-bold text-text leading-snug mb-3">{hub.titlu}</h2>
 
-							{#if getProiectParinte(hub)}
+							{#if parinteAl(hub.proiectParinteSlug)}
 								<p class="pointer-events-auto text-xs text-text-muted mb-2">
 									Parte din{' '}
-									<a href="/proiecte/{getProiectParinte(hub)!.slug}" class="text-blue hover:text-oxford transition-colors no-underline">
-										{getProiectParinte(hub)!.titlu}
+									<a href="/proiecte/{parinteAl(hub.proiectParinteSlug)!.slug}" class="text-blue hover:text-oxford transition-colors no-underline">
+										{parinteAl(hub.proiectParinteSlug)!.titlu}
 									</a>
 								</p>
 							{/if}

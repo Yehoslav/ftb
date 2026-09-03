@@ -1,7 +1,10 @@
 import { getPublishedPostSlugs } from "$lib/server/queries/posts";
 import { resurseCategorii } from "$lib/data/resurse";
-import { evenimente } from "$lib/data/evenimente";
-import { editii, huburi } from "$lib/data/proiecte";
+import { getPublishedEvents } from "$lib/server/queries/events";
+import {
+    getPublishedEditions,
+    getPublishedHubs,
+} from "$lib/server/queries/projects";
 
 export async function GET() {
     const staticPages = [
@@ -33,6 +36,12 @@ export async function GET() {
             priority: "0.6",
         }))
     );
+
+    const [evenimente, huburi, editii] = await Promise.all([
+        getPublishedEvents(),
+        getPublishedHubs(),
+        getPublishedEditions(),
+    ]);
 
     const evenimentePages = evenimente.map((ev) => ({
         loc: `/evenimente/${ev.slug}`,

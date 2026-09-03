@@ -1,7 +1,8 @@
-import { eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import { type Event, events } from "../schema";
 import type { Eveniment } from "$lib/data/evenimente";
+import { getPublishedProjectFamilySlugs } from "./projects";
 
 export function toEveniment(row: Event): Eveniment {
     return {
@@ -40,4 +41,21 @@ export async function getEventBySlug(slug: string): Promise<Eveniment | null> {
         .from(events)
         .where(eq(events.slug, slug));
     return row ? toEveniment(row) : null;
+}
+
+export async function getEventsForProject(
+    hubSlug: string,
+): Promise<Eveniment[]> {
+    const familySlugs = await getPublishedProjectFamilySlugs(hubSlug);
+    const rows = await db
+        .select()
+        .from(events)
+        .where(
+            and(
+                eq(events.status, "published"),
+                inArray(events.proiectSlug, familySlugs),
+            ),
+        )
+        .orderBy(events.id);
+    return rows.map(toEveniment);
 }

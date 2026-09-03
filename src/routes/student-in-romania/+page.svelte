@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
 	import { getResursaBySlug, type ResurseItem } from '$lib/data/resurse';
-	import { getEvenimenteVitoare } from '$lib/data/evenimente';
 	import Placeholder from '$lib/components/Placeholder.svelte';
 
 	let { data }: PageProps = $props();
@@ -15,7 +14,8 @@
 		.map((slug) => getResursaBySlug(slug))
 		.filter((g): g is ResurseItem => g !== undefined);
 
-	const evenimenteVitoare = getEvenimenteVitoare().slice(0, 3);
+	// svelte-ignore state_referenced_locally — one-time init din datele serverului
+	const evenimenteVitoare = data.evenimenteVitoare;
 
 	const orase = $derived(
 		[...new Set(data.membri.map((m) => m.oras).filter(Boolean))].sort((a, b) =>

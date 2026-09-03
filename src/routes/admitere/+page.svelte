@@ -1,9 +1,13 @@
 <script lang="ts">
-	import { getHubBySlug, getEditieCurenta } from '$lib/data/proiecte';
+	import type { PageProps } from './$types';
 	import { getCategorieBySlug } from '$lib/data/resurse';
 
-	const hub = getHubBySlug('admiteri');
-	const editie = hub ? getEditieCurenta(hub.slug) : undefined;
+	let { data }: PageProps = $props();
+
+	// svelte-ignore state_referenced_locally — one-time init din datele serverului
+	const hub = data.hub ?? undefined;
+	// svelte-ignore state_referenced_locally — one-time init din datele serverului
+	const editie = data.editie ?? undefined;
 	const resurse = getCategorieBySlug('admitere')?.items ?? [];
 
 	const pasi = [
